@@ -125,7 +125,6 @@ class ChooseProfilePictureView extends GetView<ChooseProfilePictureController> {
           ),
         ),
       ),
-      extendBody: true,
     );
   }
 }

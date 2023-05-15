@@ -12,6 +12,7 @@ class BottomNavigationbarController extends GetxController {
   final count = 0.obs;
 
   var args = Get.arguments;
+  var Dpop = false.obs;
   var _selectedIndex = 0.obs;
   get selectedIndex => _selectedIndex.value;
   set selectedIndex(value) => _selectedIndex.value = value;

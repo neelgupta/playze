@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:playze/Reusability/shared/lodding.dart';
 import 'package:playze/Reusability/shared/textStyle.dart';
+import 'package:playze/Reusability/utils/shared_prefs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Util {
-}
+
+
+Util() async{
+
+
+  }
+
 
 Widget w(double count) => SizedBox(
   width: count,
@@ -64,5 +73,25 @@ class ButtonWithStyle extends StatelessWidget {
               BorderRadius.circular(5)),
           child: Center(child: Text(textVal,style: style ?? AppTextStyle.size14Medium))
         ));
+  }
+}
+
+class UtillDialogs {
+  static Future<void> showDialogBox(Widget widget, bool dismiss) {
+    return Get.dialog(widget, barrierDismissible: dismiss);
+  }
+  static Future<void> showLoadingDialog({barrierDismissible = false}) async {
+    print('opned');
+    return Get.dialog(
+        Material(
+          type: MaterialType.transparency,
+          child: Center(
+            // Aligns the container to center
+            child: LoadingAni(
+              isTransparent: true,
+            ),
+          ),
+        ),
+        barrierDismissible: barrierDismissible);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:playze/Reusability/utils/shared_prefs.dart';
 import 'package:playze/Reusability/utils/util.dart';
 import 'package:playze/app/modules/BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
 import 'package:playze/app/routes/app_pages.dart';
@@ -222,18 +223,24 @@ class _CsDrawerState extends State<CsDrawer> {
                 ),
               ),
               h(20),
-              Container(
-                height: Get.height*0.07,
-                child: Row(
-                  children: [
-                    Container(
-                      height: Get.height*0.035,
-                      width: Get.width*0.09,
-                      child: Image.asset("assets/images/logout.png"),
-                    ),
-                    w(10),
-                    Text("Logout",style: TextStyle(color: Colors.white,fontSize: 16),),
-                  ],
+              GestureDetector(
+                onTap: (){
+                  SharedPrefs().value.write(SharedPrefs.setBool, false);
+                  Get.offNamedUntil(Routes.SIGNIN, (route) => false);
+                },
+                child: Container(
+                  height: Get.height*0.07,
+                  child: Row(
+                    children: [
+                      Container(
+                        height: Get.height*0.035,
+                        width: Get.width*0.09,
+                        child: Image.asset("assets/images/logout.png"),
+                      ),
+                      w(10),
+                      Text("Logout",style: TextStyle(color: Colors.white,fontSize: 16),),
+                    ],
+                  ),
                 ),
               ),
             ],

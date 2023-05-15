@@ -64,97 +64,105 @@ class SearchView extends GetView<SearchController> {
           ),
         ),
       ),
-      body: Container(
-        height: Get.height,
-        width: Get.width,
-        margin: EdgeInsets.only(left: 20,right: 20,top: 20),
-        child: Column(
-          children: [
-            Container(
-              height: Get.height*0.06,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(25))
-              ),
-              child: Row(
+      body: Obx(
+            () => controller.isLoading.value
+            ? const Center(
+          child: CircularProgressIndicator(
+            color: Colors.blue,
+          ),
+        )
+            :Container(
+              height: Get.height,
+              width: Get.width,
+              margin: EdgeInsets.only(left: 20,right: 20,top: 20),
+              child: Column(
                 children: [
-                  SizedBox(width: Get.width*0.03,),
                   Container(
-                      height: Get.height*0.05,
-                      width: Get.width*0.07,
-                      child: Image(image: AssetImage("assets/images/search.png"))),
-                  SizedBox(width: Get.width*0.03,),
-                  Container(
-                    height: Get.height*0.3,
-                    width: Get.width*0.5,
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: "Search places",
-                          border: InputBorder.none
-                      ),
+                    height: Get.height*0.06,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(25))
                     ),
+                    child: Row(
+                      children: [
+                        SizedBox(width: Get.width*0.03,),
+                        Container(
+                            height: Get.height*0.05,
+                            width: Get.width*0.07,
+                            child: Image(image: AssetImage("assets/images/search.png"))),
+                        SizedBox(width: Get.width*0.03,),
+                        Container(
+                          height: Get.height*0.3,
+                          width: Get.width*0.5,
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText: "Search places",
+                                border: InputBorder.none
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: Get.height*0.08,
+                    child: Text("What are you searching for?",style: TextStyle(fontSize: 20),),
+                  ),
+                  Container(
+                    height: Get.height*0.6,
+                    child: ListView.builder(itemCount: controller.CategoryList.length,itemBuilder: (context, index) {
+                      return Container(
+                        height: Get.height*0.06,
+                        child: Row(
+                          children: [
+                            Text(controller.CategoryList[index].name,style: TextStyle(color: Colors.grey),),
+                            Spacer(),
+                            Icon(Icons.arrow_forward_ios,color: Colors.grey,size: 16,)
+                          ],
+                        ),
+                      );
+                    },),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+
+                              border: Border.all(color: Color(0xffFE7702)),
+                              borderRadius: BorderRadius.all(Radius.circular(5))
+                          ),
+                          height: Get.height*0.06,
+                          width: Get.width*0.4,
+                          child: Text("Clear All".toUpperCase(),style: TextStyle(color: Color(0xffFE7702))),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Color(0xffFE7702),
+                              borderRadius: BorderRadius.all(Radius.circular(5))
+                          ),
+                          height: Get.height*0.06,
+                          width: Get.width*0.4,
+                          child: Text("Search".toUpperCase(),style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            Container(
-              alignment: Alignment.center,
-              height: Get.height*0.08,
-              child: Text("What are you searching for?",style: TextStyle(fontSize: 20),),
-            ),
-            Container(
-              height: Get.height*0.6,
-              child: ListView.builder(itemCount: 10,itemBuilder: (context, index) {
-                return Container(
-                  height: Get.height*0.06,
-                  child: Row(
-                    children: [
-                      Text("Science Museum",style: TextStyle(color: Colors.grey),),
-                      Spacer(),
-                      Icon(Icons.arrow_forward_ios,color: Colors.grey,size: 16,)
-                    ],
-                  ),
-                );
-              },),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: (){
-
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-
-                        border: Border.all(color: Color(0xffFE7702)),
-                        borderRadius: BorderRadius.all(Radius.circular(5))
-                    ),
-                    height: Get.height*0.06,
-                    width: Get.width*0.4,
-                    child: Text("Clear All".toUpperCase(),style: TextStyle(color: Color(0xffFE7702))),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: (){
-
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Color(0xffFE7702),
-                        borderRadius: BorderRadius.all(Radius.circular(5))
-                    ),
-                    height: Get.height*0.06,
-                    width: Get.width*0.4,
-                    child: Text("Search".toUpperCase(),style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -133,7 +133,7 @@ class SettingsView extends GetView<SettingsController> {
         GetBuilder<SettingsController>(
               builder: (controller) {
                 return  Switch(
-                  activeColor: Colors.amber,
+                  activeColor: Colors.orange,
                   inactiveThumbColor: Colors.orange,
                   value: controller.isSwitched,
                   onChanged: (value) {

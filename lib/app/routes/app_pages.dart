@@ -12,8 +12,6 @@ import '../modules/ChooseProfilePicture/bindings/choose_profile_picture_binding.
 import '../modules/ChooseProfilePicture/views/choose_profile_picture_view.dart';
 import '../modules/ContactUs/bindings/contact_us_binding.dart';
 import '../modules/ContactUs/views/contact_us_view.dart';
-import '../modules/CreateYourAccount/bindings/create_your_account_binding.dart';
-import '../modules/CreateYourAccount/views/create_your_account_view.dart';
 import '../modules/Details/bindings/details_binding.dart';
 import '../modules/Details/views/details_view.dart';
 import '../modules/EditProfile/bindings/edit_profile_binding.dart';
@@ -54,8 +52,6 @@ import '../modules/signin/bindings/signin_binding.dart';
 import '../modules/signin/views/signin_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
-import '../modules/splash/bindings/splash_binding.dart';
-import '../modules/splash/views/splash_view.dart';
 import '../modules/verification/bindings/verification_binding.dart';
 import '../modules/verification/views/verification_view.dart';
 import '../modules/wishlist/bindings/wishlist_binding.dart';
@@ -75,11 +71,6 @@ class AppPages {
       binding: HomeBinding(),
     ),
     GetPage(
-      name: _Paths.SPLASH,
-      page: () => SplashView(),
-      binding: SplashBinding(),
-    ),
-    GetPage(
       name: _Paths.SIGNIN,
       page: () => const SigninView(),
       binding: SigninBinding(),
@@ -91,12 +82,12 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.VERIFICATION,
-      page: () => const VerificationView(),
+      page: () => VerificationView(),
       binding: VerificationBinding(),
     ),
     GetPage(
       name: _Paths.CHILDINFO,
-      page: () => const ChildinfoView(),
+      page: () => ChildinfoView(),
       binding: ChildinfoBinding(),
     ),
     GetPage(
@@ -161,7 +152,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.EDIT_PROFILE,
-      page: () => const EditProfileView(),
+      page: () =>  EditProfileView(),
       binding: EditProfileBinding(),
     ),
     GetPage(
@@ -190,11 +181,6 @@ class AppPages {
       binding: NotificationsBinding(),
     ),
     GetPage(
-      name: _Paths.CREATE_YOUR_ACCOUNT,
-      page: () => const CreateYourAccountView(),
-      binding: CreateYourAccountBinding(),
-    ),
-    GetPage(
       name: _Paths.ADD_PROFILE_PICTURE,
       page: () => const AddProfilePictureView(),
       binding: AddProfilePictureBinding(),
@@ -216,7 +202,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FRISTPAGE,
-      page: () =>  FristpageView(),
+      page: () => FristpageView(),
       binding: FristpageBinding(),
     ),
   ];

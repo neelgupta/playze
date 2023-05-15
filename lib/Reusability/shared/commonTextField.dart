@@ -11,7 +11,9 @@ class InputTextField extends StatefulWidget {
         this.hintText,
         this.hintTextStyle,
         this.width,
-        this.height
+        this.height,
+        this.style,
+        this.onChanged,
       });
 
   final BuildContext context;
@@ -22,6 +24,9 @@ class InputTextField extends StatefulWidget {
   final TextStyle? hintTextStyle;
   final double? width;
   final double? height;
+  final TextStyle? style;
+  final void Function()? onChanged;
+
 
   @override
   State<StatefulWidget> createState() {
@@ -33,7 +38,10 @@ class InputTextField extends StatefulWidget {
       hintText: hintText,
       hintTextStyle: hintTextStyle,
       width : width,
-        height: height
+        height: height,
+        style: style,
+        onChanged: onChanged
+
     );
   }
 }
@@ -47,6 +55,8 @@ class InputTextFieldState extends State<InputTextField> {
   final TextStyle? hintTextStyle;
   final double? width;
   final double? height;
+  final TextStyle? style;
+  final void Function()? onChanged;
 
   InputTextFieldState(
       {required this.context,
@@ -56,7 +66,9 @@ class InputTextFieldState extends State<InputTextField> {
         this.hintText,
         this.hintTextStyle,
         this.width,
-        this.height
+        this.height,
+        this.style,
+        this.onChanged
       });
   @override
   Widget build(BuildContext context) {
@@ -69,6 +81,8 @@ class InputTextFieldState extends State<InputTextField> {
         borderRadius: BorderRadius.circular(borderRadius ?? 5.00)
       ),
       child: TextFormField(
+        style: style,
+        onChanged: (value) => onChanged != null ? onChanged!() : null,
         controller: controller,
         decoration: InputDecoration(
             border: InputBorder.none,

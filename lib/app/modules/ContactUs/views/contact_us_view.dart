@@ -72,55 +72,63 @@ class ContactUsView extends GetView<ContactUsController> {
         ),
       ),
         drawer: CsDrawer(),
-        body: Container(
-          height: Get.height,
-          width: Get.width,
-          margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                InputTextField(
-                  borderColor: Colors.grey,
-                  borderRadius: 10,
-                  hintTextStyle: TextStyle(color: Colors.grey),
-                  context: context,
-                  controller: controller.FName,
-                  hintText: "Full Name",
-                ),
-                h(15),
-                InputTextField(
-                  borderColor: Colors.grey,
-                  borderRadius: 10,
-                  hintTextStyle: TextStyle(color: Colors.grey),
-                  context: context,
-                  controller: controller.Email,
-                  hintText: "Email",
-                ),
-                h(15),
-
-                InputTextField(
-                  height: Get.height*0.2,
-                  borderColor: Colors.grey,
-                  borderRadius: 10,
-                  hintTextStyle: TextStyle(color: Colors.grey),
-                  context: context,
-                  controller: controller.Massage,
-                  hintText: "Massage",
-                ),
-                h(270),
-                ButtonWithStyle(
-                  onPressed: () {
-
-                  },
-                  textVal: LocaleKeys.buttons_submit.tr.toUpperCase(),
-                  btnwidth: Get.width,
-                ),
-                h(80),
-              ],
+        body: Obx(
+              () => controller.isLoading.value
+              ? const Center(
+            child: CircularProgressIndicator(
+              color: Colors.blue,
             ),
-          ),
+          )
+              : Container(
+                height: Get.height,
+                width: Get.width,
+                margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      InputTextField(
+                        borderColor: Colors.grey,
+                        borderRadius: 10,
+                        hintTextStyle: TextStyle(color: Colors.grey),
+                        context: context,
+                        controller: controller.FName,
+                        hintText: "Full Name",
+                      ),
+                      h(15),
+                      InputTextField(
+                        borderColor: Colors.grey,
+                        borderRadius: 10,
+                        hintTextStyle: TextStyle(color: Colors.grey),
+                        context: context,
+                        controller: controller.Email,
+                        hintText: "Email",
+                      ),
+                      h(15),
+
+                      InputTextField(
+                        height: Get.height*0.2,
+                        borderColor: Colors.grey,
+                        borderRadius: 10,
+                        hintTextStyle: TextStyle(color: Colors.grey),
+                        context: context,
+                        controller: controller.Massage,
+                        hintText: "Massage",
+                      ),
+                      h(220),
+                      ButtonWithStyle(
+                        onPressed: () {
+                          controller.userContactus();
+                        },
+                        textVal: LocaleKeys.buttons_submit.tr.toUpperCase(),
+                        btnwidth: Get.width,
+                      ),
+                      h(80),
+                    ],
+                  ),
+                ),
+              ),
         ),
         bottomNavigationBar: btmbar(fromOther: true,),
       extendBody: true,

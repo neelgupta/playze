@@ -68,70 +68,129 @@ class ChangePasswordView extends GetView<ChangePasswordController> {
           ),
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(LocaleKeys.buttons_Current_Password.tr,style: TextStyle(),),
-            h(5),
-            InputTextField(
-              borderColor: Colors.grey,
-              borderRadius: 10,
-              hintTextStyle: TextStyle(color: Colors.grey),
-              context: context,
-              controller: controller.CurrentPassword,
-              hintText: LocaleKeys.buttons_Current_Password.tr,
-            ),
-            h(15),
-            Text(LocaleKeys.buttons_Current_Password.tr,style: TextStyle(),),
-            h(5),
-            InputTextField(
-              borderColor: Colors.grey,
-              borderRadius: 10,
-              hintTextStyle: TextStyle(color: Colors.grey),
-              context: context,
-              controller: controller.NewPassword,
-              hintText: LocaleKeys.buttons_New_Password.tr,
-            ),
-            h(15),
-            Text(LocaleKeys.buttons_Re_type_New_assword.tr,style: TextStyle(),),
-            h(5),
-            InputTextField(
-              borderColor: Colors.grey,
-              borderRadius: 10,
-              hintTextStyle: TextStyle(color: Colors.grey),
-              context: context,
-              controller: controller.RetypeNewPassword,
-              hintText: LocaleKeys.buttons_Re_type_New_assword.tr,
-            ),
-            Spacer(),
-            ButtonWithStyle(
-              onPressed: () {
-
-              },
-              textVal: LocaleKeys.buttons_Update_Password.tr.toUpperCase(),
-              btnwidth: Get.width,
-            ),
-            h(15),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                border: Border.all(color: Colors.grey)
+      body: Obx(
+            () => controller.isLoading.value
+            ? const Center(
+          child: CircularProgressIndicator(
+            color: Colors.blue,
+          ),
+        )
+            : Container(
+              height: Get.height,
+              margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(LocaleKeys.buttons_Current_Password.tr,style: TextStyle(),),
+                    h(5),
+                    Container(
+                      height: Get.height*0.065,
+                      padding: EdgeInsets.symmetric(horizontal: Get.width*0.03),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5.00)
+                      ),
+                      child: TextFormField(
+                        obscureText: true,
+                        controller: controller.CurrentPassword,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: LocaleKeys.buttons_Current_Password.tr,
+                            hintStyle: AppTextStyle.size12Regular
+                        ),
+                      ),
+                    ),
+                    // InputTextField(
+                    //   borderColor: Colors.grey,
+                    //   borderRadius: 10,
+                    //   hintTextStyle: TextStyle(color: Colors.grey),
+                    //   context: context,
+                    //   controller: controller.CurrentPassword,
+                    //   hintText: LocaleKeys.buttons_Current_Password.tr,
+                    // ),
+                    h(15),
+                    Text(LocaleKeys.buttons_Current_Password.tr,style: TextStyle(),),
+                    h(5),
+                    Container(
+                      height: Get.height*0.065,
+                      padding: EdgeInsets.symmetric(horizontal: Get.width*0.03),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5.00)
+                      ),
+                      child: TextFormField(
+                        obscureText: true,
+                        controller: controller.NewPassword,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: LocaleKeys.buttons_Current_Password.tr,
+                            hintStyle: AppTextStyle.size12Regular
+                        ),
+                      ),
+                    ),
+                    h(15),
+                    Text(LocaleKeys.buttons_Re_type_New_assword.tr,style: TextStyle(),),
+                    h(5),
+                    Container(
+                      height: Get.height*0.065,
+                      padding: EdgeInsets.symmetric(horizontal: Get.width*0.03),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5.00)
+                      ),
+                      child: TextFormField(
+                        obscureText: true,
+                        controller: controller.RetypeNewPassword,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: LocaleKeys.buttons_Re_type_New_assword.tr,
+                            hintStyle: AppTextStyle.size12Regular
+                        ),
+                      ),
+                    ),
+                    // InputTextField(
+                    //   borderColor: Colors.grey,
+                    //   borderRadius: 10,
+                    //   hintTextStyle: TextStyle(color: Colors.grey),
+                    //   context: context,
+                    //   controller: controller.RetypeNewPassword,
+                    //   hintText: LocaleKeys.buttons_Re_type_New_assword.tr,
+                    // ),
+                    h(140),
+                    ButtonWithStyle(
+                      onPressed: () {
+                        controller.userChengpassword();
+                      },
+                      textVal: LocaleKeys.buttons_Update_Password.tr.toUpperCase(),
+                      btnwidth: Get.width,
+                    ),
+                    h(15),
+                    GestureDetector(
+                      onTap: (){
+                        Get.back();
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            border: Border.all(color: Colors.grey)
+                        ),
+                        width: Get.width,
+                        height: 40,
+                        child: Text(LocaleKeys.buttons_Cancel.tr.toUpperCase(),style: AppTextStyle.size14Medium.copyWith(color: Colors.black),),
+                      ),
+                    ),
+                    h(20),
+                    Container(
+                        alignment: Alignment.center,
+                        child: Text(LocaleKeys.buttons_Forgot_your_Password.tr.toUpperCase(),style: TextStyle(),)),
+                    h(80),
+                  ],
+                ),
               ),
-              width: Get.width,
-              height: 40,
-              child: Text(LocaleKeys.buttons_Cancel.tr.toUpperCase(),style: AppTextStyle.size14Medium.copyWith(color: Colors.black),),
             ),
-            h(20),
-            Container(
-              alignment: Alignment.center,
-                child: Text(LocaleKeys.buttons_Forgot_your_Password.tr.toUpperCase(),style: TextStyle(),)),
-            h(80),
-          ],
-        ),
       ),
         bottomNavigationBar: btmbar(fromOther: true,),
       extendBody: true,
