@@ -1,25 +1,25 @@
 // To parse this JSON data, do
 //
-//     final plaseModel = plaseModelFromJson(jsonString);
+//     final placeData = placeDataFromJson(jsonString);
 
 import 'dart:convert';
 
-PlaseModel plaseModelFromJson(String str) => PlaseModel.fromJson(json.decode(str));
+PlaceData placeDataFromJson(String str) => PlaceData.fromJson(json.decode(str));
 
-String plaseModelToJson(PlaseModel data) => json.encode(data.toJson());
+String placeDataToJson(PlaceData data) => json.encode(data.toJson());
 
-class PlaseModel {
+class PlaceData {
   int? status;
   List<Datum>? data;
   String? message;
 
-  PlaseModel({
+  PlaceData({
     this.status,
     this.data,
     this.message,
   });
 
-  factory PlaseModel.fromJson(Map<String, dynamic> json) => PlaseModel(
+  factory PlaceData.fromJson(Map<String, dynamic> json) => PlaceData(
     status: json["status"],
     data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
     message: json["message"],
@@ -35,11 +35,14 @@ class PlaseModel {
 class Datum {
   String? id;
   String? placesName;
-  Address? address;
-  String? latitude;
-  String? longitude;
+  String? address;
+  int? latitude;
+  int? longitude;
   String? costAdults;
   String? costChildren;
+  String? logo;
+  int? rating;
+  int? totalreview;
   List<Highlight>? highlights;
   List<Image>? images;
   List<Video>? video;
@@ -52,6 +55,9 @@ class Datum {
     this.longitude,
     this.costAdults,
     this.costChildren,
+    this.logo,
+    this.totalreview,
+    this.rating,
     this.highlights,
     this.images,
     this.video,
@@ -60,11 +66,14 @@ class Datum {
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
     id: json["id"],
     placesName: json["places_name"],
-    address: addressValues.map[json["address"]]!,
+    address: json["address"],
     latitude: json["latitude"],
     longitude: json["longitude"],
     costAdults: json["cost_adults"],
     costChildren: json["cost_children"],
+    logo: json["logo"],
+    totalreview: json["total_review"],
+    rating: json["rating"],
     highlights: json["highlights"] == null ? [] : List<Highlight>.from(json["highlights"]!.map((x) => Highlight.fromJson(x))),
     images: json["images"] == null ? [] : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
     video: json["video"] == null ? [] : List<Video>.from(json["video"]!.map((x) => Video.fromJson(x))),
@@ -73,26 +82,24 @@ class Datum {
   Map<String, dynamic> toJson() => {
     "id": id,
     "places_name": placesName,
-    "address": addressValues.reverse[address],
+    "address": address,
     "latitude": latitude,
     "longitude": longitude,
     "cost_adults": costAdults,
     "cost_children": costChildren,
+    "logo": logo,
+    "total_review": totalreview,
+    "rating": rating,
     "highlights": highlights == null ? [] : List<dynamic>.from(highlights!.map((x) => x.toJson())),
     "images": images == null ? [] : List<dynamic>.from(images!.map((x) => x.toJson())),
     "video": video == null ? [] : List<dynamic>.from(video!.map((x) => x.toJson())),
   };
 }
 
-enum Address { ASDFASDF }
-
-final addressValues = EnumValues({
-  "asdfasdf": Address.ASDFASDF
-});
 
 class Highlight {
   String? id;
-  Highlights? highlights;
+  String? highlights;
 
   Highlight({
     this.id,
@@ -101,21 +108,14 @@ class Highlight {
 
   factory Highlight.fromJson(Map<String, dynamic> json) => Highlight(
     id: json["id"],
-    highlights: highlightsValues.map[json["highlights"]]!,
+    highlights:json["highlights"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "highlights": highlightsValues.reverse[highlights],
+    "highlights": highlights,
   };
 }
-
-enum Highlights { SADFSGSWG, ASFSDGFSDG }
-
-final highlightsValues = EnumValues({
-  "asfsdgfsdg": Highlights.ASFSDGFSDG,
-  "sadfsgswg": Highlights.SADFSGSWG
-});
 
 class Image {
   String? id;
@@ -140,20 +140,24 @@ class Image {
 class Video {
   String? id;
   String? video;
+  String? videoImage;
 
   Video({
     this.id,
     this.video,
+    this.videoImage,
   });
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
     id: json["id"],
     video: json["video"],
+    videoImage: json["video_image"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "video": video,
+    "video_image": videoImage,
   };
 }
 

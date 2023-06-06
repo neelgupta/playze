@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:playze/Reusability/utils/shared_prefs.dart';
-import 'package:playze/app/data/modal/login.dart';
 import 'package:playze/app/data/service/Userservise.dart';
 
 import '../../../data/modal/userdata.dart';
@@ -13,10 +14,11 @@ class ProfileController extends GetxController {
   String? lname;
   String? email;
   String? mnumbar;
-  List<Children> childrenList = [];
+  List<ChildrenDetails> childrenList = [];
   Usersevise usersevise = Usersevise();
   RxBool isLoading = false.obs;
   DataModal? a;
+
   @override
   void onInit() {
     super.onInit();
@@ -37,17 +39,24 @@ class ProfileController extends GetxController {
   Future<void> getAbout() async {
     isLoading(true);
     try {
-      childrenList.clear();
       a = await usersevise.getdata(id);
-      a?.data?.children?.forEach((element) {
-        childrenList.add(element);
-        for(var i = 0; i<childrenList.length; i ++){
-          print(childrenList[i].name);
-        }
-      });
-      update();
+
+      if (a != null) {
+        childrenList.clear();
+        childrenList.addAll(a!.data.children);
+        // for (var element in a!.data.children) {
+        // }
+
+        // for (var i = 0; i < childrenList.length; i++) {
+        //   log("childrenList[i].name :: ${childrenList[i].name}");
+        // }
+        update();
+      }
+
+      log("childrenList.length :: ${childrenList.length}");
     } catch (e) {
-      print("${e.toString()}");
+      log("${e.toString()}");
+      rethrow;
     } finally {
       isLoading(false);
     }

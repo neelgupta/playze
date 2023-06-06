@@ -1,27 +1,28 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:playze/Reusability/utils/shared_prefs.dart';
-import 'package:playze/Reusability/utils/util.dart';
 import 'package:playze/app/data/Network/network.dart';
 import 'package:playze/app/data/modal/comman.dart';
+import 'package:playze/app/data/modal/emoji.dart';
 import 'package:playze/app/data/modal/otp.dart';
 import 'package:playze/app/data/modal/signup.dart';
-import 'package:playze/app/data/service/Api_list.dart';
+import 'package:playze/app/data/service/api_list.dart';
 
 import '../modal/class.dart';
 import '../modal/login.dart';
 
-
 class loginService {
-
-
   Future<hp> getinterest({client}) async {
     if (client == null) {
       client = http.Client();
       // token = Util().getToken()!;
     }
-    var url = ApiURLList.Getinterest;
-    var result = await NetworkHandler().getwithoutToken(url, client,);
+    var url = ApiUrlList.getinterest;
+    var result = await NetworkHandler().getwithoutToken(
+      url,
+      client,
+    );
     print("getinterest result is $result");
     if (result != null) {
       return hp.fromjson(jsonDecode(result));
@@ -30,11 +31,12 @@ class loginService {
     }
   }
 
-  Future<SignModel?> postsignup(name, lname, email, pnumbar, password,
-      cpassword, cname, cage, interest, {client}) async {
+  Future<SignModel?> postsignup(
+      name, lname, email, pnumbar, password, cpassword, cname, cage, interest,
+      {client}) async {
     client ??= http.Client();
-    print(ApiURLList.Register);
-    var url = ApiURLList.Register;
+    print(ApiUrlList.register);
+    var url = ApiUrlList.register;
     var result = await NetworkHandler().postwithoutToken(url, client, model: {
       "first_name": name,
       "last_name": lname,
@@ -57,8 +59,8 @@ class loginService {
 
   Future<LoginModel?> postlogin(email, password, {client}) async {
     client ??= http.Client();
-    print(ApiURLList.login);
-    var url = ApiURLList.login;
+    print(ApiUrlList.login);
+    var url = ApiUrlList.login;
     var result = await NetworkHandler().postwithoutToken(url, client, model: {
       "email": email,
       "password": password,
@@ -73,11 +75,10 @@ class loginService {
     }
   }
 
-
   Future<OtpModel?> postotp(id, otp, {client}) async {
     client ??= http.Client();
-    print(ApiURLList.otp);
-    var url = ApiURLList.otp;
+    print(ApiUrlList.otp);
+    var url = ApiUrlList.otp;
     var result = await NetworkHandler().postwithoutToken(url, client, model: {
       "users_id": id,
       "otp": otp,
@@ -92,8 +93,8 @@ class loginService {
 
   Future<Commonmsg?> postRotp(email, {client}) async {
     client ??= http.Client();
-    print(ApiURLList.Rotp);
-    var url = ApiURLList.Rotp;
+    print(ApiUrlList.resendOtp);
+    var url = ApiUrlList.resendOtp;
     var result = await NetworkHandler().postwithoutToken(url, client, model: {
       "email": email,
     });
@@ -105,79 +106,22 @@ class loginService {
     }
   }
 
-  // Future<Commonmsg?> postaddprofile(
-  //     id, user_name,image,{client}) async {
-  //   client ??= http.Client();
-  //   print(ApiURLList.Addprofile);
-  //   print(tokan);
-  //   var url = ApiURLList.Addprofile;
-  //   var result = await  NetworkHandler().post(url, client,tokan,model: {
-  //     "user_id": id,
-  //     "user_name": user_name,
-  //     "image": image,
-  //   });
-  //   print("signup result is $result");
-  //   if (result != null) {
-  //     return Commonmsg.fromJson(jsonDecode(result));
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  // Future<Commonmsg?> postaddprofile(String?file, id, userid, {client}) async {
-  //   var postUri = Uri.parse(ApiURLList.Addprofile);
-  //   var request = http.MultipartRequest("POST", postUri);
-  //   request.headers['Authorization'] =
-  //   "Bearer ${(tokan!.substring(3))}";
-  //   http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-  //       'image', file!.pat);
-  //   request.files.add(multipartFile);
-  //
-  //   http.StreamedResponse response = await request.send();
-  //   print('code: ${response.statusCode}');
-  //   final res = await http.Response.fromStream(response);
-  //   print('body: ${res.body}');
-  // }
-    // Future<Commonmsg?> postaddprofile(filePath,id,userid) async {
-    //   var postUri = Uri.parse(ApiURLList.Addprofile);
-    //
-    //   http.MultipartRequest request = new http.MultipartRequest("POST", postUri);
-    //
-    //   http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-    //           'image', filePath);
-    //   request.fields['user_id'] = id;
-    //   request.fields['user_name'] = userid;
-    //   request.files.add(multipartFile);
-    //   request.headers['Authorization'] ='bearer ${tokan!.substring(3)}';
-    //   http.StreamedResponse response = await request.send();
-    //   print(response);
-    //   print(response.statusCode);
-    // }
-    // Future<Commonmsg?> postaddprofile(
-    //     id,
-    //     user_name,
-    //     List<int>? imageData,
-    //     String? fileType,
-    //     {client}) async {
-    //   client ??= http.Client();
-    //   print(ApiURLList.Addprofile);
-    //   print(tokan?.substring(3));
-    //   var url = ApiURLList.Addprofile;
-    //   var result = await  NetworkHandler().postMutiPartData(url, client, tokan?.substring(3),
-    //       fileName: 'profile_image.$fileType',
-    //       fileType: fileType ?? '',
-    //       file: imageData!,
-    //       httpType: "POST",
-    //       model: {
-    //     "user_id":id,
-    //     "user_name":user_name
-    //   });
-    //   print("signup result is $result");
-    //   if (result != null) {
-    //     return Commonmsg.fromJson(jsonDecode(result));
-    //   } else {
-    //     return null;
-    //   }
-    // }
-
+  Future<GetEmoji?> getemoji({client}) async {
+    List<String>? tokan =
+        SharedPrefs().value.read(SharedPrefs.tokenKey).split("|");
+    if (client == null) {
+      client = http.Client();
+      // token = Util().getToken()!;
+    }
+    var url = ApiUrlList.activeEmojisList;
+    String newtokan = tokan![1];
+    print(newtokan);
+    var result = await NetworkHandler().get(url, client, newtokan);
+    print("getPlasedata result is $result");
+    if (result != null) {
+      return GetEmoji.fromJson(jsonDecode(result));
+    } else {
+      throw Exception("Error getting agreement list");
+    }
   }
+}

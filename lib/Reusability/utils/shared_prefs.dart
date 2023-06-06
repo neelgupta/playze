@@ -8,6 +8,7 @@ class SharedPrefs {
   Function? disposeListen;
 
   static String userIdKey = "usersId";
+  static String DiviseKey = "usersId";
   static String tokenKey = "token";
   static String idKey = "id";
   static String fnamenKey = "first_name";

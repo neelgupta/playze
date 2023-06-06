@@ -11,7 +11,7 @@ class AboutModel {
 
   factory AboutModel.fromJson(Map<String, dynamic> json) => AboutModel(
     status: json["status"],
-    data: Data.fromJson(json["data"]),
+    data: Data.fromJson(json["data"] ?? {}),
     message: json["message"],
   );
 

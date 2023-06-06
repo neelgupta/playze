@@ -9,84 +9,80 @@ SignModel signModelFromJson(String str) => SignModel.fromJson(json.decode(str));
 String signModelToJson(SignModel data) => json.encode(data.toJson());
 
 class SignModel {
-  int status;
-  Data data;
-  String message;
+  int? status;
+  Data? data;
+  String? message;
 
   SignModel({
-    required this.status,
-    required this.data,
-    required this.message,
+    this.status,
+    this.data,
+    this.message,
   });
 
   factory SignModel.fromJson(Map<String, dynamic> json) => SignModel(
     status: json["status"],
-    data: Data.fromJson(json["data"]),
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
     message: json["message"],
   );
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": data?.toJson(),
     "message": message,
   };
 }
 
 class Data {
-  String id;
-  String firstName;
-  String lastName;
-  String password;
-  String mobileNumber;
-  String email;
-  String otp;
-  List<Child> children;
-  List<Interest> interest;
+  String? id;
+  String? name;
+  String? password;
+  String? mobileNumber;
+  String? email;
+  String? otp;
+  List<Child>? children;
+  List<Interest>? interest;
 
   Data({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.password,
-    required this.mobileNumber,
-    required this.email,
-    required this.otp,
-    required this.children,
-    required this.interest,
+    this.id,
+    this.name,
+    this.password,
+    this.mobileNumber,
+    this.email,
+    this.otp,
+    this.children,
+    this.interest,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
+    name: json["name"],
     password: json["password"],
     mobileNumber: json["mobile_number"],
     email: json["email"],
     otp: json["otp"],
-    children: List<Child>.from(json["children"].map((x) => Child.fromJson(x))),
-    interest: List<Interest>.from(json["interest"].map((x) => Interest.fromJson(x))),
+    children: json["children"] == null ? [] : List<Child>.from(json["children"]!.map((x) => Child.fromJson(x))),
+    interest: json["interest"] == null ? [] : List<Interest>.from(json["interest"]!.map((x) => Interest.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "first_name": firstName,
-    "last_name": lastName,
+    "name": name,
     "password": password,
     "mobile_number": mobileNumber,
     "email": email,
     "otp": otp,
-    "children": List<dynamic>.from(children.map((x) => x.toJson())),
-    "interest": List<dynamic>.from(interest.map((x) => x.toJson())),
+    "children": children == null ? [] : List<dynamic>.from(children!.map((x) => x.toJson())),
+    "interest": interest == null ? [] : List<dynamic>.from(interest!.map((x) => x.toJson())),
   };
 }
 
 class Child {
-  String name;
-  String age;
+  String? name;
+  String? age;
 
   Child({
-    required this.name,
-    required this.age,
+    this.name,
+    this.age,
   });
 
   factory Child.fromJson(Map<String, dynamic> json) => Child(
@@ -101,12 +97,12 @@ class Child {
 }
 
 class Interest {
-  String id;
-  String name;
+  String? id;
+  String? name;
 
   Interest({
-    required this.id,
-    required this.name,
+    this.id,
+    this.name,
   });
 
   factory Interest.fromJson(Map<String, dynamic> json) => Interest(

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:playze/Reusability/shared/custom_btmbar.dart';
 import 'package:playze/Reusability/shared/drawer.dart';
 import 'package:playze/Reusability/utils/util.dart';
-import 'package:playze/app/routes/app_pages.dart';
 
 import '../controllers/aboutus_controller.dart';
 
@@ -14,7 +12,7 @@ class AboutusView extends GetView<AboutusController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _key,
+      key: _key,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: Get.height * 0.1, //
@@ -25,8 +23,7 @@ class AboutusView extends GetView<AboutusController> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                padding:
-                const EdgeInsets.only(left: 10, bottom: 10,right: 10),
+                padding: const EdgeInsets.only(left: 10, bottom: 10, right: 10),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -36,14 +33,12 @@ class AboutusView extends GetView<AboutusController> {
                       child: Container(
                         padding: EdgeInsets.all(8),
                         height: Get.height * 0.06,
-                        decoration: BoxDecoration(
-                        ),
+                        decoration: BoxDecoration(),
                         child: Center(
                           child: Container(
                               padding: EdgeInsets.all(5),
                               child: Image(
-                                image:
-                                AssetImage("assets/images/menu.png"),
+                                image: AssetImage("assets/images/menu.png"),
                                 color: Colors.white,
                               )),
                         ),
@@ -59,7 +54,6 @@ class AboutusView extends GetView<AboutusController> {
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.white,
-
                             )),
                       ],
                     ),
@@ -70,35 +64,40 @@ class AboutusView extends GetView<AboutusController> {
           ),
         ),
       ),
-        drawer: CsDrawer(),
+      drawer: CsDrawer(),
       body: Obx(
-            () => controller.isLoading.value
+        () => controller.isLoading.value
             ? const Center(
-          child: CircularProgressIndicator(
-            color: Colors.blue,
-          ),
-        )
-            :Container(
-              height: Get.height,
-              margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height:Get.height*0.15,
-                      width: Get.width*0.4,
-                      child: Image.asset("assets/images/notslogo.png"),
-                    ),
-                    Text("${controller?.a?.data?.privacypolicy ?? ""}",style:TextStyle(fontSize: 14)),
-                    h(90)
-                  ],
+                child: CircularProgressIndicator(
+                  color: Colors.blue,
+                ),
+              )
+            : Container(
+                height: Get.height,
+                margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: Get.height * 0.15,
+                        width: Get.width * 0.4,
+                        child: Image.asset("assets/images/notslogo.png"),
+                      ),
+                      Text(
+                        "${controller.a?.data?.privacypolicy ?? ""}",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      h(90)
+                    ],
+                  ),
                 ),
               ),
-            ),
       ),
-        bottomNavigationBar: btmbar(fromOther: true,),
+      bottomNavigationBar: btmbar(
+        fromOther: true,
+      ),
       extendBody: true,
     );
   }

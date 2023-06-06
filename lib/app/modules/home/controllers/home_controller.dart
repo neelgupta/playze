@@ -1,13 +1,11 @@
-import 'dart:typed_data';
+import 'dart:async';
+import 'dart:ui' as ui;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:playze/Reusability/shared/drawer.dart';
-import 'package:playze/app/routes/app_pages.dart';
-import 'dart:ui' as ui;
 
 import '../../../data/modal/plaseModel.dart';
 import '../../../data/service/Userservise.dart';
@@ -21,22 +19,41 @@ class HomeController extends GetxController {
   var ison = false.obs;
 
   RxBool isLoading = false.obs;
-  LocationData? currentlocation;
+  LatLng? positionStream;
   static const LatLng location1 = LatLng(21.230557, 72.821677);
   static const LatLng location2 = LatLng(21.224772, 72.821394);
+
   Usersevise usersevise = Usersevise();
-  List<String> images = [ 'assets/images/NoPath.png' ,'assets/images/NoPath.png', 'assets/images/NoPath.png' , 'assets/images/NoPath.png', 'assets/images/NoPath.png' , 'assets/images/NoPath.png' ,];
+
+  List<String> images = [
+    'assets/images/NoPath.png',
+    'assets/images/NoPath.png',
+    'assets/images/NoPath.png',
+    'assets/images/NoPath.png',
+    'assets/images/NoPath.png',
+    'assets/images/NoPath.png',
+  ];
   Uint8List? markerImage;
-  PlaseModel? a;
-  final List<Marker> markers =  <Marker>[];
-  final List<LatLng> latLang =  <LatLng>[
-    LatLng(21.194198910486286, 72.78706006722157), LatLng(21.19339957816572, 72.78677048041395) ,LatLng(21.19302105335981, 72.78770875175347),
-    LatLng(21.192499528705643, 72.78736592184096), LatLng(21.191952767011255, 72.78837636789889), LatLng(21.191935943542433, 72.7884124552581)];
+  List<Datum> Data = [];
+  PlaceData? a;
+  final List<Marker> markers = <Marker>[];
+  final List<LatLng> latLang = <LatLng>[
+    const LatLng(21.194198910486286, 72.78706006722157),
+    const LatLng(21.19339957816572, 72.78677048041395),
+    const LatLng(21.19302105335981, 72.78770875175347),
+    const LatLng(21.192499528705643, 72.78736592184096),
+    const LatLng(21.191952767011255, 72.78837636789889),
+    const LatLng(21.191935943542433, 72.7884124552581)
+  ];
   BitmapDescriptor icons = BitmapDescriptor.defaultMarker;
+  LatLng? center;
+  late Position currentLocation;
+  LocationPermission? permission;
 
   @override
   void onInit() {
     super.onInit();
+    getPlasedata();
     loadData();
   }
 
@@ -50,14 +67,6 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  void getcurrentlocation(){
-    Location location = Location();
-
-    location.getLocation().then((location){
-      currentlocation = location;
-    });
-  }
-
   // void setcoustommarkerIcon(){
   //   BitmapDescriptor.fromAssetImage(ImageConfiguration.empty, "assets/images/NoPath.png",mipmaps: true).then((icon){
   //     icons = icon;
@@ -66,18 +75,38 @@ class HomeController extends GetxController {
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 
-  loadData()async{
+  Future<Position> locateUser() async {
+    return Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+  }
+
+  getUserLocation() async {
+    permission = await Geolocator.requestPermission();
+    currentLocation = await locateUser();
+    center = LatLng(currentLocation.latitude, currentLocation.longitude);
+    print('center $center');
+    update();
+    isLoading(false);
+  }
+
+  loadData() async {
     isLoading(true);
-    for(int i = 0 ; i < latLang.length ; i++) {
-      final Uint8List markerIcon = await getBytesFromAsset(images[i].toString(), 100);
+    // locateUser();
+    getUserLocation();
+    for (int i = 0; i < latLang.length; i++) {
+      final Uint8List markerIcon =
+          await getBytesFromAsset(images[i].toString(), 100);
       markers.add(Marker(
-        onTap: (){
+        onTap: () {
           controller.Dpop.value = !controller.Dpop.value;
         },
         markerId: MarkerId(i.toString()),
@@ -85,20 +114,22 @@ class HomeController extends GetxController {
         icon: BitmapDescriptor.fromBytes(markerIcon),
       ));
       update();
-      isLoading(false);
+      // isLoading(false);
     }
   }
 
-  Future<void> getAbout() async {
+  Future<void> getPlasedata() async {
     isLoading(true);
     try {
       a = await usersevise.getPlasedata();
+      a?.data?.forEach((element) {
+        Data.add(element);
+        // lip.add(element.name);
+      });
+
       update();
     } catch (e) {
       print("${e.toString()}");
-    } finally {
-      isLoading(false);
-    }
+    } finally {}
   }
-
 }

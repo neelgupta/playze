@@ -116,21 +116,21 @@ class ChildinfoController extends GetxController {
         Fluttertoast.showToast(
             msg: '${sigin?.message}',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,
             fontSize: 16.0);
-        SharedPrefs().value.write(SharedPrefs.userIdKey, sigin?.data.id);
-        SharedPrefs().value.write(SharedPrefs.mnumbarKey, sigin?.data.mobileNumber);
-        SharedPrefs().value.write(SharedPrefs.emailKey, sigin?.data.email);
+        SharedPrefs().value.write(SharedPrefs.userIdKey, sigin?.data?.id);
+        SharedPrefs().value.write(SharedPrefs.mnumbarKey, sigin?.data?.mobileNumber);
+        SharedPrefs().value.write(SharedPrefs.emailKey, sigin?.data?.email);
         // SharedPrefs().value.write(SharedPrefs.userIdKey, sigin?.data.);
-        Get.offNamed(Routes.VERIFICATION, arguments: [sigin?.data.id]);
+        Get.offNamed(Routes.VERIFICATION, arguments: [sigin?.data?.id]);
       } else {
         Fluttertoast.showToast(
             msg: '${sigin?.message}',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,

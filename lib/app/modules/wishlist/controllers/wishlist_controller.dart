@@ -4,6 +4,8 @@ class WishlistController extends GetxController {
   //TODO: Implement WishlistController
 
   final count = 0.obs;
+
+  get a => null;
   @override
   void onInit() {
     super.onInit();

@@ -56,6 +56,8 @@ import '../modules/verification/bindings/verification_binding.dart';
 import '../modules/verification/views/verification_view.dart';
 import '../modules/wishlist/bindings/wishlist_binding.dart';
 import '../modules/wishlist/views/wishlist_view.dart';
+import '../modules/work/bindings/work_binding.dart';
+import '../modules/work/views/work_view.dart';
 
 part 'app_routes.dart';
 
@@ -152,7 +154,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.EDIT_PROFILE,
-      page: () =>  EditProfileView(),
+      page: () => EditProfileView(),
       binding: EditProfileBinding(),
     ),
     GetPage(
@@ -204,6 +206,11 @@ class AppPages {
       name: _Paths.FRISTPAGE,
       page: () => FristpageView(),
       binding: FristpageBinding(),
+    ),
+    GetPage(
+      name: _Paths.WORK,
+      page: () => const WorkView(),
+      binding: WorkBinding(),
     ),
   ];
 }

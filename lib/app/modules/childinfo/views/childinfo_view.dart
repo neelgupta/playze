@@ -2,12 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:playze/Reusability/shared/commonTextField.dart';
 import 'package:playze/Reusability/shared/textStyle.dart';
 import 'package:playze/Reusability/utils/util.dart';
-import 'package:playze/app/routes/app_pages.dart';
 import 'package:playze/generated/locales.g.dart';
 
 import '../controllers/childinfo_controller.dart';
@@ -84,9 +82,16 @@ class ChildinfoView extends GetView<ChildinfoController> {
                                                                 fontSize: 16)),
                                                     GestureDetector(
                                                       onTap: () {
-                                                        controller.weekPrice.add(index + 1);
-                                                        controller.nameControllersList.add(TextEditingController());
-                                                        controller.ageControllersList.add(TextEditingController());
+                                                        controller.weekPrice
+                                                            .add(index + 1);
+                                                        controller
+                                                            .nameControllersList
+                                                            .add(
+                                                                TextEditingController());
+                                                        controller
+                                                            .ageControllersList
+                                                            .add(
+                                                                TextEditingController());
                                                         controller.update();
                                                       },
                                                       child: Container(
@@ -121,11 +126,13 @@ class ChildinfoView extends GetView<ChildinfoController> {
                                                 h(20),
                                                 InputTextField(
                                                   onChanged: () {
-                                                    controller.cnamestatus.value = false;
+                                                    controller.cnamestatus
+                                                        .value = false;
                                                   },
                                                   context: context,
-                                                  controller:
-                                                  controller.nameControllersList[index],
+                                                  controller: controller
+                                                          .nameControllersList[
+                                                      index],
                                                   hintText: LocaleKeys
                                                           .labels_children.tr +
                                                       " " +
@@ -145,17 +152,42 @@ class ChildinfoView extends GetView<ChildinfoController> {
                                                       : Container(),
                                                 ),
                                                 h(15),
-                                                InputTextField(
-                                                  onChanged: () {
-                                                    controller.cagestatus.value = false;
-                                                  },
-                                                  context: context,
-                                                  controller:
-                                                  controller.ageControllersList[index],
-                                                  hintText: LocaleKeys
-                                                          .labels_children.tr +
-                                                      " " +
-                                                      LocaleKeys.labels_age.tr,
+                                                Container(
+                                                  height: Get.height * 0.065,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          Get.width * 0.03),
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.white),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.00)),
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    onChanged: (value) => () {
+                                                      controller.cagestatus
+                                                          .value = false;
+                                                    },
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                    cursorColor: Colors.white,
+                                                    controller: controller
+                                                            .ageControllersList[
+                                                        index],
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        hintText: LocaleKeys
+                                                                .labels_children
+                                                                .tr +
+                                                            " " +
+                                                            LocaleKeys
+                                                                .labels_age.tr,
+                                                        hintStyle: AppTextStyle
+                                                            .size12Regular),
+                                                  ),
                                                 ),
                                                 Obx(
                                                   () => controller
@@ -184,9 +216,15 @@ class ChildinfoView extends GetView<ChildinfoController> {
                                                           .spaceBetween,
                                                   children: [
                                                     InputTextField(
+                                                      onChanged: () {
+                                                        controller.cnamestatus
+                                                            .value = false;
+                                                      },
                                                       width: Get.width * 0.8,
                                                       context: context,
-                                                      controller: controller.nameControllersList[index],
+                                                      controller: controller
+                                                              .nameControllersList[
+                                                          index],
                                                       hintText: LocaleKeys
                                                               .labels_children
                                                               .tr +
@@ -194,17 +232,47 @@ class ChildinfoView extends GetView<ChildinfoController> {
                                                           LocaleKeys
                                                               .labels_name.tr,
                                                     ),
+                                                    Obx(
+                                                      () => controller
+                                                              .cnamestatus.value
+                                                          ? SizedBox(
+                                                              child: Text(
+                                                                controller
+                                                                    .status,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .red),
+                                                              ),
+                                                            )
+                                                          : Container(),
+                                                    ),
                                                     GestureDetector(
                                                       onTap: (() {
                                                         controller.weekPrice
                                                             .removeAt(
                                                                 index - 1);
-                                                        controller.nameControllersList[index].clear();
-                                                        controller.nameControllersList[index].dispose();
-                                                        controller.nameControllersList.removeLast();
-                                                        controller.ageControllersList[index].clear();
-                                                        controller.ageControllersList[index].dispose();
-                                                        controller.ageControllersList.removeLast();
+                                                        controller
+                                                            .nameControllersList[
+                                                                index]
+                                                            .clear();
+                                                        controller
+                                                            .nameControllersList[
+                                                                index]
+                                                            .dispose();
+                                                        controller
+                                                            .nameControllersList
+                                                            .removeLast();
+                                                        controller
+                                                            .ageControllersList[
+                                                                index]
+                                                            .clear();
+                                                        controller
+                                                            .ageControllersList[
+                                                                index]
+                                                            .dispose();
+                                                        controller
+                                                            .ageControllersList
+                                                            .removeLast();
                                                         controller.update();
                                                       }),
                                                       child: Container(
@@ -220,16 +288,63 @@ class ChildinfoView extends GetView<ChildinfoController> {
                                                   ],
                                                 ),
                                                 h(15),
-                                                InputTextField(
-                                                  width: Get.width * 0.8,
-                                                  context: context,
-                                                  controller:
-                                                  controller.ageControllersList[index],
-                                                  hintText: LocaleKeys
-                                                          .labels_children.tr +
-                                                      " " +
-                                                      LocaleKeys.labels_age.tr,
+                                                Container(
+                                                  height: Get.height * 0.065,
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          Get.width * 0.03),
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.white),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.00)),
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    onChanged: (value) => () {
+                                                      controller.cagestatus
+                                                          .value = false;
+                                                    },
+                                                    controller: controller
+                                                            .ageControllersList[
+                                                        index],
+                                                    decoration: InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        hintText: LocaleKeys
+                                                                .labels_children
+                                                                .tr +
+                                                            " " +
+                                                            LocaleKeys
+                                                                .labels_age.tr,
+                                                        hintStyle: AppTextStyle
+                                                            .size12Regular),
+                                                  ),
                                                 ),
+                                                Obx(
+                                                  () => controller
+                                                          .cagestatus.value
+                                                      ? SizedBox(
+                                                          child: Text(
+                                                            controller.status,
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red),
+                                                          ),
+                                                        )
+                                                      : Container(),
+                                                ),
+                                                // InputTextField(
+                                                //   width: Get.width * 0.8,
+                                                //   context: context,
+                                                //   controller:
+                                                //   controller.ageControllersList[index],
+                                                //   hintText: LocaleKeys
+                                                //           .labels_children.tr +
+                                                //       " " +
+                                                //       LocaleKeys.labels_age.tr,
+                                                // ),
                                               ],
                                             )),
                                 ],
@@ -267,13 +382,24 @@ class ChildinfoView extends GetView<ChildinfoController> {
                                                 !control.interestsList[index]
                                                     .isSelected;
                                             control.update();
-                                            if(control.interestsList[index].isSelected == true){
-                                              controller.selectedInterestIdList.add(control.interestsList[index].id);
-                                              print(controller.selectedInterestIdList);
-                                            }else if(control.interestsList[index].isSelected == false){
-                                              controller.selectedInterestIdList.remove(control.interestsList[index].id);
-                                              print(controller.selectedInterestIdList);
-                                            }else{}
+                                            if (control.interestsList[index]
+                                                    .isSelected ==
+                                                true) {
+                                              controller.selectedInterestIdList
+                                                  .add(control
+                                                      .interestsList[index].id);
+                                              print(controller
+                                                  .selectedInterestIdList);
+                                            } else if (control
+                                                    .interestsList[index]
+                                                    .isSelected ==
+                                                false) {
+                                              controller.selectedInterestIdList
+                                                  .remove(control
+                                                      .interestsList[index].id);
+                                              print(controller
+                                                  .selectedInterestIdList);
+                                            } else {}
                                             log("control.selectedInterestIdList ${control.selectedInterestIdList}");
                                           },
                                           child: Container(

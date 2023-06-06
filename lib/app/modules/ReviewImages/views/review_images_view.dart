@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import '../controllers/review_images_controller.dart';
 
 class ReviewImagesView extends GetView<ReviewImagesController> {
   const ReviewImagesView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,8 +22,7 @@ class ReviewImagesView extends GetView<ReviewImagesController> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                padding:
-                const EdgeInsets.only(left: 10, bottom: 10,right: 10),
+                padding: const EdgeInsets.only(left: 10, bottom: 10, right: 10),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -31,14 +32,12 @@ class ReviewImagesView extends GetView<ReviewImagesController> {
                       child: Container(
                         padding: EdgeInsets.all(8),
                         height: Get.height * 0.06,
-                        decoration: BoxDecoration(
-                        ),
+                        decoration: BoxDecoration(),
                         child: Center(
                           child: Container(
                               padding: EdgeInsets.all(5),
                               child: Image(
-                                image:
-                                AssetImage("assets/images/back.png"),
+                                image: AssetImage("assets/images/back.png"),
                                 color: Colors.white,
                               )),
                         ),
@@ -65,11 +64,21 @@ class ReviewImagesView extends GetView<ReviewImagesController> {
           ),
         ),
       ),
-     body: Container(
-       height: Get.height,
-       width: Get.width,
-       child: Image.asset("assets/images/femily.png",fit: BoxFit.fill,),
-     ),
+      body: Container(
+        height: Get.height,
+        width: Get.width,
+        child: CachedNetworkImage(
+          imageUrl: controller.imageUrl,
+          errorWidget: (context, url, error) {
+            return Center(
+              child: Text("No Image Found"),
+            );
+          },
+        ),
+
+        // Image.asset("assets/images/femily.png",fit: BoxFit.fill,),
+        //  child: Image.asset("${controller.wSData?.data.images[index].images}",fit: BoxFit.fill,),
+      ),
       bottomNavigationBar: btmbar(fromOther: true),
       extendBody: true,
     );

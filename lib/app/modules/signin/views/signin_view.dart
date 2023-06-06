@@ -42,6 +42,7 @@ class SigninView extends GetView<SigninController> {
                       onChanged: (){
                         controller.emailstatus.value = false;
                       },
+                      style: const TextStyle(color: Colors.white),
                       context: context,
                       controller: controller.emailController,
                       hintText: LocaleKeys.labels_email.tr,
@@ -61,8 +62,10 @@ class SigninView extends GetView<SigninController> {
                         onChanged: (value) => (){
                           controller.passwordstatus.value = false;
                         },
+                        style: const TextStyle(color: Colors.white),
                         obscureText: true,
                         controller: controller.passwordController,
+                        cursorColor: Colors.white,
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: LocaleKeys.labels_password.tr,
@@ -136,11 +139,12 @@ class SigninView extends GetView<SigninController> {
                       onPressed: () {
                         if(controller.emailController.text.isEmpty){
                           controller.emailstatus.value = true;
-                          controller.status = "please enter Email";
+                          controller.status = "Please Enter Email";
                         }else if(controller.passwordController.text.isEmpty){
                           controller.passwordstatus.value = true;
-                          controller.status = "please enter Password";
-                        }else{
+                          controller.status = "Please Enter Password";
+                        }
+                        else{
                           controller.signin();
                         }
                       },

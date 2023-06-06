@@ -12,15 +12,17 @@ class ChangePasswordController extends GetxController {
   var getdata = Get.arguments;
   TextEditingController CurrentPassword = TextEditingController();
   TextEditingController NewPassword = TextEditingController();
-  TextEditingController RetypeNewPassword  = TextEditingController();
+  TextEditingController RetypeNewPassword = TextEditingController();
   RxBool isLoading = false.obs;
+
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Usersevise usersevise = Usersevise();
   String? id;
   @override
   void onInit() {
     super.onInit();
-   id = SharedPrefs().value.read(SharedPrefs.userIdKey);
-   print(id);
+    id = SharedPrefs().value.read(SharedPrefs.userIdKey);
+    print(id);
   }
 
   @override
@@ -35,13 +37,12 @@ class ChangePasswordController extends GetxController {
 
   Future<void> userChengpassword() async {
     isLoading(true);
-    try{
+    try {
       Commonmsg? sigin = await usersevise.postUserChengpassword(
           id,
           CurrentPassword.text.trim(),
           NewPassword.text.trim(),
-          RetypeNewPassword.text.trim()
-      );
+          RetypeNewPassword.text.trim());
       if (sigin?.status == 200) {
         CurrentPassword.text = "";
         NewPassword.text = "";
@@ -49,30 +50,26 @@ class ChangePasswordController extends GetxController {
         Fluttertoast.showToast(
             msg: '${sigin?.message}',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,
-            fontSize: 16.0
-        );
-      }else{
+            fontSize: 16.0);
+        Get.back();
+      } else {
         Fluttertoast.showToast(
             msg: '${sigin?.message}',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,
-            fontSize: 16.0
-        );
+            fontSize: 16.0);
       }
-    }
-    catch(e){
+    } catch (e) {
       rethrow;
-    }
-    finally{
+    } finally {
       isLoading(false);
     }
   }
-
 }

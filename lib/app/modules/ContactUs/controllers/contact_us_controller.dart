@@ -11,9 +11,12 @@ class ContactUsController extends GetxController {
   final count = 0.obs;
   TextEditingController FName = TextEditingController();
   TextEditingController Email = TextEditingController();
-  TextEditingController Massage  = TextEditingController();
+  TextEditingController Massage = TextEditingController();
   Usersevise usersevise = Usersevise();
   RxBool isLoading = false.obs;
+
+  GlobalKey<FormState> contactFormKey = GlobalKey<FormState>();
+
   @override
   void onInit() {
     super.onInit();
@@ -31,9 +34,9 @@ class ContactUsController extends GetxController {
 
   Future<void> userContactus() async {
     isLoading(true);
-    try{
+    try {
       Commonmsg? sigin = await usersevise.postcontactus(
-          FName.text.trim(),
+        FName.text.trim(),
         Email.text.trim(),
         Massage.text.trim(),
       );
@@ -48,9 +51,9 @@ class ContactUsController extends GetxController {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,
-            fontSize: 16.0
-        );
-      }else{
+            fontSize: 16.0);
+        Get.back();
+      } else {
         Fluttertoast.showToast(
             msg: '${sigin?.message}',
             toastLength: Toast.LENGTH_SHORT,
@@ -58,14 +61,11 @@ class ContactUsController extends GetxController {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,
-            fontSize: 16.0
-        );
+            fontSize: 16.0);
       }
-    }
-    catch(e){
+    } catch (e) {
       rethrow;
-    }
-    finally{
+    } finally {
       isLoading(false);
     }
   }

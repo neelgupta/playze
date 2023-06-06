@@ -44,45 +44,58 @@ class VerificationController extends GetxController {
   }
 
    Future<void> otp() async {
-     isLoading(true);
-     try{
-       var sigin = await Loginervice.postotp(argumentData[0], otpController.text.trim());
-       if (sigin?.status == 200) {
-         Fluttertoast.showToast(
-             msg: '${sigin?.message}',
-             toastLength: Toast.LENGTH_SHORT,
-             gravity: ToastGravity.CENTER,
-             timeInSecForIosWeb: 1,
-             backgroundColor: Colors.blue,
-             textColor: Colors.white,
-             fontSize: 16.0);
-         SharedPrefs().value.write(SharedPrefs.tokenKey, sigin?.data.token);
-         SharedPrefs().value.write(SharedPrefs.userIdKey, sigin?.data.usersId);
-         SharedPrefs().value.write(SharedPrefs.setBool, true);
-         print("====>${(SharedPrefs().value.read(SharedPrefs.tokenKey))}");
-         print("====>${(SharedPrefs().value.read(SharedPrefs.userIdKey))}");
-         isLoading(false);
-         Get.offNamedUntil(
-           Routes.ADD_PROFILE_PICTURE,
-               (route) => false,
-         );
-       } else {
-         isLoading(false);
-         Fluttertoast.showToast(
-             msg: '${sigin?.message}',
-             toastLength: Toast.LENGTH_SHORT,
-             gravity: ToastGravity.CENTER,
-             timeInSecForIosWeb: 1,
-             backgroundColor: Colors.blue,
-             textColor: Colors.white,
-             fontSize: 16.0);
+     if (otpController.text.trim().isEmpty || otpController.text.trim().length<4) {
+       Fluttertoast.showToast(
+           msg: 'Please Enter Correct OTP',
+           toastLength: Toast.LENGTH_SHORT,
+           gravity: ToastGravity.BOTTOM,
+           timeInSecForIosWeb: 1,
+           backgroundColor: Colors.blue,
+           textColor: Colors.white,
+           fontSize: 16.0);
+     }
+     else {
+       isLoading(true);
+       try{
+         var sigin = await Loginervice.postotp(argumentData[0], otpController.text.trim());
+         if (sigin?.status == 200) {
+           Fluttertoast.showToast(
+               msg: '${sigin?.message}',
+               toastLength: Toast.LENGTH_SHORT,
+               gravity: ToastGravity.BOTTOM,
+               timeInSecForIosWeb: 1,
+               backgroundColor: Colors.blue,
+               textColor: Colors.white,
+               fontSize: 16.0);
+           SharedPrefs().value.write(SharedPrefs.tokenKey, sigin?.data.token);
+           SharedPrefs().value.write(SharedPrefs.userIdKey, sigin?.data.usersId);
+           SharedPrefs().value.write(SharedPrefs.setBool, true);
+           print("====>${(SharedPrefs().value.read(SharedPrefs.tokenKey))}");
+           print("====>${(SharedPrefs().value.read(SharedPrefs.userIdKey))}");
+           isLoading(false);
+           Get.offNamedUntil(
+             Routes.ADD_PROFILE_PICTURE,
+                 (route) => false,
+           );
+         }
+         else {
+           isLoading(false);
+           Fluttertoast.showToast(
+               msg: '${sigin?.message}',
+               toastLength: Toast.LENGTH_SHORT,
+               gravity: ToastGravity.BOTTOM,
+               timeInSecForIosWeb: 1,
+               backgroundColor: Colors.blue,
+               textColor: Colors.white,
+               fontSize: 16.0);
+         }
        }
-     }
-     catch(e){
-       rethrow;
-     }
-     finally{
-       isLoading(false);
+       catch(e){
+         rethrow;
+       }
+       finally{
+         isLoading(false);
+       }
      }
    }
 
@@ -96,7 +109,7 @@ class VerificationController extends GetxController {
         Fluttertoast.showToast(
             msg: '${sigin?.message}',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,
@@ -106,7 +119,7 @@ class VerificationController extends GetxController {
         Fluttertoast.showToast(
             msg: '${sigin?.message}',
             toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
+            gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,

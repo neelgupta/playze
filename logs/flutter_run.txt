@@ -1,0 +1,49 @@
+[2:02:45 pm]: Spawning C:\flutter\bin\flutter.bat with args ["run","--machine","--start-paused","--no-sound-null-safety","-d","304fd404","--devtools-server-address","http://127.0.0.1:9100/","--target","lib\\main.dart"]
+[2:02:45 pm]: ..  in C:\Flutter projects\playze
+[2:02:45 pm]: ..  with {"toolEnv":{"FLUTTER_HOST":"VSCode","PUB_ENVIRONMENT":"vscode.dart-code"}}
+[2:02:45 pm]: PID: 14168
+[2:02:48 pm]: <== [{"event":"daemon.connected","params":{"version":"0.6.1","pid":6944}}]
+[2:02:48 pm]: <== [{"event":"app.start","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f","deviceId":"304fd404","directory":"C:\\Flutter projects\\playze","supportsRestart":true,"launchMode":"run"}}]
+[2:02:48 pm]: <== Launching lib\main.dart on RMX3491 in debug mode...
+[2:02:49 pm]: <== [{"event":"app.progress","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f","id":"0","progressId":null,"message":"Running Gradle task 'assembleDebug'...","finished":false}}]
+[2:02:56 pm]: Warning: Mapping new ns http://schemas.android.com/repository/android/common/02 to old ns http://schemas.android.com/repository/android/common/01
+[2:02:56 pm]: Warning: Mapping new ns http://schemas.android.com/repository/android/generic/02 to old ns http://schemas.android.com/repository/android/generic/01
+Warning: Mapping new ns http://schemas.android.com/sdk/android/repo/addon2/02 to old ns http://schemas.android.com/sdk/android/repo/addon2/01
+Warning: Mapping new ns http://schemas.android.com/sdk/android/repo/addon2/03 to old ns http://schemas.android.com/sdk/android/repo/addon2/01
+Warning: Mapping new ns http://schemas.android.com/sdk/android/repo/repository2/02 to old ns http://schemas.android.com/sdk/android/repo/repository2/01
+Warning: Mapping new ns http://schemas.android.com/sdk/android/repo/repository2/03 to old ns http://schemas.android.com/sdk/android/repo/repository2/01
+Warning: Mapping new ns http://schemas.android.com/sdk/android/repo/sys-img2/03 to old ns http://schemas.android.com/sdk/android/repo/sys-img2/01
+Warning: Mapping new ns http://schemas.android.com/sdk/android/repo/sys-img2/02 to old ns http://schemas.android.com/sdk/android/repo/sys-img2/01
+[2:03:01 pm]: <== I/flutter (17202): STARTING WIDGET UPDATE
+[2:03:08 pm]: <== Parameter format not correct -
+[2:03:18 pm]: <== [{"event":"app.progress","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f","id":"0","progressId":null,"finished":true}}]
+[2:03:22 pm]: <== √  Built build\app\outputs\flutter-apk\app-debug.apk.
+[2:03:22 pm]: <== [{"event":"app.progress","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f","id":"1","progressId":null,"message":"Installing build\\app\\outputs\\flutter-apk\\app.apk...","finished":false}}]
+[2:03:29 pm]: <== [{"event":"app.progress","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f","id":"1","progressId":null,"finished":true}}]
+[2:03:32 pm]: <== D/FlutterGeolocator(17623): Attaching Geolocator to activity
+[2:03:33 pm]: <== D/FlutterGeolocator(17623): Creating service.
+[2:03:33 pm]: <== D/FlutterGeolocator(17623): Binding to location service.
+[2:03:33 pm]: <== D/FlutterLocationService(17623): Creating service.
+[2:03:33 pm]: <== D/FlutterLocationService(17623): Binding to location service.
+[2:03:33 pm]: <== D/FlutterGeolocator(17623): Geolocator foreground service connected
+[2:03:33 pm]: <== D/FlutterGeolocator(17623): Initializing Geolocator services
+[2:03:33 pm]: <== D/FlutterGeolocator(17623): Flutter engine connected. Connected engine count 1
+[2:03:33 pm]: <== [{"event":"app.debugPort","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f","port":52822,"wsUri":"ws://127.0.0.1:52822/tOKxga8a0sQ=/ws","baseUri":"file:///data/user/0/com.app.playze/code_cache/playzeUNLDUA/playze/"}}]
+[2:03:34 pm]: <== [{"event":"app.progress","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f","id":"2","progressId":null,"message":"Syncing files to device RMX3491...","finished":false}}]
+[2:03:34 pm]: <== [{"event":"app.progress","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f","id":"2","progressId":null,"finished":true}}]
+[2:03:34 pm]: <== [{"event":"app.started","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f"}}]
+[2:03:36 pm]: <== I/com.app.playze(17623): ProcessProfilingInfo new_methods=1751 is saved saved_to_disk=1 resolve_classes_delay=5000
+[2:03:38 pm]: <== D/ProfileInstaller(17623): Installing profile for com.app.playze
+[2:03:40 pm]: <== I/flutter (17623): ====>false
+[2:03:52 pm]: <== D/ViewRootImpl(17623): enqueueInputEventMotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=741.0, y[0]=1771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241457264, downTime=241457264, deviceId=4, source=0x1002, displayId=0 }
+[2:03:52 pm]: <== D/ViewRootImpl[MainActivity](17623): processMotionEvent MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=741.0, y[0]=1771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241457264, downTime=241457264, deviceId=4, source=0x1002, displayId=0 }
+[2:03:52 pm]: <== D/ViewRootImpl[MainActivity](17623): dispatchPointerEvent handled=true, event=MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=741.0, y[0]=1771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241457264, downTime=241457264, deviceId=4, source=0x1002, displayId=0 }
+[2:03:52 pm]: <== D/ViewRootImpl[MainActivity](17623): processMotionEvent MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=741.0, y[0]=1771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241457430, downTime=241457264, deviceId=4, source=0x1002, displayId=0 }
+[2:03:52 pm]: <== D/ViewRootImpl[MainActivity](17623): dispatchPointerEvent handled=true, event=MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=741.0, y[0]=1771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241457430, downTime=241457264, deviceId=4, source=0x1002, displayId=0 }
+[2:03:53 pm]: <== D/ViewRootImpl(17623): enqueueInputEventMotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=355.0, y[0]=771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241458478, downTime=241458478, deviceId=4, source=0x1002, displayId=0 }
+[2:03:53 pm]: <== D/ViewRootImpl[MainActivity](17623): processMotionEvent MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=355.0, y[0]=771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241458478, downTime=241458478, deviceId=4, source=0x1002, displayId=0 }
+[2:03:53 pm]: <== D/ViewRootImpl[MainActivity](17623): dispatchPointerEvent handled=true, event=MotionEvent { action=ACTION_DOWN, actionButton=0, id[0]=0, x[0]=355.0, y[0]=771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241458478, downTime=241458478, deviceId=4, source=0x1002, displayId=0 }
+[2:03:53 pm]: <== D/ViewRootImpl[MainActivity](17623): processMotionEvent MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=355.0, y[0]=771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241458567, downTime=241458478, deviceId=4, source=0x1002, displayId=0 }
+[2:03:53 pm]: <== D/ViewRootImpl[MainActivity](17623): dispatchPointerEvent handled=true, event=MotionEvent { action=ACTION_UP, actionButton=0, id[0]=0, x[0]=355.0, y[0]=771.0, toolType[0]=TOOL_TYPE_FINGER, buttonState=0, classification=NONE, metaState=0, flags=0x0, edgeFlags=0x0, pointerCount=1, historySize=0, eventTime=241458567, downTime=241458478, deviceId=4, source=0x1002, displayId=0 }
+[2:04:37 pm]: <== Lost connection to device.
+[2:04:37 pm]: <== [{"event":"app.stop","params":{"appId":"a6257f67-e64a-4512-9c2d-d2c6e47df81f"}}]
