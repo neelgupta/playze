@@ -1,5 +1,6 @@
 class ApiUrlList {
-  static String baseUrl = "https://rkinfosolution.com/playze/api/";
+  // static String baseUrl = "https://rkinfosolution.com/playze/api/";
+  static String baseUrl = "http://aaradhyatoursandtravels.co.in/playze/api/";
 
   //auth apis
   static String register = '${baseUrl}registermobile';
@@ -23,6 +24,9 @@ class ApiUrlList {
   static String plaseDetails = '${baseUrl}plaseDetails';
   static String deleteChildren = '${baseUrl}deleteChildren';
   static String getWorkspace = '${baseUrl}workspace/getWorkspace';
+
+  ///user functions apis
+  static String addWorkSpace = '${baseUrl}workspace/addWorkspace';
 
   //common apis
   static String aboutus = '${baseUrl}about';

@@ -1,10 +1,5 @@
 import 'package:get/get.dart';
-import 'package:playze/app/modules/myplan/views/myplan_view.dart';
-import 'package:playze/app/modules/profile/views/profile_view.dart';
-import 'package:playze/app/modules/wishlist/views/wishlist_view.dart';
 import 'package:playze/app/routes/app_pages.dart';
-
-import '../../home/views/home_view.dart';
 
 class BottomNavigationbarController extends GetxController {
   //TODO: Implement BottomNavigationbarController
@@ -12,7 +7,7 @@ class BottomNavigationbarController extends GetxController {
   final count = 0.obs;
 
   var args = Get.arguments;
-  var Dpop = false.obs;
+  var locateWindowPop = false.obs;
   var _selectedIndex = 0.obs;
   get selectedIndex => _selectedIndex.value;
   set selectedIndex(value) => _selectedIndex.value = value;
@@ -23,6 +18,7 @@ class BottomNavigationbarController extends GetxController {
     update();
   }
 
+  @override
   void onInit() {
     if (Get.arguments != null) {
       print(_selectedIndex);
@@ -34,18 +30,14 @@ class BottomNavigationbarController extends GetxController {
   }
 
   @override
-  void onReady() {
-
-  }
+  void onReady() {}
 
   @override
-  void onClose() {
-
-  }
+  void onClose() {}
   onOtherScreen(int index) {
     selectedIndex = index;
     print(selectedIndex);
-    Get.offNamedUntil(Routes.BOTTOM_NAVIGATIONBAR, (route) => false, arguments: [index]);
+    Get.offNamedUntil(Routes.BOTTOM_NAVIGATIONBAR, (route) => false,
+        arguments: [index]);
   }
-
 }

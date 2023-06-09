@@ -16,7 +16,7 @@ class AddplacesView extends GetView<AddplacesController> {
         toolbarHeight: Get.height * 0.1, //
         flexibleSpace: Container(
           height: Get.height * 0.2,
-          color: Color(0xff0264C5),
+          color: const Color(0xff0264C5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -29,25 +29,25 @@ class AddplacesView extends GetView<AddplacesController> {
                         Get.back();
                       },
                       child: Container(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         height: Get.height * 0.06,
-                        decoration: BoxDecoration(),
+                        decoration: const BoxDecoration(),
                         child: Center(
                           child: Container(
-                              padding: EdgeInsets.all(2),
-                              child: Image(
+                              padding: const EdgeInsets.all(2),
+                              child: const Image(
                                 image: AssetImage("assets/images/back.png"),
                                 color: Colors.white,
                               )),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text("Add Pleces",
                             style: TextStyle(
                               fontSize: 18,
@@ -68,7 +68,7 @@ class AddplacesView extends GetView<AddplacesController> {
                 color: Colors.blue,
               ),
             )
-          : Container(
+          : SizedBox(
               height: Get.height,
               width: Get.height,
               child: Stack(
@@ -88,7 +88,7 @@ class AddplacesView extends GetView<AddplacesController> {
                             child: Container(
                               height: Get.height * 0.06,
                               width: Get.width * 0.75,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   color: Colors.white,
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(25))),
@@ -97,19 +97,19 @@ class AddplacesView extends GetView<AddplacesController> {
                                   SizedBox(
                                     width: Get.width * 0.03,
                                   ),
-                                  Container(
+                                  SizedBox(
                                       height: Get.height * 0.05,
                                       width: Get.width * 0.07,
-                                      child: Image(
+                                      child: const Image(
                                           image: AssetImage(
                                               "assets/images/search.png"))),
                                   SizedBox(
                                     width: Get.width * 0.03,
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: Get.height * 0.3,
                                     width: Get.width * 0.5,
-                                    child: TextField(
+                                    child: const TextField(
                                       enabled: false,
                                       decoration: InputDecoration(
                                           hintText: "Search places",
@@ -128,10 +128,10 @@ class AddplacesView extends GetView<AddplacesController> {
                               Get.toNamed(Routes.FILTER);
                             },
                             child: Container(
-                              padding: EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(10),
                               height: Get.height * 0.06,
                               width: Get.width * 0.13,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                   color: Colors.white, shape: BoxShape.circle),
                               child: Image.asset("assets/images/menu2.png"),
                             ),
@@ -139,7 +139,7 @@ class AddplacesView extends GetView<AddplacesController> {
                         ],
                       ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         color: Colors.white,
                         height: Get.height * 0.7,
                         width: Get.width,
@@ -149,13 +149,27 @@ class AddplacesView extends GetView<AddplacesController> {
                             return Card(
                               child: Container(
                                 color: Colors.white,
-                                margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                margin:
+                                    const EdgeInsets.fromLTRB(10, 20, 10, 0),
                                 height: Get.height * 0.25,
                                 child: Column(
                                   children: [
                                     Row(
                                       children: [
                                         Container(
+                                          height: Get.height * 0.12,
+                                          width: Get.width * 0.4,
+                                          decoration: BoxDecoration(
+                                              color: Colors.cyan,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10)),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(controller
+                                                      .Data[index]
+                                                      .images![index]
+                                                      .images
+                                                      .toString()))),
                                           child: Stack(
                                             children: [
                                               Positioned(
@@ -170,21 +184,9 @@ class AddplacesView extends GetView<AddplacesController> {
                                               )
                                             ],
                                           ),
-                                          height: Get.height * 0.12,
-                                          width: Get.width * 0.4,
-                                          decoration: BoxDecoration(
-                                              color: Colors.cyan,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10)),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(controller
-                                                      .Data[index]
-                                                      .images![index]
-                                                      .images
-                                                      .toString()))),
                                         ),
                                         Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
@@ -198,9 +200,9 @@ class AddplacesView extends GetView<AddplacesController> {
                                               ),
                                               Row(
                                                 children: [
-                                                  Container(
+                                                  SizedBox(
                                                       height: Get.height * 0.02,
-                                                      child: Image(
+                                                      child: const Image(
                                                           image: AssetImage(
                                                               "assets/images/star.png"))),
                                                   SizedBox(
@@ -208,13 +210,13 @@ class AddplacesView extends GetView<AddplacesController> {
                                                   ),
                                                   Text(
                                                     "${controller.Data[index].rating}",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
                                                   ),
                                                   SizedBox(
                                                     width: Get.width * 0.02,
                                                   ),
-                                                  Text(
+                                                  const Text(
                                                     "150 Reviews",
                                                     style: TextStyle(
                                                         fontSize: 12,
@@ -227,19 +229,19 @@ class AddplacesView extends GetView<AddplacesController> {
                                               ),
                                               Row(
                                                 children: [
-                                                  Container(
+                                                  SizedBox(
                                                       height: Get.height * 0.02,
-                                                      child: Image(
+                                                      child: const Image(
                                                           image: AssetImage(
                                                               "assets/images/log.png"))),
                                                   SizedBox(
                                                     width: Get.width * 0.02,
                                                   ),
-                                                  Container(
+                                                  SizedBox(
                                                       width: Get.width * 0.35,
                                                       child: Text(
                                                         "${controller.Data[index].address}",
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
@@ -253,15 +255,15 @@ class AddplacesView extends GetView<AddplacesController> {
                                               ),
                                               Row(
                                                 children: [
-                                                  Container(
+                                                  SizedBox(
                                                       height: Get.height * 0.02,
-                                                      child: Image(
+                                                      child: const Image(
                                                           image: AssetImage(
                                                               "assets/images/walking.png"))),
                                                   SizedBox(
                                                     width: Get.width * 0.02,
                                                   ),
-                                                  Text(
+                                                  const Text(
                                                     "2 min",
                                                     style: TextStyle(
                                                         fontSize: 12,
@@ -270,7 +272,7 @@ class AddplacesView extends GetView<AddplacesController> {
                                                   SizedBox(
                                                     width: Get.width * 0.02,
                                                   ),
-                                                  Text(
+                                                  const Text(
                                                     "1 km away",
                                                     style: TextStyle(
                                                         fontSize: 12,
@@ -287,6 +289,8 @@ class AddplacesView extends GetView<AddplacesController> {
                                       height: Get.height * 0.025,
                                     ),
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
@@ -319,8 +323,6 @@ class AddplacesView extends GetView<AddplacesController> {
                                           btnwidth: Get.width * 0.3,
                                         ),
                                       ],
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
                                     )
                                   ],
                                 ),
@@ -334,7 +336,7 @@ class AddplacesView extends GetView<AddplacesController> {
                 ],
               ),
             )),
-      bottomNavigationBar: btmbar(
+      bottomNavigationBar: const btmbar(
         fromOther: true,
       ),
       extendBody: true,

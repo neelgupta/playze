@@ -4,40 +4,46 @@
 
 import 'dart:convert';
 
-PlaceData placeDataFromJson(String str) => PlaceData.fromJson(json.decode(str));
+PlaceDataModel placeDataFromJson(String str) =>
+    PlaceDataModel.fromJson(json.decode(str));
 
-String placeDataToJson(PlaceData data) => json.encode(data.toJson());
+String placeDataToJson(PlaceDataModel data) => json.encode(data.toJson());
 
-class PlaceData {
+class PlaceDataModel {
   int? status;
-  List<Datum>? data;
+  List<PlaceDetails>? data;
   String? message;
 
-  PlaceData({
+  PlaceDataModel({
     this.status,
     this.data,
     this.message,
   });
 
-  factory PlaceData.fromJson(Map<String, dynamic> json) => PlaceData(
-    status: json["status"],
-    data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
-    message: json["message"],
-  );
+  factory PlaceDataModel.fromJson(Map<String, dynamic> json) => PlaceDataModel(
+        status: json["status"],
+        data: json["data"] == null
+            ? []
+            : List<PlaceDetails>.from(
+                json["data"]!.map((x) => PlaceDetails.fromJson(x))),
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "status": status,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-    "message": message,
-  };
+        "status": status,
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "message": message,
+      };
 }
 
-class Datum {
+class PlaceDetails {
   String? id;
   String? placesName;
   String? address;
-  int? latitude;
-  int? longitude;
+  String? latitude;
+  String? longitude;
   String? costAdults;
   String? costChildren;
   String? logo;
@@ -47,7 +53,7 @@ class Datum {
   List<Image>? images;
   List<Video>? video;
 
-  Datum({
+  PlaceDetails({
     this.id,
     this.placesName,
     this.address,
@@ -63,39 +69,51 @@ class Datum {
     this.video,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    id: json["id"],
-    placesName: json["places_name"],
-    address: json["address"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-    costAdults: json["cost_adults"],
-    costChildren: json["cost_children"],
-    logo: json["logo"],
-    totalreview: json["total_review"],
-    rating: json["rating"],
-    highlights: json["highlights"] == null ? [] : List<Highlight>.from(json["highlights"]!.map((x) => Highlight.fromJson(x))),
-    images: json["images"] == null ? [] : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
-    video: json["video"] == null ? [] : List<Video>.from(json["video"]!.map((x) => Video.fromJson(x))),
-  );
+  factory PlaceDetails.fromJson(Map<String, dynamic> json) => PlaceDetails(
+        id: json["id"],
+        placesName: json["places_name"],
+        address: json["address"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        costAdults: json["cost_adults"],
+        costChildren: json["cost_children"],
+        logo: json["logo"],
+        totalreview: json["total_review"],
+        rating: json["rating"],
+        highlights: json["highlights"] == null
+            ? []
+            : List<Highlight>.from(
+                json["highlights"]!.map((x) => Highlight.fromJson(x))),
+        images: json["images"] == null
+            ? []
+            : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
+        video: json["video"] == null
+            ? []
+            : List<Video>.from(json["video"]!.map((x) => Video.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "places_name": placesName,
-    "address": address,
-    "latitude": latitude,
-    "longitude": longitude,
-    "cost_adults": costAdults,
-    "cost_children": costChildren,
-    "logo": logo,
-    "total_review": totalreview,
-    "rating": rating,
-    "highlights": highlights == null ? [] : List<dynamic>.from(highlights!.map((x) => x.toJson())),
-    "images": images == null ? [] : List<dynamic>.from(images!.map((x) => x.toJson())),
-    "video": video == null ? [] : List<dynamic>.from(video!.map((x) => x.toJson())),
-  };
+        "id": id,
+        "places_name": placesName,
+        "address": address,
+        "latitude": latitude,
+        "longitude": longitude,
+        "cost_adults": costAdults,
+        "cost_children": costChildren,
+        "logo": logo,
+        "total_review": totalreview,
+        "rating": rating,
+        "highlights": highlights == null
+            ? []
+            : List<dynamic>.from(highlights!.map((x) => x.toJson())),
+        "images": images == null
+            ? []
+            : List<dynamic>.from(images!.map((x) => x.toJson())),
+        "video": video == null
+            ? []
+            : List<dynamic>.from(video!.map((x) => x.toJson())),
+      };
 }
-
 
 class Highlight {
   String? id;
@@ -107,14 +125,14 @@ class Highlight {
   });
 
   factory Highlight.fromJson(Map<String, dynamic> json) => Highlight(
-    id: json["id"],
-    highlights:json["highlights"],
-  );
+        id: json["id"],
+        highlights: json["highlights"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "highlights": highlights,
-  };
+        "id": id,
+        "highlights": highlights,
+      };
 }
 
 class Image {
@@ -127,14 +145,14 @@ class Image {
   });
 
   factory Image.fromJson(Map<String, dynamic> json) => Image(
-    id: json["id"],
-    images: json["images"],
-  );
+        id: json["id"],
+        images: json["images"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "images": images,
-  };
+        "id": id,
+        "images": images,
+      };
 }
 
 class Video {
@@ -149,16 +167,16 @@ class Video {
   });
 
   factory Video.fromJson(Map<String, dynamic> json) => Video(
-    id: json["id"],
-    video: json["video"],
-    videoImage: json["video_image"],
-  );
+        id: json["id"],
+        video: json["video"],
+        videoImage: json["video_image"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "video": video,
-    "video_image": videoImage,
-  };
+        "id": id,
+        "video": video,
+        "video_image": videoImage,
+      };
 }
 
 class EnumValues<T> {

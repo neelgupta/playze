@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,10 +14,12 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  @override
   final controller = Get.put<HomeController>(HomeController());
   final controllerc =
       Get.put<BottomNavigationbarController>(BottomNavigationbarController());
 
+  HomeView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +104,7 @@ class HomeView extends GetView<HomeController> {
                 ),
               )
             : Obx(
-                () => controller.ison.value != true
+                () => controller.isMapView.value
                     ? Container(
                         height: Get.height,
                         width: Get.width,
@@ -113,14 +117,17 @@ class HomeView extends GetView<HomeController> {
                                   height: Get.height * 0.85,
                                   width: Get.width,
                                   child: GoogleMap(
+                                    initialCameraPosition:
+                                        controller.initialCameraPosition!,
                                     myLocationEnabled: true,
                                     scrollGesturesEnabled: true,
                                     zoomControlsEnabled: false,
-                                    initialCameraPosition: CameraPosition(
-                                        target: controller.center!,
-                                        tilt: 10,
-                                        zoom: 14.5),
+                                    // myLocationButtonEnabled: true,
                                     markers: Set<Marker>.of(controller.markers),
+                                    onTap: (location) {
+                                      log("location.latitude ::  ${location.latitude}");
+                                      log("location. ::  ${location.longitude}");
+                                    },
                                   ),
                                 ),
                                 Row(
@@ -193,8 +200,9 @@ class HomeView extends GetView<HomeController> {
                                   left: 20,
                                   child: GestureDetector(
                                     onTap: () {
-                                      controller.ison.value = true;
-                                      controllerc.Dpop.value = false;
+                                      controller.isMapView.value =
+                                          !controller.isMapView.value;
+                                      controllerc.locateWindowPop.value = false;
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -307,7 +315,7 @@ class HomeView extends GetView<HomeController> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      Get.offNamed(Routes.FILTER);
+                                      Get.toNamed(Routes.FILTER);
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
@@ -329,7 +337,7 @@ class HomeView extends GetView<HomeController> {
                                 height: Get.height * 0.75,
                                 width: Get.width,
                                 child: ListView.builder(
-                                  itemCount: controller.Data.length,
+                                  itemCount: controller.placeDataList.length,
                                   itemBuilder: (context, index) {
                                     return Column(
                                       children: [
@@ -388,13 +396,12 @@ class HomeView extends GetView<HomeController> {
                                                             ),
                                                             child:
                                                                 CachedNetworkImage(
-                                                              imageUrl:
-                                                                  controller
-                                                                      .Data[
-                                                                          index]
-                                                                      .images!
-                                                                      .first
-                                                                      .images!,
+                                                              imageUrl: controller
+                                                                  .placeDataList[
+                                                                      index]
+                                                                  .images!
+                                                                  .first
+                                                                  .images!,
                                                               fit: BoxFit.cover,
                                                               errorWidget:
                                                                   (context, url,
@@ -411,11 +418,11 @@ class HomeView extends GetView<HomeController> {
                                                           top: 10,
                                                           left: 10,
                                                           child: SizedBox(
-                                                            child: Image(
-                                                                image: AssetImage(
-                                                                    "assets/images/dil.png")),
                                                             height: Get.height *
                                                                 0.02,
+                                                            child: const Image(
+                                                                image: AssetImage(
+                                                                    "assets/images/dil.png")),
                                                           ),
                                                         )
                                                       ],
@@ -433,22 +440,24 @@ class HomeView extends GetView<HomeController> {
                                                                 .start,
                                                         children: [
                                                           Text(
-                                                              "${controller.Data[index].placesName}"),
+                                                              "${controller.placeDataList[index].placesName}"),
                                                           SizedBox(
                                                             height: Get.height *
                                                                 0.01,
                                                           ),
-                                                          controller.Data[index]
+                                                          controller
+                                                                          .placeDataList[
+                                                                              index]
                                                                           .rating !=
                                                                       0 ||
                                                                   controller
-                                                                          .Data[
+                                                                          .placeDataList[
                                                                               index]
                                                                           .totalreview !=
                                                                       0
                                                               ? Row(
                                                                   children: [
-                                                                    controller.Data[index].rating !=
+                                                                    controller.placeDataList[index].rating !=
                                                                             0
                                                                         ? SizedBox(
                                                                             height: Get.height *
@@ -456,17 +465,17 @@ class HomeView extends GetView<HomeController> {
                                                                             child:
                                                                                 const Image(image: AssetImage("assets/images/star.png")))
                                                                         : h(1),
-                                                                    controller.Data[index].rating !=
+                                                                    controller.placeDataList[index].rating !=
                                                                             0
                                                                         ? SizedBox(
                                                                             width:
                                                                                 Get.width * 0.02,
                                                                           )
                                                                         : h(1),
-                                                                    controller.Data[index].rating !=
+                                                                    controller.placeDataList[index].rating !=
                                                                             0
                                                                         ? Text(
-                                                                            "${controller.Data[index].rating}",
+                                                                            "${controller.placeDataList[index].rating}",
                                                                             style:
                                                                                 const TextStyle(fontSize: 16),
                                                                           )
@@ -476,15 +485,15 @@ class HomeView extends GetView<HomeController> {
                                                                               .width *
                                                                           0.02,
                                                                     ),
-                                                                    controller.Data[index].totalreview !=
+                                                                    controller.placeDataList[index].totalreview !=
                                                                             0
                                                                         ? Text(
-                                                                            '${controller.Data[index].totalreview}',
+                                                                            '${controller.placeDataList[index].totalreview}',
                                                                             style:
                                                                                 const TextStyle(fontSize: 12, color: Colors.grey),
                                                                           )
                                                                         : h(1),
-                                                                    controller.Data[index].totalreview !=
+                                                                    controller.placeDataList[index].totalreview !=
                                                                             0
                                                                         ? const Text(
                                                                             ' Reviews',
@@ -518,7 +527,7 @@ class HomeView extends GetView<HomeController> {
                                                                     Get.width *
                                                                         0.35,
                                                                 child: Text(
-                                                                  "${controller.Data[index].address}",
+                                                                  "${controller.placeDataList[index].address}",
                                                                   style: const TextStyle(
                                                                       overflow:
                                                                           TextOverflow
@@ -585,15 +594,43 @@ class HomeView extends GetView<HomeController> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Row(
-                                                      children: const [
-                                                        Image(
-                                                          image: AssetImage(
-                                                              "assets/images/go.png"),
-                                                          width: 25,
-                                                        ),
-                                                        Text("  Go"),
-                                                      ],
+                                                    InkWell(
+                                                      onTap: () {
+                                                        controller.isMapView
+                                                            .value = true;
+                                                        controller
+                                                                .selectedPlaceLocation =
+                                                            controller
+                                                                    .placeDataList[
+                                                                index];
+                                                        controller
+                                                                .initialCameraPosition =
+                                                            CameraPosition(
+                                                          target: LatLng(
+                                                              double.parse(controller
+                                                                  .selectedPlaceLocation!
+                                                                  .latitude!),
+                                                              double.parse(controller
+                                                                  .selectedPlaceLocation!
+                                                                  .longitude!)),
+                                                          tilt: 10,
+                                                          zoom: 14.5,
+                                                        );
+
+                                                        controllerc
+                                                            .locateWindowPop
+                                                            .value = true;
+                                                      },
+                                                      child: Row(
+                                                        children: const [
+                                                          Image(
+                                                            image: AssetImage(
+                                                                "assets/images/go.png"),
+                                                            width: 25,
+                                                          ),
+                                                          Text("  Go"),
+                                                        ],
+                                                      ),
                                                     ),
                                                     SizedBox(
                                                       width: Get.width * 0.025,
@@ -613,7 +650,10 @@ class HomeView extends GetView<HomeController> {
                                                         Get.toNamed(
                                                           Routes.FULL_DETAILS,
                                                           arguments: [
-                                                            controller.a!.data![index].id
+                                                            controller
+                                                                .placeModel!
+                                                                .data![index]
+                                                                .id
                                                           ],
                                                         );
                                                       },
@@ -650,7 +690,7 @@ class HomeView extends GetView<HomeController> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      controller.ison.value = false;
+                                      controller.isMapView.value = true;
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(

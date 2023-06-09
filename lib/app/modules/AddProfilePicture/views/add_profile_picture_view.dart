@@ -31,7 +31,7 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                       padding:
                           EdgeInsets.symmetric(horizontal: Get.width * 0.05),
                       child: Container(
-                        margin: EdgeInsets.only(top: 0),
+                        margin: const EdgeInsets.only(top: 0),
                         child: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,10 +57,10 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                                         controller.getFromCamera();
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.all(12),
+                                        padding: const EdgeInsets.all(12),
                                         height: Get.height * 0.06,
                                         width: Get.width * 0.15,
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: Colors.white,
                                           shape: BoxShape.circle,
                                         ),
@@ -74,11 +74,11 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                                         controller.getFromGallery();
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.all(12),
+                                        padding: const EdgeInsets.all(12),
                                         alignment: Alignment.center,
                                         height: Get.height * 0.06,
                                         width: Get.width * 0.15,
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: Colors.white,
                                           shape: BoxShape.circle,
                                         ),
@@ -215,7 +215,7 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                                                                 .storeimgselected
                                                                 .toString()),
                                                         fit: BoxFit.fill)
-                                                    : DecorationImage(
+                                                    : const DecorationImage(
                                                         image: AssetImage(
                                                             "assets/images/noman.png")),
                                           ),
@@ -228,11 +228,11 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                                   child: GestureDetector(
                                     onTap: () {},
                                     child: Container(
-                                      padding: EdgeInsets.all(5),
+                                      padding: const EdgeInsets.all(5),
                                       alignment: Alignment.center,
                                       height: Get.height * 0.03,
                                       width: Get.width * 0.06,
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Colors.orange,
                                         shape: BoxShape.circle,
                                       ),
@@ -244,7 +244,7 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                               ],
                             ),
                             h(10),
-                            Text(LocaleKeys.labels_Profile.tr + " " + "Name",
+                            Text("${LocaleKeys.labels_Profile.tr} Name",
                                 style: AppTextStyle.size14Medium.copyWith(
                                     letterSpacing: 1,
                                     fontWeight: FontWeight.w600)),

@@ -1,35 +1,28 @@
+import 'dart:developer';
+
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
-
-import '../../../../Reusability/shared/drawer.dart';
-
 
 class ReviewVideosController extends GetxController {
   //TODO: Implement ReviewVideosController
 
   final count = 0.obs;
   late VideoPlayerController videoPlayerController;
-   ChewieController? chewieController;
-
+  ChewieController? chewieController;
 
   var args = Get.arguments;
 
-  var videosUrl  ="";
+  var videosUrl = "";
 
   @override
   void onInit() {
     super.onInit();
-    initplayer();
-    print(chewieController);
-    print(videoPlayerController);
-    videosUrl=args[0];
-  }
 
-  @override
-  void onReady() {
-    super.onReady();
+    initplayer();
+    // print(chewieController);
+    // print(videoPlayerController);
   }
 
   @override
@@ -39,13 +32,31 @@ class ReviewVideosController extends GetxController {
     chewieController?.dispose();
   }
 
- Future<void> initplayer()async{
-   videoPlayerController = VideoPlayerController.network(
-       "${videosUrl}");
-   await videoPlayerController.initialize();
-   chewieController = ChewieController(videoPlayerController: videoPlayerController,
+  Future<void> initplayer() async {
+    videosUrl = args[0];
+    log("videosUrl :$videosUrl");
+    // VideoPlayerController.network();
+    videoPlayerController = VideoPlayerController.network(videosUrl)
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        // setState(() {});
 
-   );
-   update();
- }
+        update();
+      });
+    // await videoPlayerController.initialize();
+    chewieController = ChewieController(
+      videoPlayerController: videoPlayerController,
+      autoInitialize: true,
+      showOptions: true,
+      errorBuilder: (context, errorMessage) {
+        return Center(
+          child: Text(
+            errorMessage,
+            style: const TextStyle(color: Colors.white),
+          ),
+        );
+      },
+    );
+    update();
+  }
 }

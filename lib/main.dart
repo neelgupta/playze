@@ -6,7 +6,6 @@ import 'package:playze/generated/locales.g.dart';
 // ignore: depend_on_referenced_packages
 // import 'package:firebase_core/firebase_core.dart';
 import 'app/routes/app_pages.dart';
-import 'dart:async';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -40,7 +39,7 @@ void main() async {
       translationsKeys: AppTranslation.translations,
       debugShowCheckedModeBanner: false,
       locale: const Locale('en', 'US'),
-      fallbackLocale: Locale('en', 'US'),
+      fallbackLocale: const Locale('en', 'US'),
       // theme: AppTheme.theme,
       navigatorKey: Get.key,
     ),

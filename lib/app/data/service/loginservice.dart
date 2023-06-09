@@ -14,10 +14,7 @@ import '../modal/login.dart';
 
 class loginService {
   Future<hp> getinterest({client}) async {
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+    client ??= http.Client();
     var url = ApiUrlList.getinterest;
     var result = await NetworkHandler().getwithoutToken(
       url,
@@ -109,10 +106,7 @@ class loginService {
   Future<GetEmoji?> getemoji({client}) async {
     List<String>? tokan =
         SharedPrefs().value.read(SharedPrefs.tokenKey).split("|");
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+    client ??= http.Client();
     var url = ApiUrlList.activeEmojisList;
     String newtokan = tokan![1];
     print(newtokan);

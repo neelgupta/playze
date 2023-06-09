@@ -59,10 +59,7 @@ class Usersevise {
   }
 
   Future<hp?> getCategorylist({client}) async {
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+    client ??= http.Client();
     var url = ApiUrlList.categoryList;
     String newtokan = tokan![1];
     print(newtokan);
@@ -76,10 +73,7 @@ class Usersevise {
   }
 
   Future<AboutModel?> getAboutus({client}) async {
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+    client ??= http.Client();
     var url = ApiUrlList.aboutus;
     String newtokan = tokan![1];
     print(newtokan);
@@ -93,10 +87,7 @@ class Usersevise {
   }
 
   Future<DataModal?> getdata(id, {client}) async {
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+    client ??= http.Client();
     var url = ApiUrlList.userDetailes;
     String newtokan = tokan![1];
     log("id : $id");
@@ -112,10 +103,7 @@ class Usersevise {
   }
 
   Future<Commonmsg?> deletechildren(id, {client}) async {
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+    client ??= http.Client();
     var url = ApiUrlList.deleteChildren;
     String newtokan = tokan![1];
     print(newtokan);
@@ -129,28 +117,22 @@ class Usersevise {
     }
   }
 
-  Future<PlaceData?> getPlasedata({client}) async {
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+  Future<PlaceDataModel?> getPlasedata({client}) async {
+    client ??= http.Client();
     var url = ApiUrlList.placesActiveList;
     String newtokan = tokan![1];
     log(newtokan);
     var result = await NetworkHandler().get(url, client, newtokan);
-    log("getPlasedata result is=$result");
+    log("getPlasedata result is : $result");
     if (result != null) {
-      return PlaceData.fromJson(jsonDecode(result));
+      return PlaceDataModel.fromJson(jsonDecode(result));
     } else {
       throw Exception("Error getting agreement list");
     }
   }
 
   Future<WorkSpaceDetailModel?> postdataplace(id, {client}) async {
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+    client ??= http.Client();
     var url = ApiUrlList.plaseDetails;
     String newtokan = tokan![1];
     log(newtokan);
@@ -165,10 +147,7 @@ class Usersevise {
   }
 
   Future<WorkModal?> getwork({client}) async {
-    if (client == null) {
-      client = http.Client();
-      // token = Util().getToken()!;
-    }
+    client ??= http.Client();
     var url = ApiUrlList.getWorkspace;
     String newtokan = tokan![1];
     print(newtokan);
@@ -178,6 +157,34 @@ class Usersevise {
       return WorkModal.fromJson(jsonDecode(result));
     } else {
       throw Exception("Error getting agreement list");
+    }
+  }
+
+  Future<bool?> addWorkSpaceToMyWorkSpace(
+      {userId, placesId, status, client}) async {
+    client ??= http.Client();
+    var url = ApiUrlList.addWorkSpace;
+    String newtokan = tokan![1];
+
+    var reqBody = {
+      "user_id": userId,
+      "places_id": placesId,
+      "status": status,
+    };
+    log("addWorkSpaceToMyWorkSpace token :: $newtokan");
+    log("addWorkSpaceToMyWorkSpace reqBody :: $reqBody");
+    var result = await NetworkHandler().post(
+      url,
+      client,
+      newtokan,
+      model: reqBody,
+    );
+    log("addWorkSpaceToMyWorkSpace result is :: $result");
+    if (result != null) {
+      return true;
+    } else {
+      // throw Exception("Error adding workspace");
+      return false;
     }
   }
 }

@@ -51,11 +51,6 @@ class AddProfilePictureController extends GetxController {
     getPlasedata();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
   getFromGallery() async {
     XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
@@ -80,19 +75,14 @@ class AddProfilePictureController extends GetxController {
     );
     if (pickedFile != null) {
       imageFile = File(pickedFile.path);
-      print("pathimg==${imageFile}");
+      print("pathimg==$imageFile");
       isPicked.value = true;
       ispic.value = false;
     }
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> Addprofile() async {
-    // isLoading(true);
+    isLoading(true);
     // if (storeimgselected != null) {
     //   print(storeimgselected);
     //   final response = await http.get(Uri.parse(storeimgselected.toString()));
@@ -167,7 +157,7 @@ class AddProfilePictureController extends GetxController {
       }
       update();
     } catch (e) {
-      print("${e.toString()}");
+      print(e.toString());
     } finally {
       isLoading(false);
     }

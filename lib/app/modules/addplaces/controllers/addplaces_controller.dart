@@ -7,9 +7,9 @@ class AddplacesController extends GetxController {
 
   final count = 0.obs;
   Usersevise usersevise = Usersevise();
-  PlaceData? a;
+  PlaceDataModel? placeModel;
   RxBool isLoading = false.obs;
-  List<Datum> Data = [];
+  List<PlaceDetails> Data = [];
   List<Image> images = [];
   @override
   void onInit() {
@@ -17,33 +17,23 @@ class AddplacesController extends GetxController {
     getPlasedata();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> getPlasedata() async {
     isLoading(true);
     try {
-      a = await usersevise.getPlasedata();
-      a?.data?.forEach((element) {
+      placeModel = await usersevise.getPlasedata();
+      placeModel?.data?.forEach((element) {
         Data.add(element);
         // lip.add(element.name);
       });
-      for(int i = 0; i< Data.length ;i++){
-        a?.data?[i].images?.forEach((element) {
+      for (int i = 0; i < Data.length; i++) {
+        placeModel?.data?[i].images?.forEach((element) {
           images.add(element);
           // lip.add(element.name);
         });
       }
       update();
     } catch (e) {
-      print("${e.toString()}");
+      print(e.toString());
     } finally {
       isLoading(false);
     }
