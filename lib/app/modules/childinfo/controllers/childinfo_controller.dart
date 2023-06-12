@@ -8,7 +8,6 @@ import 'package:playze/app/data/modal/signup.dart';
 import 'package:playze/app/data/service/loginservice.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:playze/app/routes/app_pages.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChildinfoController extends GetxController {
   //TODO: Implement ChildinfoController
@@ -24,6 +23,7 @@ class ChildinfoController extends GetxController {
   TextEditingController ageController = TextEditingController();
   var cnamestatus = false.obs;
   var cagestatus = false.obs;
+  var isChildDataValid = false.obs;
   String status = "";
   hp? a;
   String nameListString = "";
@@ -46,12 +46,12 @@ class ChildinfoController extends GetxController {
   String? cpassword;
   @override
   void onInit() {
-    fname =  SharedPrefs().value.read(SharedPrefs.fnamenKey);
-    lname =  SharedPrefs().value.read(SharedPrefs.lnameKey);
-    email =  SharedPrefs().value.read(SharedPrefs.emailKey);
-    pnumbar =  SharedPrefs().value.read(SharedPrefs.mnumbarKey);
-    password =  SharedPrefs().value.read(SharedPrefs.passwordKey);
-    cpassword =  SharedPrefs().value.read(SharedPrefs.passwordKey);
+    fname = SharedPrefs().value.read(SharedPrefs.fnamenKey);
+    lname = SharedPrefs().value.read(SharedPrefs.lnameKey);
+    email = SharedPrefs().value.read(SharedPrefs.emailKey);
+    pnumbar = SharedPrefs().value.read(SharedPrefs.mnumbarKey);
+    password = SharedPrefs().value.read(SharedPrefs.passwordKey);
+    cpassword = SharedPrefs().value.read(SharedPrefs.passwordKey);
     // print(argumentData[1]);
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -59,23 +59,18 @@ class ChildinfoController extends GetxController {
     });
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
   Future<void> getinterest(context) async {
     isLoading(true);
     try {
       a = await Loginervice.getinterest();
-      a?.data.forEach((element) {
+      for (var element in a!.data) {
         interestsList.add(element);
         // lip.add(element.name);
-      });
+      }
       print(lip);
       update();
     } catch (e) {
-      print("${e.toString()}");
+      print(e.toString());
     } finally {
       isLoading(false);
     }
@@ -86,14 +81,14 @@ class ChildinfoController extends GetxController {
   Future<void> signUp(context) async {
     Interest = selectedInterestIdList.map((e) => e).toList().join(",");
     isLoading(true);
-    for(var tc in nameControllersList){
+    for (var tc in nameControllersList) {
       log("tc : ${tc.text}");
       nameList.add(tc.text.trim());
       // print(list.toString().replaceAll('[', '').replaceAll(']',''))
     }
     nameListString = nameList.map((e) => e).toList().join(",");
     log("ageControllersList : ${nameListString.toString()}");
-    for(var tc in ageControllersList){
+    for (var tc in ageControllersList) {
       log("tc : ${tc.text}");
       ageList.add(tc.text.trim());
       // print(list.toString().replaceAll('[', '').replaceAll(']',''))
@@ -122,7 +117,9 @@ class ChildinfoController extends GetxController {
             textColor: Colors.white,
             fontSize: 16.0);
         SharedPrefs().value.write(SharedPrefs.userIdKey, sigin?.data?.id);
-        SharedPrefs().value.write(SharedPrefs.mnumbarKey, sigin?.data?.mobileNumber);
+        SharedPrefs()
+            .value
+            .write(SharedPrefs.mnumbarKey, sigin?.data?.mobileNumber);
         SharedPrefs().value.write(SharedPrefs.emailKey, sigin?.data?.email);
         // SharedPrefs().value.write(SharedPrefs.userIdKey, sigin?.data.);
         Get.offNamed(Routes.VERIFICATION, arguments: [sigin?.data?.id]);
@@ -137,9 +134,9 @@ class ChildinfoController extends GetxController {
             fontSize: 16.0);
       }
     } catch (e) {
-      print("${e.toString()}");
+      print(e.toString());
     } finally {
       isLoading(false);
     }
-
-}}
+  }
+}

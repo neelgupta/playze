@@ -47,11 +47,14 @@ class PlaceDetails {
   String? costAdults;
   String? costChildren;
   String? logo;
-  int? rating;
-  int? totalreview;
+  String? distance;
+  String? duration;
+  String? totalReview;
+  String? rating;
+  String? avgRating;
   List<Highlight>? highlights;
-  List<Image>? images;
-  List<Video>? video;
+  List<ImageData>? images;
+  List<VideoData>? video;
 
   PlaceDetails({
     this.id,
@@ -62,8 +65,11 @@ class PlaceDetails {
     this.costAdults,
     this.costChildren,
     this.logo,
-    this.totalreview,
+    this.distance,
+    this.duration,
+    this.totalReview,
     this.rating,
+    this.avgRating,
     this.highlights,
     this.images,
     this.video,
@@ -78,18 +84,23 @@ class PlaceDetails {
         costAdults: json["cost_adults"],
         costChildren: json["cost_children"],
         logo: json["logo"],
-        totalreview: json["total_review"],
+        distance: json["distance"],
+        duration: json["duration"],
+        totalReview: json["total_review"],
         rating: json["rating"],
+        avgRating: json["avg_rating"],
         highlights: json["highlights"] == null
             ? []
             : List<Highlight>.from(
                 json["highlights"]!.map((x) => Highlight.fromJson(x))),
         images: json["images"] == null
             ? []
-            : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
+            : List<ImageData>.from(
+                json["images"]!.map((x) => ImageData.fromJson(x))),
         video: json["video"] == null
             ? []
-            : List<Video>.from(json["video"]!.map((x) => Video.fromJson(x))),
+            : List<VideoData>.from(
+                json["video"]!.map((x) => VideoData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -101,8 +112,11 @@ class PlaceDetails {
         "cost_adults": costAdults,
         "cost_children": costChildren,
         "logo": logo,
-        "total_review": totalreview,
+        "distance": distance,
+        "duration": duration,
+        "total_review": totalReview,
         "rating": rating,
+        "avg_rating": avgRating,
         "highlights": highlights == null
             ? []
             : List<dynamic>.from(highlights!.map((x) => x.toJson())),
@@ -135,16 +149,16 @@ class Highlight {
       };
 }
 
-class Image {
+class ImageData {
   String? id;
   String? images;
 
-  Image({
+  ImageData({
     this.id,
     this.images,
   });
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory ImageData.fromJson(Map<String, dynamic> json) => ImageData(
         id: json["id"],
         images: json["images"],
       );
@@ -155,18 +169,18 @@ class Image {
       };
 }
 
-class Video {
+class VideoData {
   String? id;
   String? video;
   String? videoImage;
 
-  Video({
+  VideoData({
     this.id,
     this.video,
     this.videoImage,
   });
 
-  factory Video.fromJson(Map<String, dynamic> json) => Video(
+  factory VideoData.fromJson(Map<String, dynamic> json) => VideoData(
         id: json["id"],
         video: json["video"],
         videoImage: json["video_image"],

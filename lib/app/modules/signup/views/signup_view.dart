@@ -7,7 +7,6 @@ import 'package:playze/Reusability/shared/commonTextField.dart';
 import 'package:playze/Reusability/shared/textStyle.dart';
 import 'package:playze/Reusability/utils/shared_prefs.dart';
 import 'package:playze/Reusability/utils/util.dart';
-import 'package:playze/app/modules/childinfo/views/childinfo_view.dart';
 import 'package:playze/app/routes/app_pages.dart';
 import 'package:playze/generated/locales.g.dart';
 
@@ -120,7 +119,7 @@ class SignupView extends GetView<SignupController> {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(10),
                   ],
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
                   keyboardType: TextInputType.number,
                   onChanged: (value) => () {
@@ -214,28 +213,28 @@ class SignupView extends GetView<SignupController> {
                   if (controller.fNameController.text.isEmpty) {
                     controller.fnamestatus.value = true;
                     controller.status = "Please Enter FristName";
-                  }else if (controller.lNameController.text.isEmpty) {
+                  } else if (controller.lNameController.text.isEmpty) {
                     controller.lnamestatus.value = true;
                     controller.status = "Please Enter LastName";
-                  }else if (controller.emailController.text.isEmpty) {
+                  } else if (controller.emailController.text.isEmpty) {
                     controller.emailstatus.value = true;
                     controller.status = "Please Enter Email";
-                  }else if (!emailValid) {
+                  } else if (!emailValid) {
                     controller.emailstatus.value = true;
                     controller.status = "Please Enter Valid Email";
-                  }else if (controller.phoneController.text.isEmpty) {
+                  } else if (controller.phoneController.text.isEmpty) {
                     controller.phonestatus.value = true;
                     controller.status = "Please Enter PhoneNumber";
-                  }else if (controller.passwordController.text.isEmpty) {
+                  } else if (controller.passwordController.text.isEmpty) {
                     controller.passwordstatus.value = true;
                     controller.status = "Please Enter Password";
-                  }else if (controller.passwordController.text.length < 6) {
+                  } else if (controller.passwordController.text.length < 6) {
                     controller.passwordstatus.value = true;
                     controller.status = "Please Enter Six Charter";
-                  }else if (controller.cPasswordController.text.isEmpty) {
+                  } else if (controller.cPasswordController.text.isEmpty) {
                     controller.cPasswordstatus.value = true;
                     controller.status = "Please Enter Confirm Password";
-                  }else if (controller.passwordController.text !=
+                  } else if (controller.passwordController.text !=
                       controller.cPasswordController.text) {
                     controller.cPasswordstatus.value = true;
                     controller.status = "Password does not match";

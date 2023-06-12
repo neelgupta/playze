@@ -65,6 +65,7 @@ class LocaleKeys {
   static const labels_phone = 'labels_phone';
   static const labels_confirm_password = 'labels_confirm_password';
   static const labels_children = 'labels_children';
+  static const labels_childs = "Child's";
   static const labels_info = 'labels_info';
   static const labels_name = 'labels_name';
   static const labels_age = 'labels_age';
@@ -149,6 +150,7 @@ class Locales {
     'labels_phone': 'Phone Number',
     'labels_confirm_password': 'Confirm Password',
     'labels_children': 'Children',
+    'labels_childs': "Child's",
     'labels_info': 'information',
     'labels_name': 'Name',
     'labels_age': 'Age',

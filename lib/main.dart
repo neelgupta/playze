@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:playze/generated/locales.g.dart';
+import 'package:provider/provider.dart';
 // ignore: depend_on_referenced_packages
 // import 'package:firebase_core/firebase_core.dart';
+import 'app/data/provider/filter_provider.dart';
 import 'app/routes/app_pages.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -32,16 +34,21 @@ void main() async {
   //   sound: true,
   // );
   runApp(
-    GetMaterialApp(
-      title: "Application",
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
-      translationsKeys: AppTranslation.translations,
-      debugShowCheckedModeBanner: false,
-      locale: const Locale('en', 'US'),
-      fallbackLocale: const Locale('en', 'US'),
-      // theme: AppTheme.theme,
-      navigatorKey: Get.key,
+    MultiProvider(
+      providers: [
+        ListenableProvider<FilterProvider>(create: (_) => FilterProvider()),
+      ],
+      child: GetMaterialApp(
+        title: "Application",
+        initialRoute: AppPages.INITIAL,
+        getPages: AppPages.routes,
+        translationsKeys: AppTranslation.translations,
+        debugShowCheckedModeBanner: false,
+        locale: const Locale('en', 'US'),
+        fallbackLocale: const Locale('en', 'US'),
+        // theme: AppTheme.theme,
+        navigatorKey: Get.key,
+      ),
     ),
   );
 }

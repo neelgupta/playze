@@ -17,19 +17,4 @@ class SignupController extends GetxController {
   var passwordstatus = false.obs;
   var cPasswordstatus = false.obs;
   String status = "";
-   @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
 }

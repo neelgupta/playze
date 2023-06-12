@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
 import 'package:playze/Reusability/utils/app_colors.dart';
 
+import '../../../data/modal/class.dart';
 import '../controllers/filter_controller.dart';
 
 class FilterView extends GetView<FilterController> {
@@ -47,9 +51,9 @@ class FilterView extends GetView<FilterController> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "Filter",
                         style: TextStyle(
@@ -86,8 +90,8 @@ class FilterView extends GetView<FilterController> {
                       itemBuilder: (context, index) {
                         return GetBuilder<FilterController>(
                           builder: (controlles) {
-                            int number = controller.filterList.length;
-                            int count = number;
+                            // int number = controller.filterList.length;
+                            // int count = number;
                             var singleItem = controller.filterList[index];
                             // List<bool> checks =
                             //     List.generate(count, (_) => false).obs;
@@ -105,6 +109,13 @@ class FilterView extends GetView<FilterController> {
                               onChanged: (newValue) {
                                 singleItem.isSelected = newValue!;
                                 controller.update();
+
+                                controller.selectedCount.value = 0;
+                                for (var item in controller.filterList) {
+                                  if (item.isSelected) {
+                                    controller.selectedCount.value += 1;
+                                  }
+                                }
                                 // print(controlles.isbool[index]);
                               },
                               dense: true,
@@ -169,10 +180,11 @@ class FilterView extends GetView<FilterController> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  for (var item in controller.filterList) {
-                    item.isSelected = false;
-                  }
-                  controller.update();
+                  // for (var item in controller.filterList) {
+                  //   item.isSelected = false;
+                  // }
+                  controller.clearFilterHomeScreenPlacesList();
+                  // controller.update();
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -199,22 +211,50 @@ class FilterView extends GetView<FilterController> {
               child: GestureDetector(
                 onTap: () {
                   //filter api call
+                  controller.selectedCatIdList = [];
+
+                  List<dp> selectedList = [];
+                  for (var item in controller.filterList) {
+                    if (item.isSelected) {
+                      log("item.isSelected ::  ${item.id}");
+                      controller.selectedCatIdList.add(item.id.toString());
+                      selectedList.add(item);
+                    }
+                  }
+
+                  if (controller.selectedCatIdList.isEmpty) {
+                    controller.filterProv.updateFilterDataList(selectedList);
+                    Fluttertoast.showToast(
+                      msg: 'Please select any category to filter out places.',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.blue,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  } else {
+                    controller.filterProv.updateFilterDataList(selectedList);
+                    controller.categoryFilterSearchApi();
+                  }
                 },
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    color: Color(0xffFE7702),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
+                child: Obx(
+                  () => Container(
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      color: Color(0xffFE7702),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5),
+                      ),
                     ),
-                  ),
-                  height: Get.height * 0.06,
-                  // width: Get.width * 0.4,
-                  width: double.infinity,
-                  child: Text(
-                    "Apply".toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.white,
+                    height: Get.height * 0.06,
+                    // width: Get.width * 0.4,
+                    width: double.infinity,
+                    child: Text(
+                      "Apply (${controller.selectedCount.value})".toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

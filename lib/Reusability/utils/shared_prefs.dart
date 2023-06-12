@@ -1,9 +1,6 @@
-import 'package:playze/Reusability/utils/util.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get_storage/get_storage.dart';
 
 class SharedPrefs {
-
   final value = GetStorage();
   Function? disposeListen;
 
@@ -21,8 +18,6 @@ class SharedPrefs {
   static String interestKey = "interest";
   static String setBool = "login";
 
-
-
   // setotpData({
   //    String? token,
   //    String? usersId,
@@ -39,7 +34,6 @@ class SharedPrefs {
   //   value.read(tokenKey);
   //   value.read(userIdKey);
   // }
-
 
   // setLoginData({
   //   required String token,

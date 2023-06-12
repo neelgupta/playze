@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,10 +8,11 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:playze/Reusability/utils/shared_prefs.dart';
-import 'package:playze/app/data/modal/emoji.dart';
 import 'package:playze/app/data/service/api_list.dart';
 import 'package:playze/app/data/service/loginservice.dart';
 import 'package:playze/app/routes/app_pages.dart';
+
+import '../../../data/modal/get_emoji_model.dart';
 
 class AddProfilePictureController extends GetxController {
   //TODO: Implement AddProfilePictureController
@@ -20,10 +22,12 @@ class AddProfilePictureController extends GetxController {
   String? usersId;
   File? imageFile;
   String? storeimgselected;
+
+  GlobalKey<FormState> profileFormKey = GlobalKey<FormState>();
   File? f;
   var argumentData = Get.arguments;
   loginService Loginervice = loginService();
-  GetEmoji? a;
+
   RxBool isLoading = false.obs;
   var isPicked = false.obs;
   var ispic = false.obs;
@@ -34,21 +38,26 @@ class AddProfilePictureController extends GetxController {
   var imagecamerafile = ''.obs;
   File? imagecameraFile;
   File? ApiListImages;
-  List<Datum> data = [];
+
+  GetEmojiModel? getEmojiModel;
+  List<ActiveEmojiData> activeEmojiDataList = [];
   List<int>? imageData;
   List<int>? imageDatas;
   String? fileType;
-  List<Emoji> images = [];
+  List<EmojiData> imagesList = [];
 
-  TextEditingController otpController = TextEditingController();
+  TextEditingController profileNameController = TextEditingController();
+
+  var isError = false.obs;
+  RxString errorString = "".obs;
 
   @override
   void onInit() {
     super.onInit();
     usersId = SharedPrefs().value.read(SharedPrefs.userIdKey);
     tokan = SharedPrefs().value.read(SharedPrefs.tokenKey).split("|");
-    print("usersId:+>$usersId");
-    getPlasedata();
+    print("usersId : : $usersId");
+    getActiveEmojisList();
   }
 
   getFromGallery() async {
@@ -81,7 +90,7 @@ class AddProfilePictureController extends GetxController {
     }
   }
 
-  Future<void> Addprofile() async {
+  Future<void> addProfileData() async {
     isLoading(true);
     // if (storeimgselected != null) {
     //   print(storeimgselected);
@@ -91,23 +100,40 @@ class AddProfilePictureController extends GetxController {
     //   f!.writeAsBytesSync(response.bodyBytes);
     //   print('f ===> $f');
     // } else {}
-    print("imageFile ===> $imageFile");
+    log("addProfileData image file ===> $imageFile");
     try {
       Map<String, String> data = {
         "user_id": usersId!,
-        "user_name": otpController.text.trim(),
+        "user_name": profileNameController.text.trim(),
       };
       var postUri = Uri.parse(ApiUrlList.addprofile);
       var request = http.MultipartRequest("POST", postUri);
       request.headers['Authorization'] = "Bearer ${(tokan![1])}";
       request.fields.addAll(data);
-      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-          'image', imageFile != null ? imageFile!.path : f!.path);
-      request.files.add(multipartFile);
+      log("addProfileData postUri ===> $postUri");
+      log("addProfileData req data ===> $data");
+
+      if (imageFile != null) {
+        http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+          'image',
+          imageFile!.path,
+        );
+        request.files.add(multipartFile);
+        log(' request.files : ${request.files.first.filename}');
+      } else {
+        request.fields.addAll({
+          'image': storeimgselected!,
+        });
+        log("storeimgselected! ===> ${storeimgselected!}");
+        // multipartFile = http.MultipartFile.fromString(
+        //   'image',
+        //   storeimgselected!,
+        // );
+      }
       http.StreamedResponse response = await request.send();
-      print('code: ${response.statusCode}');
+      log('code: ${response.statusCode}');
       final res = await http.Response.fromStream(response);
-      print('body: ${res.body}');
+      log('body: ${res.body}');
       Map map = jsonDecode(res.body);
       if (map['status'] == 200) {
         Fluttertoast.showToast(
@@ -141,23 +167,25 @@ class AddProfilePictureController extends GetxController {
     }
   }
 
-  Future<void> getPlasedata() async {
-    isLoading(true);
+  Future<void> getActiveEmojisList() async {
     try {
-      a = await Loginervice.getemoji();
-      a?.data?.forEach((element) {
-        data.add(element);
-        // lip.add(element.name);
-      });
-      for (var i = 0; i < data.length; i++) {
-        data[i].emojis?.forEach((element) {
-          images.add(element);
-          // lip.add(element.name);
-        });
+      isLoading(true);
+      getEmojiModel = await Loginervice.getActiveEmojisList();
+
+      if (getEmojiModel != null) {
+        activeEmojiDataList = getEmojiModel!.data;
       }
+      // a?.data?.forEach((element) {
+      //   data.add(element);
+      //   // lip.add(element.name);
+      // });
+      // for (var item in activeEmojiDataList) {
+      //   imagesList.add(item.)
+      // }
       update();
     } catch (e) {
       print(e.toString());
+      rethrow;
     } finally {
       isLoading(false);
     }

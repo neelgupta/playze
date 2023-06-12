@@ -5,7 +5,6 @@ import 'package:playze/Reusability/shared/textStyle.dart';
 import 'package:playze/Reusability/utils/util.dart';
 import 'package:playze/app/routes/app_pages.dart';
 
-import '../../../../Reusability/shared/commonTextField.dart';
 import '../../../../generated/locales.g.dart';
 import '../controllers/choose_profile_picture_controller.dart';
 

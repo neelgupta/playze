@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:playze/Reusability/utils/shared_prefs.dart';
 import 'package:playze/app/data/Network/network.dart';
 import 'package:playze/app/data/modal/comman.dart';
-import 'package:playze/app/data/modal/emoji.dart';
+import 'package:playze/app/data/modal/get_emoji_model.dart';
 import 'package:playze/app/data/modal/otp.dart';
 import 'package:playze/app/data/modal/signup.dart';
 import 'package:playze/app/data/service/api_list.dart';
@@ -50,7 +53,7 @@ class loginService {
       return SignModel.fromJson(jsonDecode(result));
     } else {
       return null;
-      throw Exception('Failed to load album');
+      // throw Exception('Failed to load album');
     }
   }
 
@@ -82,7 +85,20 @@ class loginService {
     });
     print("signup result is $result");
     if (result != null) {
-      return OtpModel.fromJson(jsonDecode(result));
+      var resBody = jsonDecode(result);
+      if (resBody['status'] == 200) {
+        return OtpModel.fromJson(jsonDecode(result));
+      } else {
+        Fluttertoast.showToast(
+            msg: '${resBody['message']}',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return null;
+      }
     } else {
       return null;
     }
@@ -103,19 +119,19 @@ class loginService {
     }
   }
 
-  Future<GetEmoji?> getemoji({client}) async {
+  Future<GetEmojiModel?> getActiveEmojisList({client}) async {
     List<String>? tokan =
         SharedPrefs().value.read(SharedPrefs.tokenKey).split("|");
     client ??= http.Client();
     var url = ApiUrlList.activeEmojisList;
     String newtokan = tokan![1];
-    print(newtokan);
+    log("newtokan : $newtokan");
     var result = await NetworkHandler().get(url, client, newtokan);
-    print("getPlasedata result is $result");
+    log("getActiveEmojisList result is $result");
     if (result != null) {
-      return GetEmoji.fromJson(jsonDecode(result));
+      return GetEmojiModel.fromJson(jsonDecode(result));
     } else {
-      throw Exception("Error getting agreement list");
+      throw Exception("Error getActiveEmojisList list");
     }
   }
 }

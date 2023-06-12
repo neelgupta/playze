@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:playze/Reusability/shared/drawer.dart';
-import 'package:playze/app/routes/app_pages.dart';
 
 import '../../../../Reusability/utils/util.dart';
 import '../controllers/wishlist_controller.dart';
 
 class WishlistView extends GetView<WishlistController> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  @override
   final controller = Get.put<WishlistController>(WishlistController());
+
+  WishlistView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,9 +49,9 @@ class WishlistView extends GetView<WishlistController> {
                     const SizedBox(
                       width: 20,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text("Wishlist",
                             style: TextStyle(
                               fontSize: 18,
@@ -210,8 +212,8 @@ class WishlistView extends GetView<WishlistController> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: const [
+                                const Row(
+                                  children: [
                                     Image(
                                       image: AssetImage("assets/images/go.png"),
                                       width: 25,
@@ -222,8 +224,8 @@ class WishlistView extends GetView<WishlistController> {
                                 SizedBox(
                                   width: Get.width * 0.025,
                                 ),
-                                Row(
-                                  children: const [
+                                const Row(
+                                  children: [
                                     Image(
                                       image:
                                           AssetImage("assets/images/plan.png"),
@@ -234,20 +236,18 @@ class WishlistView extends GetView<WishlistController> {
                                 ),
                                 ButtonWithStyle(
                                   onPressed: () {
-                                  //   Get.toNamed(Routes.FULL_DETAILS);
-                                  //   Get.toNamed(
-                                  //     Routes.FULL_DETAILS,
-                                  //     arguments: [
-                                  //       controller.a?
-                                  //           .data![index].id
-                                  //     ],
-                                  //   );
+                                    //   Get.toNamed(Routes.FULL_DETAILS);
+                                    //   Get.toNamed(
+                                    //     Routes.FULL_DETAILS,
+                                    //     arguments: [
+                                    //       controller.a?
+                                    //           .data![index].id
+                                    //     ],
+                                    //   );
                                   },
                                   textVal: "Details",
                                   btnwidth: Get.width * 0.3,
                                 ),
-
-
                               ],
                             )
                           ],

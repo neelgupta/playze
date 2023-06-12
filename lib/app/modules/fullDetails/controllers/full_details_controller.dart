@@ -2,11 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:playze/app/data/modal/placeclass.dart';
 
 import '../../../../Reusability/utils/shared_prefs.dart';
+import '../../../data/modal/get_nearby_model.dart';
+import '../../../data/modal/get_reviews_model.dart';
 import '../../../data/service/Userservise.dart';
 
 class FullDetailsController extends GetxController {
@@ -14,17 +17,32 @@ class FullDetailsController extends GetxController {
 
   final count = 0.obs;
   var tabon = false.obs;
-  var argumentData = Get.arguments[0];
+  var placeDataId = Get.arguments[0];
   var isImagesAddSelected = "".obs;
   Usersevise usersevise = Usersevise();
   RxBool isLoading = false.obs;
+    RxBool viewMoreReviews = false.obs;
+    int reviewsCount = 1;
   WorkSpaceDetailModel? wSData;
+
+  GetNearByModel? getNearByModel;
+
+  List<NearByPlaceData> nearByPlacesList = [];
+  GetReviewsModel? getReviewsModel;
+
+  RData? reviewAllData;
+  late Position currentLocation;
+  LocationPermission? permission;
+
+  RxString currentLattitude = "".obs;
+  RxString currentLongitude = "".obs;
 
   LatLng? placeLocation;
   @override
   void onInit() {
     super.onInit();
-    userdeletechildren(argumentData);
+    userdeletechildren(placeDataId);
+    // getNearByPlaces();
   }
 
   Future<void> userdeletechildren(id) async {
@@ -35,9 +53,58 @@ class FullDetailsController extends GetxController {
 
       if (wSData != null) {
         placeLocation = LatLng(
-          wSData!.data.latitude.toDouble(),
-          wSData!.data.longitude.toDouble(),
+          double.parse(wSData!.data.latitude),
+          double.parse(wSData!.data.longitude),
         );
+      }
+    } catch (e) {
+      rethrow;
+    } finally {
+      // isLoading(false);
+      getNearByPlaces();
+    }
+  }
+
+  Future<void> getNearByPlaces() async {
+    isLoading(true);
+    try {
+      permission = await Geolocator.requestPermission();
+      currentLocation = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      currentLattitude.value = currentLocation.latitude.toString();
+
+      currentLongitude.value = currentLocation.longitude.toString();
+
+      getNearByModel = await usersevise.getNearbyPlaces(
+        longitude: currentLongitude.value,
+        latitude: currentLattitude.value,
+      );
+
+      if (getNearByModel != null) {
+        nearByPlacesList.addAll(getNearByModel!.data);
+      }
+      log("nearByPlacesList len is : ${nearByPlacesList.length}");
+    } catch (e) {
+      rethrow;
+    } finally {
+      // isLoading(false);
+      getPlaceReviewsList();
+    }
+  }
+
+  Future<void> getPlaceReviewsList() async {
+    isLoading(true);
+    try {
+      getReviewsModel = await usersevise.getPlaceReviews(placeId: placeDataId);
+      // var long2 =  num.tryParse(a?.data?.totalRating)?.toDouble();
+
+      if (getReviewsModel != null) {
+        reviewAllData = getReviewsModel!.data;
+        // placeLocation = LatLng(
+        //   double.parse(wSData!.data.latitude),
+        //   double.parse(wSData!.data.longitude),
+        // );
       }
     } catch (e) {
       rethrow;
@@ -61,7 +128,7 @@ class FullDetailsController extends GetxController {
       if (addedToWS!) {
         log("wergyefre done adding to ws");
         Fluttertoast.showToast(
-            msg: 'Workspace Added Successfully.',
+            msg: "Playzee workspace added successfully.",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,

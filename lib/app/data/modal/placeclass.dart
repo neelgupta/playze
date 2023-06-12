@@ -39,8 +39,8 @@ class Data {
   final String id;
   final String placesName;
   final String address;
-  final int latitude;
-  final int longitude;
+  final String latitude;
+  final String longitude;
   final String description;
   final String costAdults;
   final String costChildren;

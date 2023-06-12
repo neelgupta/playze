@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,18 @@ class ReviewVideosController extends GetxController {
 
   var args = Get.arguments;
 
+  bool isNetwork = true;
+
   var videosUrl = "";
 
   @override
   void onInit() {
     super.onInit();
+
+    var arguments = args as List;
+    if (arguments.length > 1) {
+      isNetwork = args[1];
+    }
 
     initplayer();
     // print(chewieController);
@@ -36,13 +44,23 @@ class ReviewVideosController extends GetxController {
     videosUrl = args[0];
     log("videosUrl :$videosUrl");
     // VideoPlayerController.network();
-    videoPlayerController = VideoPlayerController.network(videosUrl)
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        // setState(() {});
+    if (isNetwork) {
+      videoPlayerController = VideoPlayerController.network(videosUrl)
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          // setState(() {});
 
-        update();
-      });
+          update();
+        });
+    } else {
+      videoPlayerController = VideoPlayerController.file(File(videosUrl))
+        ..initialize().then((_) {
+          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+          // setState(() {});
+
+          update();
+        });
+    }
     // await videoPlayerController.initialize();
     chewieController = ChewieController(
       videoPlayerController: videoPlayerController,

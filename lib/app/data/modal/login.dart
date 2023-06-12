@@ -4,7 +4,6 @@
 
 import 'dart:convert';
 
-import 'otp.dart';
 
 LoginModel loginModelFromJson(String str) => LoginModel.fromJson(json.decode(str));
 

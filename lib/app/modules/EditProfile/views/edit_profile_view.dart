@@ -52,10 +52,10 @@ class EditProfileView extends GetView<EditProfileController> {
                     const SizedBox(
                       width: 20,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text("Edit Profile",
+                        Text("Edit Profile",
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.white,
@@ -86,7 +86,7 @@ class EditProfileView extends GetView<EditProfileController> {
                     children: [
                       Row(
                         children: [
-                          Container(
+                          SizedBox(
                             height: 70,
                             width: 75,
                             child: Stack(
@@ -196,7 +196,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                   //   style: TextStyle(fontSize: 12),
                                   // ),
                                   Text(
-                                    "${controller.profileData?.data.location ?? ""}",
+                                    controller.profileData?.data.location ?? "",
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                 ],
@@ -366,51 +366,18 @@ class EditProfileView extends GetView<EditProfileController> {
                                                         color: Colors.black),
                                                   ),
                                                   const Spacer(),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      controller
-                                                          .nameControllersList
-                                                          .add(
-                                                              TextEditingController());
-                                                      controller
-                                                          .ageControllersList
-                                                          .add(
-                                                              TextEditingController());
-                                                      print(
-                                                          "${controller.nameListString}");
-                                                      controller.update();
-                                                    },
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      height: Get.height * 0.04,
-                                                      width: Get.width * 0.08,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.orange,
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                      child: const Icon(
-                                                        Icons.add,
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
                                                 ],
                                               ),
                                               h(15),
                                               Container(
-                                                  margin: const EdgeInsets.only(
-                                                      left: 10),
-                                                  child: Text(
-                                                    (LocaleKeys.labels_children
-                                                            .tr +
-                                                        " " +
-                                                        LocaleKeys
-                                                            .labels_name.tr),
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
-                                                  )),
+                                                margin: const EdgeInsets.only(
+                                                    left: 10),
+                                                child: Text(
+                                                  ("${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_name.tr} ${index + 1}"),
+                                                  style: const TextStyle(
+                                                      fontSize: 16),
+                                                ),
+                                              ),
                                               h(5),
                                               InputTextField(
                                                 width: Get.width,
@@ -431,11 +398,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                                   margin: const EdgeInsets.only(
                                                       left: 10),
                                                   child: Text(
-                                                    (LocaleKeys.labels_children
-                                                            .tr +
-                                                        " " +
-                                                        LocaleKeys
-                                                            .labels_age.tr),
+                                                    ("${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_age.tr} ${index + 1}"),
                                                     style: const TextStyle(
                                                         fontSize: 16),
                                                   )),
@@ -476,11 +439,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                                   margin: const EdgeInsets.only(
                                                       left: 10),
                                                   child: Text(
-                                                    (LocaleKeys.labels_children
-                                                            .tr +
-                                                        " " +
-                                                        LocaleKeys
-                                                            .labels_name.tr),
+                                                    ("${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_name.tr} ${index + 1}"),
                                                     style: const TextStyle(
                                                         fontSize: 16),
                                                   )),
@@ -571,11 +530,7 @@ class EditProfileView extends GetView<EditProfileController> {
                                                   margin: const EdgeInsets.only(
                                                       left: 10),
                                                   child: Text(
-                                                    (LocaleKeys.labels_children
-                                                            .tr +
-                                                        " " +
-                                                        LocaleKeys
-                                                            .labels_age.tr),
+                                                    ("${LocaleKeys.labels_children.tr} ${LocaleKeys.labels_age.tr} ${index + 1}"),
                                                     style: const TextStyle(
                                                         fontSize: 16),
                                                   )),
@@ -611,9 +566,58 @@ class EditProfileView extends GetView<EditProfileController> {
                           },
                         );
                       }),
-                      h(30),
+                      // h(10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              controller.nameControllersList
+                                  .add(TextEditingController());
+                              controller.ageControllersList
+                                  .add(TextEditingController());
+                              print(controller.nameListString);
+                              controller.update();
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 20, bottom: 0),
+                              alignment: Alignment.center,
+                              height: 35,
+                              width: 110,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: const BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(50),
+                                  )
+                                  // shape: BoxShape.circle,
+                                  ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    "Add Child",
+                                    style: TextStyle(
+                                      color: AppColors.whiteColor,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  w(4),
+                                  const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      h(25),
 
-                      Container(
+                      SizedBox(
                         height: Get.height * 0.3,
                         child: GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),

@@ -12,7 +12,6 @@ class BottomNavigationbarController extends GetxController {
   get selectedIndex => _selectedIndex.value;
   set selectedIndex(value) => _selectedIndex.value = value;
 
-  @override
   void changeTabIndex(int index) {
     selectedIndex.value = index;
     update();
@@ -27,6 +26,7 @@ class BottomNavigationbarController extends GetxController {
       print(_selectedIndex);
       _selectedIndex = 0.obs;
     }
+    super.onInit();
   }
 
   @override

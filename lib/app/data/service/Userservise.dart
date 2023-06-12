@@ -13,6 +13,10 @@ import 'package:playze/app/data/modal/workmodal.dart';
 import 'package:playze/app/data/service/api_list.dart';
 
 import '../../../Reusability/utils/shared_prefs.dart';
+import '../modal/get_category_filter_model.dart';
+import '../modal/get_nearby_model.dart';
+import '../modal/get_reviews_model.dart';
+import '../modal/get_search_filter_model.dart';
 
 class Usersevise {
   List<String>? tokan =
@@ -117,9 +121,11 @@ class Usersevise {
     }
   }
 
-  Future<PlaceDataModel?> getPlasedata({client}) async {
+  Future<PlaceDataModel?> getPlasedata(
+      {latitudeValue, longitudeValue, client}) async {
     client ??= http.Client();
-    var url = ApiUrlList.placesActiveList;
+    var url =
+        "${ApiUrlList.placesActiveList}?latitude=$latitudeValue&longitude=$longitudeValue";
     String newtokan = tokan![1];
     log(newtokan);
     var result = await NetworkHandler().get(url, client, newtokan);
@@ -143,6 +149,43 @@ class Usersevise {
       return WorkSpaceDetailModel.fromJson(jsonDecode(result));
     } else {
       throw Exception("Error getting agreement list");
+    }
+  }
+
+  Future<GetNearByModel?> getNearbyPlaces({longitude, latitude, client}) async {
+    client ??= http.Client();
+    var url = ApiUrlList.nearbyPlaces;
+    String newtokan = tokan![1];
+    log(newtokan);
+    var result = await NetworkHandler().post(
+      url,
+      client,
+      newtokan,
+      model: {
+        "longitude": longitude,
+        "latitude": latitude,
+      },
+    );
+    log("getNearbyPlaces result is $result");
+    if (result != null) {
+      return GetNearByModel.fromJson(jsonDecode(result));
+    } else {
+      throw Exception("Error getting getNearbyPlaces list");
+    }
+  }
+
+  Future<GetReviewsModel?> getPlaceReviews({placeId, client}) async {
+    client ??= http.Client();
+    var url = ApiUrlList.pleaseReview;
+    String newtokan = tokan![1];
+    log(newtokan);
+    var result = await NetworkHandler()
+        .post(url, client, newtokan, model: {"places_id": placeId});
+    log("getPlaceReviews result is $result");
+    if (result != null) {
+      return GetReviewsModel.fromJson(jsonDecode(result));
+    } else {
+      throw Exception("Error getPlaceReviews list");
     }
   }
 
@@ -185,6 +228,65 @@ class Usersevise {
     } else {
       // throw Exception("Error adding workspace");
       return false;
+    }
+  }
+
+  Future<GetCategoryFilterModel?> categoryFilterGetList(
+      {required categoryFilterIdList,
+      required latitude,
+      required longitude,
+      client}) async {
+    client ??= http.Client();
+    var url = ApiUrlList.categoryPlaceFilter;
+    String newtokan = tokan![1];
+
+    var reqBody = {
+      "category_filter": categoryFilterIdList,
+      "latitude": latitude,
+      "longitude": longitude,
+    };
+    log("categoryFilterGetList token :: $newtokan");
+    log("categoryFilterGetList reqBody :: $reqBody");
+    var result = await NetworkHandler().post(
+      url,
+      client,
+      newtokan,
+      model: reqBody,
+    );
+    log("categoryFilterGetList result is :: $result");
+    if (result != null) {
+      // var data = GetCategoryFilterModel.fromJson(jsonDecode(result));
+      return GetCategoryFilterModel.fromJson(jsonDecode(result));
+    } else {
+      throw Exception("Error categoryFilterGetList");
+      // return Exception("Error getting agreement list");
+    }
+  }
+
+  Future<GetSearchFilterModel?> searchDataGetList(
+      {required searchData, client}) async {
+    client ??= http.Client();
+    var url = ApiUrlList.searchFilter;
+    String newtokan = tokan![1];
+
+    var reqBody = {
+      "search": searchData,
+    };
+    log("searchDataGetList token :: $newtokan");
+    log("searchDataGetList reqBody :: $reqBody");
+    var result = await NetworkHandler().post(
+      url,
+      client,
+      newtokan,
+      model: reqBody,
+    );
+    log("searchDataGetList result is :: $result");
+    if (result != null) {
+      // var data = GetCategoryFilterModel.fromJson(jsonDecode(result));
+      return GetSearchFilterModel.fromJson(jsonDecode(result));
+    } else {
+      throw Exception("Error searchDataGetList");
+      // return Exception("Error getting agreement list");
     }
   }
 }

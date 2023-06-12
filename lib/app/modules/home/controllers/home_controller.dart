@@ -3,13 +3,17 @@ import 'dart:developer';
 import 'dart:ui' as ui;
 
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:playze/Reusability/shared/drawer.dart';
+import 'package:provider/provider.dart';
 
 import '../../../data/modal/plaseModel.dart';
+import '../../../data/provider/filter_provider.dart';
 import '../../../data/service/Userservise.dart';
+import '../../BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
@@ -20,6 +24,7 @@ class HomeController extends GetxController {
   var isMapView = true.obs;
 
   RxBool isLoading = false.obs;
+  RxBool isFiltered = false.obs;
   LatLng? positionStream;
   static const LatLng location1 = LatLng(21.230557, 72.821677);
   static const LatLng location2 = LatLng(21.224772, 72.821394);
@@ -27,6 +32,10 @@ class HomeController extends GetxController {
   Usersevise usersevise = Usersevise();
 
   PlaceDetails? selectedPlaceLocation;
+
+  TextEditingController searchController = TextEditingController();
+
+  FilterProvider filterProv = Provider.of<FilterProvider>(Get.context!);
 
   List<String> images = [
     'assets/images/NoPath.png',
@@ -38,6 +47,8 @@ class HomeController extends GetxController {
   ];
   Uint8List? markerImage;
   List<PlaceDetails> placeDataList = [];
+
+  List<PlaceDetails> placeFilteredList = [];
   PlaceDataModel? placeModel;
 
   CameraPosition? initialCameraPosition;
@@ -58,9 +69,11 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getPlasedata();
 
-    loadData();
+    getUserLocation();
+    // getPlasedata();
+
+    // searchController.text = filterProv.searchString;
   }
 
   // void setcoustommarkerIcon(){
@@ -86,45 +99,59 @@ class HomeController extends GetxController {
   }
 
   getUserLocation() async {
-    permission = await Geolocator.requestPermission();
-    currentLocation = await locateUser();
-    center = LatLng(currentLocation.latitude, currentLocation.longitude);
-    markers.add(
-      Marker(
-        onTap: () {
-          // controller.locateWindowPop.value = !controller.locateWindowPop.value;
-          controller.locateWindowPop.value = false;
-        },
-        infoWindow: const InfoWindow(title: "My Location"),
-        visible: true,
-
-        markerId: const MarkerId('01'),
-        position: LatLng(currentLocation.latitude, currentLocation.longitude),
-        // icon: BitmapDescriptor.fromBytes(markerIcon),
-      ),
-    );
-
-    initialCameraPosition = CameraPosition(
-      target: center!,
-      tilt: 10,
-      zoom: 14.5,
-    );
-    print('center  :: $center');
-    update();
-    isLoading(false);
-  }
-
-  loadData() async {
     isLoading(true);
-    // locateUser();
-    getUserLocation();
+
+    try {
+      permission = await Geolocator.requestPermission();
+      currentLocation = await locateUser();
+      center = LatLng(currentLocation.latitude, currentLocation.longitude);
+      markers.add(
+        Marker(
+          onTap: () {
+            // controller.locateWindowPop.value = !controller.locateWindowPop.value;
+            controller.locateWindowPop.value = false;
+          },
+          infoWindow: const InfoWindow(title: "My Location"),
+          visible: true,
+
+          markerId: const MarkerId('01'),
+          position: LatLng(currentLocation.latitude, currentLocation.longitude),
+          // icon: BitmapDescriptor.fromBytes(markerIcon),
+        ),
+      );
+
+      initialCameraPosition = CameraPosition(
+        target: center!,
+        tilt: 10,
+        zoom: 14.5,
+      );
+      log('center  :: $center');
+      update();
+    } catch (e) {
+      log("exc :: ${e.toString()}");
+    } finally {
+      getPlasedata();
+      // isLoading(false);
+    }
   }
+
+  // loadData() async {
+  //   isLoading(true);
+  //   // locateUser();
+  //   getUserLocation();
+  // }
 
   Future<void> getPlasedata() async {
-    isLoading(true);
     try {
-      await usersevise.getPlasedata().then((value) {
+      isLoading(true);
+      await usersevise
+          .getPlasedata(
+        latitudeValue: currentLocation.latitude,
+        longitudeValue: currentLocation.longitude,
+      )
+          .then((value) {
         placeModel = value;
+        placeDataList.clear();
         placeModel?.data?.forEach((element) {
           placeDataList.add(element);
           // lip.add(element.name);
@@ -176,6 +203,77 @@ class HomeController extends GetxController {
       update();
     } catch (e) {
       print(e.toString());
-    } finally {}
+    } finally {
+      isLoading(false);
+    }
   }
+
+  clearFilterHomeScreenPlacesList() {
+    // if (Get.isRegistered<HomeController>()) {
+    //   var homeCont = Get.find<HomeController>();
+    isLoading(true);
+    isFiltered.value = false;
+    placeFilteredList = [];
+
+    filterProv.updateFilterDataList([]);
+
+    // for (var filter in filteredCatList) {
+    //   for (var item inplaceDataList) {
+    //     if (filter.id == item.id) {
+    //      placeFilteredList.add(item);
+    //     }
+    //   }
+    // }
+
+    if (placeDataList.isNotEmpty) {
+      markers.clear();
+      selectedPlaceLocation = placeDataList.first;
+      for (int i = 0; i < placeDataList.length; i++) {
+        // final Uint8List markerIcon =
+        //     await getBytesFromAsset(images[i].toString(), 100);
+
+        var singlePlace = placeDataList[i];
+
+        // if (Get.isRegistered<HomeController>()) {
+        var bottombarController = Get.find<BottomNavigationbarController>();
+
+        // log(" singlePlace.latitude!.toDouble() ${singlePlace.latitude!.toDouble()}");
+        // log(" singlePlace.longitude!.toDouble() ${singlePlace.longitude!.toDouble()}");
+
+        markers.add(
+          Marker(
+            onTap: () {
+              bottombarController.locateWindowPop.value =
+                  !bottombarController.locateWindowPop.value;
+              selectedPlaceLocation = singlePlace;
+            },
+            infoWindow: InfoWindow(
+                title: "${singlePlace.placesName}",
+                snippet: "${singlePlace.address}"),
+            flat: true,
+            rotation: 1.1,
+            zIndex: 10,
+
+            visible: true,
+
+            markerId: MarkerId(singlePlace.id.toString()),
+            position: LatLng(
+              double.parse(singlePlace.latitude!),
+              double.parse(singlePlace.longitude!),
+            ),
+            // icon: BitmapDescriptor.fromBytes(markerIcon),
+          ),
+        );
+
+        log(" markers  len is : ${markers.length}");
+      }
+    }
+
+    log("placeDataList len ::${placeDataList.length}");
+    update();
+    isLoading(false);
+  }
+
+  // Get.back();
+  // }
 }

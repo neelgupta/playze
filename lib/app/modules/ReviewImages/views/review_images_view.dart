@@ -17,7 +17,7 @@ class ReviewImagesView extends GetView<ReviewImagesController> {
         toolbarHeight: Get.height * 0.1, //
         flexibleSpace: Container(
           height: Get.height * 0.2,
-          color: Color(0xff0264C5),
+          color: const Color(0xff0264C5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -30,31 +30,34 @@ class ReviewImagesView extends GetView<ReviewImagesController> {
                         Get.back();
                       },
                       child: Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         height: Get.height * 0.06,
-                        decoration: BoxDecoration(),
+                        decoration: const BoxDecoration(),
                         child: Center(
                           child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Image(
+                              padding: const EdgeInsets.all(5),
+                              child: const Image(
                                 image: AssetImage("assets/images/back.png"),
                                 color: Colors.white,
                               )),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text("Review Images",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white,
-                                fontFamily: "spartan",
-                                fontWeight: FontWeight.bold)),
+                        Text(
+                          "Review Images",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                            fontFamily: "spartan",
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -64,22 +67,24 @@ class ReviewImagesView extends GetView<ReviewImagesController> {
           ),
         ),
       ),
-      body: Container(
+      body: SizedBox(
         height: Get.height,
         width: Get.width,
-        child: CachedNetworkImage(
-          imageUrl: controller.imageUrl,
-          errorWidget: (context, url, error) {
-            return Center(
-              child: Text("No Image Found"),
-            );
-          },
-        ),
+        child: controller.isNetwork
+            ? CachedNetworkImage(
+                imageUrl: controller.imageUrl,
+                errorWidget: (context, url, error) {
+                  return const Center(
+                    child: Text("No Image Found"),
+                  );
+                },
+              )
+            : Image.asset(controller.imageUrl),
 
         // Image.asset("assets/images/femily.png",fit: BoxFit.fill,),
         //  child: Image.asset("${controller.wSData?.data.images[index].images}",fit: BoxFit.fill,),
       ),
-      bottomNavigationBar: btmbar(fromOther: true),
+      bottomNavigationBar: const btmbar(fromOther: true),
       extendBody: true,
     );
   }

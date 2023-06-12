@@ -3,15 +3,18 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:playze/Reusability/shared/custom_btmbar.dart';
 import 'package:playze/Reusability/utils/app_colors.dart';
+import 'package:playze/app/modules/BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
 import 'package:playze/app/modules/home/controllers/home_controller.dart';
-import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
+import 'package:video_thumbnail_imageview/video_thumbnail_imageview.dart';
 
 import '../../../../Reusability/utils/util.dart';
 import '../../../routes/app_pages.dart';
@@ -80,31 +83,19 @@ class FullDetailsView extends GetView<FullDetailsController> {
                     ],
                     backgroundColor: AppColors.primaryColor,
                     flexibleSpace: FlexibleSpaceBar(
-                      background: Swiper(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: controller.wSData!.data.images.isNotEmpty
-                            ? controller.wSData?.data.images.length
-                            : 1,
-                        layout: SwiperLayout.DEFAULT,
-                        // viewportFraction: 1.2,
-                        pagination: const SwiperPagination(
-                          margin: EdgeInsets.only(bottom: 15),
-                        ),
-                        autoplayDelay: 2500,
-                        containerHeight: Get.height * 0.34,
-
-                        autoplay: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          var imageUrl =
-                              controller.wSData!.data.images[index].images;
-
-                          // log("imageUrl :: $imageUrl");
-                          return SizedBox(
-                            height: Get.height * 0.33,
-                            // height: Get.height * 0.25,
-                            width: Get.width,
-                            child: CachedNetworkImage(
-                              imageUrl: imageUrl,
+                        background: CarouselSlider(
+                      options: CarouselOptions(
+                        aspectRatio: 1,
+                        viewportFraction: 1,
+                        enableInfiniteScroll: false,
+                      ),
+                      items: controller.wSData!.data.images.map((i) {
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return CachedNetworkImage(
+                              imageUrl: i.images,
+                              height: Get.height * 0.35,
+                              width: Get.width,
                               // progressIndicatorBuilder:
                               //     (context, url, downloadProgress) =>
                               //         Center(
@@ -130,15 +121,74 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                   ),
                                 );
                               },
-                            ),
+                            );
+                          },
+                        );
+                      }).toList(),
+                    )
+                        // background: CardSwiper(
+                        //   // direction: CardSwiperDirection.right,
+                        //   cardsCount: controller.wSData!.data.images.length,
+                        //   numberOfCardsDisplayed:
+                        //       controller.wSData!.data.images.length,
+                        //   //  controller.wSData!.data.images.isNotEmpty
+                        //   //     ?
+                        //   // : 1,
+                        //   // isLoop: true,
+                        //   // : SwiperLayout.DEFAULT,
+                        //   // viewportFraction: 1.2,
+                        //   // pagination: const SwiperPagination(
+                        //   //   margin: EdgeInsets.only(bottom: 15),
+                        //   // ),
+                        //   // autoplayDelay: 2500,
+                        //   // containerHeight: Get.height * 0.34,
 
-                            // Image.network(
-                            //     "${controller.wSData?.data.images[index].images.toString()}",
-                            //     fit: BoxFit.fill),
-                          );
-                        },
-                      ),
-                    ),
+                        //   // autoplay: true,
+                        //   cardBuilder: (BuildContext context, int index) {
+                        //     var imageUrl =
+                        //         controller.wSData!.data.images[index].images;
+
+                        //     log("imageUrl :: $imageUrl");
+                        //     return SizedBox(
+                        //       height: Get.height * 0.33,
+                        //       // height: Get.height * 0.25,
+                        //       width: Get.width,
+                        //       child: CachedNetworkImage(
+                        //         imageUrl: imageUrl,
+                        //         // progressIndicatorBuilder:
+                        //         //     (context, url, downloadProgress) =>
+                        //         //         Center(
+                        //         //   child: SizedBox(
+                        //         //     height: 30,
+                        //         //     width: 30,
+                        //         //     child: CircularProgressIndicator(
+                        //         //         strokeWidth: 3,
+                        //         //         value: downloadProgress.progress),
+                        //         //   ),
+                        //         // ),
+                        //         fadeInDuration: const Duration(milliseconds: 500),
+                        //         fit: BoxFit.fill,
+                        //         // color: AppColors.primaryColor,
+                        //         errorWidget: (context, url, error) {
+                        //           return const Center(
+                        //             child: Text(
+                        //               "Image Not Loaded",
+                        //               style: TextStyle(
+                        //                 color: AppColors.whiteColor,
+                        //                 fontSize: 13,
+                        //               ),
+                        //             ),
+                        //           );
+                        //         },
+                        //       ),
+
+                        //       // Image.network(
+                        //       //     "${controller.wSData?.data.images[index].images.toString()}",
+                        //       //     fit: BoxFit.fill),
+                        //     );
+                        //   },
+                        // ),
+                        ),
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate(
@@ -174,9 +224,39 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                               Get.back();
                                               homeController.isMapView.value =
                                                   true;
+
+                                              for (var item in homeController
+                                                  .placeDataList) {
+                                                if (item.id ==
+                                                    controller
+                                                        .wSData!.data.id) {
+                                                  homeController
+                                                          .selectedPlaceLocation =
+                                                      item;
+                                                  homeController
+                                                          .initialCameraPosition =
+                                                      CameraPosition(
+                                                    target: LatLng(
+                                                        double.parse(homeController
+                                                            .selectedPlaceLocation!
+                                                            .latitude!),
+                                                        double.parse(homeController
+                                                            .selectedPlaceLocation!
+                                                            .longitude!)),
+                                                    tilt: 10,
+                                                    zoom: 14.5,
+                                                  );
+
+                                                  var bottomC = Get.find<
+                                                      BottomNavigationbarController>();
+
+                                                  bottomC.locateWindowPop
+                                                      .value = true;
+                                                }
+                                              }
                                             },
-                                            child: Row(
-                                              children: const [
+                                            child: const Row(
+                                              children: [
                                                 Image(
                                                   image: AssetImage(
                                                       "assets/images/go.png"),
@@ -189,8 +269,8 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                           SizedBox(
                                             width: Get.width * 0.025,
                                           ),
-                                          Row(
-                                            children: const [
+                                          const Row(
+                                            children: [
                                               Image(
                                                 image: AssetImage(
                                                     "assets/images/plan.png"),
@@ -208,8 +288,8 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                 status: "1",
                                               );
                                             },
-                                            child: Row(
-                                              children: const [
+                                            child: const Row(
+                                              children: [
                                                 Image(
                                                   image: AssetImage(
                                                       "assets/images/plus.png"),
@@ -253,25 +333,31 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                       // ),
                                       Row(
                                         children: [
-                                          SmoothStarRating(
-                                            allowHalfRating: true,
-                                            color: Colors.amber,
-                                            borderColor: Colors.amber,
-                                            rating: int.parse(controller
-                                                    .wSData!.data.avgRating)
-                                                .toDouble(),
-                                            size: 20,
-                                            starCount: 5,
-                                            isReadOnly: true,
-                                            defaultIconData:
-                                                Icons.star_outline_rounded,
-                                            filledIconData: Icons.star_rounded,
-                                            halfFilledIconData:
-                                                Icons.star_half_rounded,
+                                          IgnorePointer(
+                                            ignoring: false,
+                                            child: SmoothStarRating(
+                                              allowHalfRating: true,
+                                              color: Colors.amber,
+                                              borderColor: Colors.amber,
+                                              rating: double.parse(
+                                                controller
+                                                    .wSData!.data.avgRating,
+                                              ),
+                                              size: 20,
+                                              starCount: 5,
+                                              // isReadOnly: true,
+
+                                              defaultIconData:
+                                                  Icons.star_outline_rounded,
+                                              filledIconData:
+                                                  Icons.star_rounded,
+                                              halfFilledIconData:
+                                                  Icons.star_half_rounded,
+                                            ),
                                           ),
                                           w(10),
                                           Text(
-                                            "${int.parse(controller.wSData!.data.avgRating).toDouble()}",
+                                            "${double.parse(controller.wSData!.data.avgRating)}",
                                             style:
                                                 const TextStyle(fontSize: 12),
                                           )
@@ -599,12 +685,12 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                             children: [
                                               SizedBox(
                                                 height: Get.height * 0.05,
-                                                child: Column(
+                                                child: const Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
-                                                  children: const [
+                                                  children: [
                                                     Text(
                                                       "Cost",
                                                       style: TextStyle(
@@ -820,7 +906,12 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                           ),
                                           ButtonWithStyle(
                                             onPressed: () {
-                                              // Get.toNamed(Routes.WRITEAREVIEW);
+                                              Get.toNamed(
+                                                Routes.WRITEAREVIEW,
+                                                arguments: [
+                                                  controller.wSData!.data.id,
+                                                ],
+                                              );
                                             },
                                             textVal: "Add Reviews",
                                             style: const TextStyle(
@@ -892,7 +983,12 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                         ),
                                                         w(5),
                                                         Text(
-                                                          "${int.parse(controller.wSData!.data.avgRating).toDouble()}",
+                                                          double.parse(controller
+                                                                  .wSData!
+                                                                  .data
+                                                                  .avgRating)
+                                                              .toStringAsFixed(
+                                                                  1),
                                                           style:
                                                               const TextStyle(
                                                             color: Colors.black,
@@ -1034,400 +1130,645 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                   ),
                                 ),
                                 h(10),
-                                // DefaultTabController(
-                                //   length: 3, // length of tabs
-                                //   initialIndex: 0,
-                                //   child: Column(
-                                //     crossAxisAlignment:
-                                //         CrossAxisAlignment.stretch,
-                                //     children: <Widget>[
-                                //       const TabBar(
-                                //         labelColor: Color(0xffFE7702),
-                                //         indicatorColor: Colors.transparent,
-                                //         padding: EdgeInsets.only(right: 100),
-                                //         unselectedLabelColor: Colors.grey,
-                                //         unselectedLabelStyle:
-                                //             TextStyle(fontSize: 12),
-                                //         labelStyle: TextStyle(fontSize: 16),
-                                //         tabs: [
-                                //           Tab(
-                                //             text: 'Reviews',
-                                //           ),
-                                //           Tab(text: 'Images'),
-                                //           Tab(text: 'Videos'),
-                                //         ],
-                                //       ),
-                                //       Container(
-                                //         height: Get.height *
-                                //             0.8, //height of TabBarView
-                                //         decoration: const BoxDecoration(
-                                //           border: Border(
-                                //             top: BorderSide(
-                                //               color: Colors.grey,
-                                //               width: 0.5,
-                                //             ),
-                                //           ),
-                                //         ),
-                                //         child: TabBarView(
-                                //           children: <Widget>[
-                                //             Container(
-                                //                 height: Get.height,
-                                //                 width: Get.width,
-                                //                 margin: const EdgeInsets.only(
-                                //                     left: 20, right: 20),
-                                //                 child: SingleChildScrollView(
-                                //                   child: Column(
-                                //                     children: [
-                                //                       Row(
-                                //                         children: [
-                                //                           SizedBox(
-                                //                             height: Get.height *
-                                //                                 0.35,
-                                //                             width: Get.width *
-                                //                                 0.13,
-                                //                             child: Column(
-                                //                               children: [
-                                //                                 Container(
-                                //                                   height:
-                                //                                       Get.height *
-                                //                                           0.1,
-                                //                                   width:
-                                //                                       Get.width *
-                                //                                           0.15,
-                                //                                   decoration:
-                                //                                       const BoxDecoration(
-                                //                                     shape: BoxShape
-                                //                                         .circle,
-                                //                                   ),
-                                //                                   child: Image
-                                //                                       .asset(
-                                //                                           "assets/images/profilepic.png"),
-                                //                                 ),
-                                //                               ],
-                                //                             ),
-                                //                           ),
-                                //                           w(20),
-                                //                           Container(
-                                //                             padding:
-                                //                                 const EdgeInsets
-                                //                                         .only(
-                                //                                     top: 20),
-                                //                             // height: Get.height *
-                                //                             //     0.35,
-                                //                             width:
-                                //                                 Get.width * 0.7,
-                                //                             child: Column(
-                                //                               mainAxisAlignment:
-                                //                                   MainAxisAlignment
-                                //                                       .start,
-                                //                               crossAxisAlignment:
-                                //                                   CrossAxisAlignment
-                                //                                       .start,
-                                //                               children: [
-                                //                                 Align(
-                                //                                   alignment:
-                                //                                       Alignment
-                                //                                           .topLeft,
-                                //                                   child: RatingBar
-                                //                                       .builder(
-                                //                                     itemSize:
-                                //                                         20,
-                                //                                     initialRating:
-                                //                                         3.5,
-                                //                                     minRating:
-                                //                                         1,
-                                //                                     direction: Axis
-                                //                                         .horizontal,
-                                //                                     allowHalfRating:
-                                //                                         true,
-                                //                                     itemCount:
-                                //                                         5,
-                                //                                     itemPadding: const EdgeInsets
-                                //                                             .symmetric(
-                                //                                         horizontal:
-                                //                                             2.0),
-                                //                                     itemBuilder:
-                                //                                         (context,
-                                //                                                 _) =>
-                                //                                             const Icon(
-                                //                                       Icons
-                                //                                           .star,
-                                //                                       size: 16,
-                                //                                       color: Colors
-                                //                                           .amber,
-                                //                                     ),
-                                //                                     onRatingUpdate:
-                                //                                         (rating) {
-                                //                                       print(
-                                //                                           rating);
-                                //                                     },
-                                //                                   ),
-                                //                                 ),
-                                //                                 h(5),
-                                //                                 const Text(
-                                //                                   "by Darryl McKinnon on April 22, 2020",
-                                //                                   style: TextStyle(
-                                //                                       fontSize:
-                                //                                           14),
-                                //                                 ),
-                                //                                 h(5),
-                                //                                 const Text(
-                                //                                   "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum...",
-                                //                                   style: TextStyle(
-                                //                                       fontSize:
-                                //                                           10),
-                                //                                 ),
-                                //                                 h(5),
-                                //                                 Row(
-                                //                                   children: [
-                                //                                     Container(
-                                //                                       decoration: const BoxDecoration(
-                                //                                           borderRadius: BorderRadius.all(Radius.circular(
-                                //                                               10)),
-                                //                                           image: DecorationImage(
-                                //                                               image: AssetImage("assets/images/view.png"),
-                                //                                               fit: BoxFit.fill)),
-                                //                                       width: Get
-                                //                                               .width *
-                                //                                           0.32,
-                                //                                       height:
-                                //                                           Get.height *
-                                //                                               0.1,
-                                //                                     ),
-                                //                                     w(5),
-                                //                                     Container(
-                                //                                       decoration: const BoxDecoration(
-                                //                                           borderRadius: BorderRadius.all(Radius.circular(
-                                //                                               10)),
-                                //                                           image: DecorationImage(
-                                //                                               image: AssetImage("assets/images/view.png"),
-                                //                                               fit: BoxFit.fill)),
-                                //                                       width: Get
-                                //                                               .width *
-                                //                                           0.32,
-                                //                                       height:
-                                //                                           Get.height *
-                                //                                               0.1,
-                                //                                     ),
-                                //                                   ],
-                                //                                 ),
-                                //                                 h(5),
-                                //                                 ButtonWithStyle(
-                                //                                   onPressed:
-                                //                                       () {},
-                                //                                   textVal:
-                                //                                       "VIEW MORE",
-                                //                                   style: const TextStyle(
-                                //                                       fontSize:
-                                //                                           11,
-                                //                                       color: Colors
-                                //                                           .white,
-                                //                                       fontWeight:
-                                //                                           FontWeight
-                                //                                               .w400),
-                                //                                   btnwidth:
-                                //                                       Get.width *
-                                //                                           0.2,
-                                //                                 ),
-                                //                               ],
-                                //                             ),
-                                //                           ),
-                                //                         ],
-                                //                       ),
-                                //                       const Align(
-                                //                         alignment:
-                                //                             Alignment.topLeft,
-                                //                         child: Text(
-                                //                           "Nearby Places",
-                                //                           style: TextStyle(
-                                //                               fontSize: 18),
-                                //                         ),
-                                //                       ),
-                                //                       SizedBox(
-                                //                         height:
-                                //                             Get.height * 0.02,
-                                //                       ),
-                                //                       SizedBox(
-                                //                         height:
-                                //                             Get.height * 0.28,
-                                //                         child: ListView.builder(
-                                //                           physics:
-                                //                               const PageScrollPhysics(),
-                                //                           scrollDirection:
-                                //                               Axis.horizontal,
-                                //                           itemCount: 5,
-                                //                           itemBuilder:
-                                //                               (context, index) {
-                                //                             return Container(
-                                //                               child: Column(
-                                //                                 mainAxisAlignment:
-                                //                                     MainAxisAlignment
-                                //                                         .start,
-                                //                                 crossAxisAlignment:
-                                //                                     CrossAxisAlignment
-                                //                                         .start,
-                                //                                 children: [
-                                //                                   Row(
-                                //                                     children: [
-                                //                                       Stack(
-                                //                                         children: [
-                                //                                           Container(
-                                //                                             decoration:
-                                //                                                 const BoxDecoration(
-                                //                                               borderRadius: BorderRadius.all(Radius.circular(10)),
-                                //                                               image: DecorationImage(image: AssetImage("assets/images/view.png"), fit: BoxFit.fill),
-                                //                                             ),
-                                //                                             height:
-                                //                                                 Get.height * 0.15,
-                                //                                             width:
-                                //                                                 Get.width * 0.5,
-                                //                                           ),
-                                //                                           Positioned(
-                                //                                             top:
-                                //                                                 3,
-                                //                                             left:
-                                //                                                 10,
-                                //                                             child:
-                                //                                                 SizedBox(
-                                //                                               height: Get.height * 0.06,
-                                //                                               width: Get.width * 0.06,
-                                //                                               child: Image.asset("assets/images/dil.png"),
-                                //                                             ),
-                                //                                           )
-                                //                                         ],
-                                //                                       ),
-                                //                                       w(20),
-                                //                                     ],
-                                //                                   ),
-                                //                                   h(5),
-                                //                                   const Text(
-                                //                                       "Children’s Museum"),
-                                //                                   SizedBox(
-                                //                                     height:
-                                //                                         Get.height *
-                                //                                             0.01,
-                                //                                   ),
-                                //                                   Row(
-                                //                                     children: [
-                                //                                       SizedBox(
-                                //                                           height: Get.height *
-                                //                                               0.02,
-                                //                                           child:
-                                //                                               const Image(image: AssetImage("assets/images/star.png"))),
-                                //                                       SizedBox(
-                                //                                         width: Get.width *
-                                //                                             0.02,
-                                //                                       ),
-                                //                                       const Text(
-                                //                                         "4.0",
-                                //                                         style: TextStyle(
-                                //                                             fontSize:
-                                //                                                 16),
-                                //                                       ),
-                                //                                       SizedBox(
-                                //                                         width: Get.width *
-                                //                                             0.02,
-                                //                                       ),
-                                //                                       const Text(
-                                //                                         "150 Reviews",
-                                //                                         style: TextStyle(
-                                //                                             fontSize:
-                                //                                                 12,
-                                //                                             color:
-                                //                                                 Colors.grey),
-                                //                                       ),
-                                //                                     ],
-                                //                                   ),
-                                //                                   SizedBox(
-                                //                                     height:
-                                //                                         Get.height *
-                                //                                             0.01,
-                                //                                   ),
-                                //                                   Row(
-                                //                                     children: [
-                                //                                       SizedBox(
-                                //                                           height: Get.height *
-                                //                                               0.02,
-                                //                                           child:
-                                //                                               const Image(image: AssetImage("assets/images/log.png"))),
-                                //                                       SizedBox(
-                                //                                         width: Get.width *
-                                //                                             0.02,
-                                //                                       ),
-                                //                                       SizedBox(
-                                //                                           width: Get.width *
-                                //                                               0.35,
-                                //                                           child:
-                                //                                               const Text(
-                                //                                             "100 Laurier Street, Gatineau..",
-                                //                                             style: TextStyle(
-                                //                                                 overflow: TextOverflow.ellipsis,
-                                //                                                 fontSize: 12,
-                                //                                                 color: Colors.grey),
-                                //                                           )),
-                                //                                     ],
-                                //                                   ),
-                                //                                   SizedBox(
-                                //                                     height:
-                                //                                         Get.height *
-                                //                                             0.01,
-                                //                                   ),
-                                //                                   Row(
-                                //                                     children: [
-                                //                                       SizedBox(
-                                //                                           height: Get.height *
-                                //                                               0.02,
-                                //                                           child:
-                                //                                               const Image(image: AssetImage("assets/images/walking.png"))),
-                                //                                       SizedBox(
-                                //                                         width: Get.width *
-                                //                                             0.02,
-                                //                                       ),
-                                //                                       const Text(
-                                //                                           "2 min",
-                                //                                           style: TextStyle(
-                                //                                               fontSize: 12,
-                                //                                               color: Colors.grey)),
-                                //                                       SizedBox(
-                                //                                         width: Get.width *
-                                //                                             0.02,
-                                //                                       ),
-                                //                                       const Text(
-                                //                                           "1 km away",
-                                //                                           style: TextStyle(
-                                //                                               fontSize: 12,
-                                //                                               color: Colors.grey)),
-                                //                                     ],
-                                //                                   )
-                                //                                 ],
-                                //                               ),
-                                //                             );
-                                //                           },
-                                //                         ),
-                                //                       ),
-                                //                     ],
-                                //                   ),
-                                //                 )),
-                                //             const Center(
-                                //               child: Text('Display Tab 2',
-                                //                   style: TextStyle(
-                                //                       fontSize: 22,
-                                //                       fontWeight:
-                                //                           FontWeight.bold)),
-                                //             ),
-                                //             const Center(
-                                //               child: Text('Display Tab 3',
-                                //                   style: TextStyle(
-                                //                       fontSize: 22,
-                                //                       fontWeight:
-                                //                           FontWeight.bold)),
-                                //             ),
-                                //           ],
-                                //         ),
-                                //       )
-                                //     ],
-                                //   ),
-                                // ),
+                                DefaultTabController(
+                                  length: 3, // length of tabs
+                                  initialIndex: 0,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: <Widget>[
+                                      const TabBar(
+                                        labelColor: Color(0xffFE7702),
+                                        indicatorColor: Colors.transparent,
+                                        padding: EdgeInsets.only(right: 100),
+                                        unselectedLabelColor: Colors.grey,
+                                        unselectedLabelStyle:
+                                            TextStyle(fontSize: 12),
+                                        labelStyle: TextStyle(fontSize: 16),
+                                        tabs: [
+                                          Tab(
+                                            text: 'Reviews',
+                                          ),
+                                          Tab(text: 'Images'),
+                                          Tab(text: 'Videos'),
+                                        ],
+                                      ),
+                                      Container(
+                                        height: Get.height *
+                                            0.72, //height of TabBarView
+                                        decoration: const BoxDecoration(
+                                          border: Border(
+                                            top: BorderSide(
+                                              color: Colors.grey,
+                                              width: 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        child: TabBarView(
+                                          children: <Widget>[
+                                            Container(
+                                                height: Get.height,
+                                                width: Get.width,
+                                                margin: const EdgeInsets.only(
+                                                    left: 15, right: 15),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      controller.reviewAllData ==
+                                                              null
+                                                          ? const SizedBox(
+                                                              height: 150,
+                                                              width: double
+                                                                  .infinity,
+                                                              child: Center(
+                                                                child: Text(
+                                                                    "No Reviews"),
+                                                              ),
+                                                            )
+                                                          : controller
+                                                                  .reviewAllData!
+                                                                  .review
+                                                                  .isEmpty
+                                                              ? const SizedBox(
+                                                                  height: 200,
+                                                                  width: double
+                                                                      .infinity,
+                                                                  child: Text(
+                                                                      "No Reviews"),
+                                                                )
+                                                              : ListView
+                                                                  .separated(
+                                                                  shrinkWrap:
+                                                                      true,
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      vertical:
+                                                                          10),
+                                                                  physics:
+                                                                      const NeverScrollableScrollPhysics(),
+                                                                  itemCount: controller
+                                                                          .viewMoreReviews
+                                                                          .value
+                                                                      ? controller
+                                                                          .reviewAllData!
+                                                                          .review
+                                                                          .length
+                                                                      : controller
+                                                                          .reviewsCount,
+                                                                  separatorBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    return const SizedBox(
+                                                                        height:
+                                                                            5);
+                                                                  },
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                          index) {
+                                                                    var singleReview =
+                                                                        controller
+                                                                            .reviewAllData!
+                                                                            .review[index];
+                                                                    return Row(
+                                                                      children: [
+                                                                        Container(
+                                                                          // height:
+                                                                          //     Get.height * 0.35,
+                                                                          // width:
+                                                                          //     Get.width * 0.13,
+                                                                          padding: const EdgeInsets.symmetric(
+                                                                              horizontal: 10,
+                                                                              vertical: 10),
+                                                                          child:
+                                                                              Column(
+                                                                            children: [
+                                                                              Container(
+                                                                                height: Get.height * 0.1,
+                                                                                width: Get.width * 0.15,
+                                                                                decoration: const BoxDecoration(
+                                                                                  shape: BoxShape.circle,
+                                                                                ),
+                                                                                // child: Image.asset("assets/images/profilepic.png"),
+                                                                                child: CircleAvatar(
+                                                                                  backgroundColor: AppColors.lightPrimaryColor,
+                                                                                  child: CachedNetworkImage(
+                                                                                    imageUrl: singleReview.profileImage,
+                                                                                    errorWidget: (context, url, error) {
+                                                                                      return const Center(
+                                                                                          child: Text(
+                                                                                        "No Image",
+                                                                                        style: TextStyle(
+                                                                                          fontSize: 9,
+                                                                                        ),
+                                                                                      ));
+                                                                                    },
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        w(20),
+                                                                        Expanded(
+                                                                          child:
+                                                                              Container(
+                                                                            padding:
+                                                                                const EdgeInsets.only(top: 20),
+                                                                            // height: Get.height *
+                                                                            //     0.35,
+                                                                            width:
+                                                                                Get.width * 0.7,
+                                                                            child:
+                                                                                Column(
+                                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                Align(
+                                                                                  alignment: Alignment.topLeft,
+                                                                                  child: IgnorePointer(
+                                                                                    ignoring: true,
+                                                                                    child: RatingBar.builder(
+                                                                                      itemSize: 20,
+                                                                                      initialRating: double.parse(singleReview.rating),
+                                                                                      minRating: 1,
+                                                                                      direction: Axis.horizontal,
+                                                                                      allowHalfRating: true,
+                                                                                      itemCount: 5,
+                                                                                      glow: false,
+                                                                                      itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                                                                      itemBuilder: (context, _) => const Icon(
+                                                                                        Icons.star,
+                                                                                        size: 16,
+                                                                                        color: Colors.amber,
+                                                                                      ),
+                                                                                      onRatingUpdate: (rating) {
+                                                                                        print(rating);
+                                                                                      },
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                h(5),
+                                                                                Text(
+                                                                                  singleReview.userNameReviewDate,
+                                                                                  // "by Darryl McKinnon on April 22, 2020",
+                                                                                  style: const TextStyle(fontSize: 14),
+                                                                                ),
+                                                                                h(5),
+                                                                                Text(
+                                                                                  singleReview.review,
+                                                                                  // "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum...",
+                                                                                  style: const TextStyle(fontSize: 10),
+                                                                                ),
+                                                                                h(5),
+                                                                                SizedBox(
+                                                                                  width: Get.width * 0.7,
+                                                                                  height: Get.height * 0.1,
+                                                                                  // color: AppColors.greyColor,
+                                                                                  child: ListView.separated(
+                                                                                    shrinkWrap: true,
+                                                                                    scrollDirection: Axis.horizontal,
+                                                                                    padding: const EdgeInsets.symmetric(),
+                                                                                    itemCount: singleReview.video.length,
+                                                                                    separatorBuilder: (context, index) {
+                                                                                      return const SizedBox(width: 8);
+                                                                                    },
+                                                                                    itemBuilder: (context, index) {
+                                                                                      var singleVideo = singleReview.video[index];
+                                                                                      String thumbnailPath = '';
+                                                                                      // Future.delayed(
+                                                                                      //     const Duration(
+                                                                                      //       milliseconds: 10,
+                                                                                      //     ), () async {
+                                                                                      //   thumbnailPath = await VideoThumbnail.thumbnailFile(
+                                                                                      //         video: singleVideo.video,
+                                                                                      //         imageFormat: ImageFormat.JPEG,
+                                                                                      //         timeMs: 1,
+                                                                                      //         quality: 50,
+                                                                                      //       ) ??
+                                                                                      //       "";
+
+                                                                                      //   // log("thumbnailPath :; $thumbnailPath");
+                                                                                      // });
+                                                                                      return SizedBox(
+                                                                                        width: 130.0,
+                                                                                        height: 84.0,
+                                                                                        child: ClipRRect(
+                                                                                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                                                          child: VTImageView(
+                                                                                            assetPlaceHolder: thumbnailPath,
+                                                                                            // singleVideo.video,
+                                                                                            color: AppColors.greyColor,
+                                                                                            videoUrl: singleVideo.video,
+                                                                                            width: 130.0,
+                                                                                            height: 84.0,
+                                                                                            errorBuilder: (context, error, stack) {
+                                                                                              return Container(
+                                                                                                width: 130.0,
+                                                                                                height: 84.0,
+                                                                                                color: Colors.blue,
+                                                                                                child: const Center(
+                                                                                                  child: Text(
+                                                                                                    "Video Loading Error",
+                                                                                                    textAlign: TextAlign.center,
+                                                                                                    style: TextStyle(
+                                                                                                      fontSize: 13,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              );
+                                                                                            },
+                                                                                          ),
+                                                                                        ),
+                                                                                      );
+                                                                                    },
+                                                                                  ),
+                                                                                ),
+                                                                                h(10),
+                                                                                index == 0
+                                                                                    ? controller.viewMoreReviews.value
+                                                                                        ? const SizedBox()
+                                                                                        : ButtonWithStyle(
+                                                                                            onPressed: () {
+                                                                                              controller.viewMoreReviews.value = !controller.viewMoreReviews.value;
+                                                                                              controller.update();
+                                                                                            },
+                                                                                            textVal: "VIEW MORE",
+                                                                                            style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w400),
+                                                                                            btnwidth: Get.width * 0.2,
+                                                                                          )
+                                                                                    : const SizedBox(),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  },
+                                                                ),
+                                                      const Align(
+                                                        alignment:
+                                                            Alignment.topLeft,
+                                                        child: Text(
+                                                          "Nearby Places",
+                                                          style: TextStyle(
+                                                              fontSize: 18),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                          height: Get.height *
+                                                              0.02),
+                                                      SizedBox(
+                                                        height:
+                                                            Get.height * 0.28,
+                                                        child: ListView.builder(
+                                                          physics:
+                                                              const PageScrollPhysics(),
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          itemCount: controller
+                                                              .nearByPlacesList
+                                                              .length,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            var singleNearBy =
+                                                                controller
+                                                                        .nearByPlacesList[
+                                                                    index];
+                                                            return Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Stack(
+                                                                      children: [
+                                                                        Container(
+                                                                          height:
+                                                                              Get.height * 0.15,
+                                                                          width:
+                                                                              Get.width * 0.5,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                AppColors.greyColor.withOpacity(0.25),
+                                                                            borderRadius:
+                                                                                const BorderRadius.all(Radius.circular(10)),
+                                                                            // image:
+                                                                            //     DecorationImage(image: AssetImage("assets/images/view.png"),
+                                                                            //fit: BoxFit.fill),
+                                                                          ),
+                                                                          child:
+                                                                              CachedNetworkImage(
+                                                                            imageUrl:
+                                                                                singleNearBy.placeImage,
+                                                                            errorWidget: (context,
+                                                                                url,
+                                                                                error) {
+                                                                              return const Center(
+                                                                                child: Text("Image Not Loaded"),
+                                                                              );
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                        Positioned(
+                                                                          top:
+                                                                              0,
+                                                                          left:
+                                                                              10,
+                                                                          child:
+                                                                              SizedBox(
+                                                                            height:
+                                                                                Get.height * 0.06,
+                                                                            width:
+                                                                                Get.width * 0.06,
+                                                                            child:
+                                                                                Image.asset("assets/images/dil.png"),
+                                                                          ),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                    w(20),
+                                                                  ],
+                                                                ),
+                                                                h(5),
+                                                                Text(
+                                                                  singleNearBy
+                                                                      .placesName,
+                                                                  // "Children’s Museum",
+                                                                ),
+                                                                SizedBox(
+                                                                    height: Get
+                                                                            .height *
+                                                                        0.01),
+                                                                Row(
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      height: Get
+                                                                              .height *
+                                                                          0.02,
+                                                                      child:
+                                                                          const Image(
+                                                                        image: AssetImage(
+                                                                            "assets/images/star.png"),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: Get.width *
+                                                                            0.02),
+                                                                    Text(
+                                                                      singleNearBy
+                                                                          .rating,
+                                                                      // "4.0",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              16),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: Get
+                                                                              .width *
+                                                                          0.02,
+                                                                    ),
+                                                                    Text(
+                                                                      "${singleNearBy.totalReview} Reviews",
+                                                                      style: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.grey),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height:
+                                                                      Get.height *
+                                                                          0.01,
+                                                                ),
+                                                                Row(
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      height: Get
+                                                                              .height *
+                                                                          0.02,
+                                                                      child:
+                                                                          const Image(
+                                                                        image: AssetImage(
+                                                                            "assets/images/log.png"),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: Get
+                                                                              .width *
+                                                                          0.02,
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: Get.width *
+                                                                            0.35,
+                                                                        child:
+                                                                            Text(
+                                                                          singleNearBy
+                                                                              .address,
+                                                                          // "100 Laurier Street, Gatineau..",
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        )),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                    height: Get
+                                                                            .height *
+                                                                        0.01),
+                                                                Row(
+                                                                  children: [
+                                                                    SizedBox(
+                                                                      height: Get
+                                                                              .height *
+                                                                          0.02,
+                                                                      child:
+                                                                          const Image(
+                                                                        image: AssetImage(
+                                                                            "assets/images/walking.png"),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: Get.width *
+                                                                            0.02),
+                                                                    Text(
+                                                                      singleNearBy
+                                                                          .duration,
+                                                                      // "2 min",
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: Get.width *
+                                                                            0.02),
+                                                                    Text(
+                                                                      "${singleNearBy.distance} away",
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                )
+                                                              ],
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )),
+                                            controller.reviewAllData == null
+                                                ? const Center(
+                                                    child: Text(
+                                                        "No Review Images"),
+                                                  )
+                                                : controller.reviewAllData!
+                                                        .reviewFile.isEmpty
+                                                    ? const Center(
+                                                        child: Text(
+                                                            "No Review Images"),
+                                                      )
+                                                    : GridView.builder(
+                                                        itemCount: controller
+                                                            .reviewAllData!
+                                                            .reviewFile
+                                                            .length,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 10,
+                                                        ),
+                                                        gridDelegate:
+                                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 3,
+                                                          childAspectRatio: 1,
+                                                          crossAxisSpacing: 10,
+                                                          mainAxisSpacing: 10,
+                                                        ),
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          var singleImage =
+                                                              controller
+                                                                  .reviewAllData!
+                                                                  .reviewFile[index];
+                                                          return CachedNetworkImage(
+                                                            imageUrl:
+                                                                singleImage
+                                                                    .file,
+                                                          );
+                                                        },
+                                                      ),
+                                            controller.reviewAllData == null
+                                                ? const Center(
+                                                    child: Text(
+                                                        "No Review Videos"),
+                                                  )
+                                                : controller.reviewAllData!
+                                                        .reviewVideo.isEmpty
+                                                    ? const Center(
+                                                        child: Text(
+                                                            "No Review Videos"),
+                                                      )
+                                                    : GridView.builder(
+                                                        itemCount: controller
+                                                            .reviewAllData!
+                                                            .reviewVideo
+                                                            .length,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 10,
+                                                        ),
+                                                        gridDelegate:
+                                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 3,
+                                                          childAspectRatio: 1,
+                                                          crossAxisSpacing: 10,
+                                                          mainAxisSpacing: 10,
+                                                        ),
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          var singleVideo =
+                                                              controller
+                                                                  .reviewAllData!
+                                                                  .reviewVideo[index];
+                                                          //                                                 final createdThumbnailPath =  VideoThumbnail.thumbnailData(
+                                                          // video: singleVideo.file,
+                                                          // imageFormat: ImageFormat.JPEG,
+                                                          // timeMs: 1,
+                                                          // quality: 50);
+
+                                                          // return CachedNetworkImage(
+                                                          //   imageUrl:
+                                                          //       singleVideo
+                                                          //           .video,
+                                                          // );
+                                                          return VTImageView(
+                                                            assetPlaceHolder:
+                                                                singleVideo
+                                                                    .video,
+                                                            videoUrl:
+                                                                singleVideo
+                                                                    .video,
+                                                            // width: 200.0,
+                                                            // height: 200.0,
+                                                            errorBuilder:
+                                                                (context, error,
+                                                                    stack) {
+                                                              return Container(
+                                                                width: 200.0,
+                                                                height: 200.0,
+                                                                color:
+                                                                    Colors.blue,
+                                                                child:
+                                                                    const Center(
+                                                                  child: Text(
+                                                                    "Video Loading Error",
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          13,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+                                            // ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),

@@ -84,12 +84,12 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.VERIFICATION,
-      page: () => VerificationView(),
+      page: () => const VerificationView(),
       binding: VerificationBinding(),
     ),
     GetPage(
       name: _Paths.CHILDINFO,
-      page: () => ChildinfoView(),
+      page: () => const ChildinfoView(),
       binding: ChildinfoBinding(),
     ),
     GetPage(
@@ -99,7 +99,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FILTER,
-      page: () => FilterView(),
+      page: () => const FilterView(),
       binding: FilterBinding(),
     ),
     GetPage(
@@ -154,7 +154,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.EDIT_PROFILE,
-      page: () => EditProfileView(),
+      page: () => const EditProfileView(),
       binding: EditProfileBinding(),
     ),
     GetPage(

@@ -14,17 +14,7 @@ class TermsConditionsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-      getAbout();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
+    getAbout();
   }
 
   Future<void> getAbout() async {
@@ -39,9 +29,8 @@ class TermsConditionsController extends GetxController {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,
-            fontSize: 16.0
-        );
-      }else{
+            fontSize: 16.0);
+      } else {
         Fluttertoast.showToast(
             msg: '${a?.message}',
             toastLength: Toast.LENGTH_SHORT,
@@ -49,12 +38,11 @@ class TermsConditionsController extends GetxController {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.blue,
             textColor: Colors.white,
-            fontSize: 16.0
-        );
+            fontSize: 16.0);
       }
       update();
     } catch (e) {
-      print("${e.toString()}");
+      print(e.toString());
     } finally {
       isLoading(false);
     }

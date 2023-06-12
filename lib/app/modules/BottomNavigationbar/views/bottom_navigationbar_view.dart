@@ -12,6 +12,7 @@ import 'package:playze/app/modules/profile/views/profile_view.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/bottom_navigationbar_controller.dart';
 
+// ignore: must_be_immutable
 class BottomNavigationbarView extends GetView<BottomNavigationbarController> {
   @override
   var controller = Get.put(BottomNavigationbarController());
@@ -139,7 +140,7 @@ class BottomNavigationbarView extends GetView<BottomNavigationbarController> {
                                                         width:
                                                             Get.width * 0.02),
                                                     Text(
-                                                      "${hController.selectedPlaceLocation?.totalreview} Reviews",
+                                                      "${hController.selectedPlaceLocation?.totalReview} Reviews",
                                                       style: const TextStyle(
                                                         fontSize: 12,
                                                         color: Colors.grey,
@@ -217,8 +218,8 @@ class BottomNavigationbarView extends GetView<BottomNavigationbarController> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Row(
-                                            children: const [
+                                          const Row(
+                                            children: [
                                               Image(
                                                 image: AssetImage(
                                                     "assets/images/go.png"),
@@ -230,8 +231,8 @@ class BottomNavigationbarView extends GetView<BottomNavigationbarController> {
                                           SizedBox(
                                             width: Get.width * 0.025,
                                           ),
-                                          Row(
-                                            children: const [
+                                          const Row(
+                                            children: [
                                               Image(
                                                 image: AssetImage(
                                                     "assets/images/plan.png"),

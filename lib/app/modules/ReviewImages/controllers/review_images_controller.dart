@@ -7,24 +7,20 @@ class ReviewImagesController extends GetxController {
 
   var args = Get.arguments;
 
-  var imageUrl  ="";
+  bool isNetwork = true;
+
+  var imageUrl = "";
 
   @override
   void onInit() {
     super.onInit();
 
-    imageUrl =  args[0];
+    imageUrl = args[0];
 
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
+    var arguments = args as List;
+    if (arguments.length > 1) {
+      isNetwork = args[1];
+    }
   }
 
   void increment() => count.value++;

@@ -6,6 +6,7 @@ import 'package:playze/Reusability/shared/drawer.dart';
 import '../controllers/playze_workspace_controller.dart';
 import '../widgets/playze_workspace_widgets.dart';
 
+// ignore: must_be_immutable
 class PlayzeWorkspaceView extends StatelessWidget {
   PlayzeWorkspaceView({Key? key}) : super(key: key);
 
@@ -48,9 +49,9 @@ class PlayzeWorkspaceView extends StatelessWidget {
                     const SizedBox(
                       width: 20,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text("Playze Workspace",
                             style: TextStyle(
                               fontSize: 18,

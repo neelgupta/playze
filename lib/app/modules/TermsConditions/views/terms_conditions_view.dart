@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:playze/Reusability/shared/custom_btmbar.dart';
 
@@ -15,7 +16,7 @@ class TermsConditionsView extends GetView<TermsConditionsController> {
         toolbarHeight: Get.height * 0.1, //
         flexibleSpace: Container(
           height: Get.height * 0.2,
-          color: Color(0xff0264C5),
+          color: const Color(0xff0264C5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -28,23 +29,23 @@ class TermsConditionsView extends GetView<TermsConditionsController> {
                         Get.back();
                       },
                       child: Container(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         height: Get.height * 0.06,
-                        decoration: BoxDecoration(),
+                        decoration: const BoxDecoration(),
                         child: Center(
                           child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Image(
+                              padding: const EdgeInsets.all(5),
+                              child: const Image(
                                 image: AssetImage("assets/images/back.png"),
                                 color: Colors.white,
                               )),
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text("Terms & Conditions",
@@ -70,23 +71,33 @@ class TermsConditionsView extends GetView<TermsConditionsController> {
               )
             : Container(
                 height: Get.height,
-                margin: EdgeInsets.fromLTRB(20, 25, 20, 0),
+                margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${controller.a?.data?.privacypolicy ?? ""}',
-                        style: TextStyle(fontSize: 14),
+                      Html(
+                        data: controller.a?.data?.termscondition ?? "",
+                        shrinkWrap: true,
+                        // style: {
+                        //   "": Style(),
+                        // },
+                        // onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, dom.Element? element) {
+                        //   //open URL in webview, or launch URL in browser, or any other logic here
+                        // }
                       ),
+                      // Text(
+                      //   controller.a?.data?.privacypolicy ?? "",
+                      //   style: const TextStyle(fontSize: 14),
+                      // ),
                       h(90)
                     ],
                   ),
                 ),
               ),
       ),
-      bottomNavigationBar: btmbar(
+      bottomNavigationBar: const btmbar(
         fromOther: true,
       ),
       extendBody: true,

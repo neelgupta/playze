@@ -28,8 +28,7 @@ class WorkModal {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data":
-            data == null ? [] : List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
         "message": message,
       };
 }

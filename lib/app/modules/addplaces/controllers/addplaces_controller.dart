@@ -10,7 +10,7 @@ class AddplacesController extends GetxController {
   PlaceDataModel? placeModel;
   RxBool isLoading = false.obs;
   List<PlaceDetails> Data = [];
-  List<Image> images = [];
+  List<ImageData> images = [];
   @override
   void onInit() {
     super.onInit();
