@@ -10,9 +10,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:playze/Reusability/utils/shared_prefs.dart';
 import 'package:playze/app/data/service/api_list.dart';
 import 'package:playze/app/data/service/loginservice.dart';
-import 'package:playze/app/routes/app_pages.dart';
 
 import '../../../data/modal/get_emoji_model.dart';
+import '../../../routes/app_pages.dart';
 
 class AddProfilePictureController extends GetxController {
   //TODO: Implement AddProfilePictureController
@@ -21,7 +21,8 @@ class AddProfilePictureController extends GetxController {
   List<String>? tokan;
   String? usersId;
   File? imageFile;
-  String? storeimgselected;
+  final isEmojiSelected = false.obs;
+  // String? storeimgselected;
 
   GlobalKey<FormState> profileFormKey = GlobalKey<FormState>();
   File? f;
@@ -45,6 +46,7 @@ class AddProfilePictureController extends GetxController {
   List<int>? imageDatas;
   String? fileType;
   List<EmojiData> imagesList = [];
+  EmojiData? selectedEmoji;
 
   TextEditingController profileNameController = TextEditingController();
 
@@ -72,6 +74,7 @@ class AddProfilePictureController extends GetxController {
       print("imageFile=$imageFile");
       isPicked.value = true;
       ispic.value = false;
+      isEmojiSelected.value = false;
     }
   }
 
@@ -87,6 +90,7 @@ class AddProfilePictureController extends GetxController {
       print("pathimg==$imageFile");
       isPicked.value = true;
       ispic.value = false;
+      isEmojiSelected.value = false;
     }
   }
 
@@ -102,34 +106,57 @@ class AddProfilePictureController extends GetxController {
     // } else {}
     log("addProfileData image file ===> $imageFile");
     try {
+      List<String>? tokan =
+          SharedPrefs().value.read(SharedPrefs.tokenKey).split("|");
+      String newtokan = tokan![1];
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: "Bearer $newtokan"
+      };
       Map<String, String> data = {
-        "user_id": usersId!,
-        "user_name": profileNameController.text.trim(),
+        "user_id": usersId!.toString(),
+        "user_name": profileNameController.text.trim().toString(),
+        "type": isEmojiSelected.value ? "1" : "0",
+        "emojis_id": isEmojiSelected.value ? selectedEmoji!.id.toString() : "",
       };
       var postUri = Uri.parse(ApiUrlList.addprofile);
       var request = http.MultipartRequest("POST", postUri);
-      request.headers['Authorization'] = "Bearer ${(tokan![1])}";
+      request.headers['Authorization'] = "Bearer ${(tokan[1])}";
       request.fields.addAll(data);
-      log("addProfileData postUri ===> $postUri");
-      log("addProfileData req data ===> $data");
+      request.headers.addAll(headers);
 
-      if (imageFile != null) {
+      // if (!isEmojiSelected.value)
+      // {
+      //   data.addAll({
+      //     "emojis_id": selectedEmoji!.id.toString(),
+      //   });
+      // }
+      if (!isEmojiSelected.value) {
         http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
           'image',
           imageFile!.path,
         );
         request.files.add(multipartFile);
         log(' request.files : ${request.files.first.filename}');
-      } else {
-        request.fields.addAll({
-          'image': storeimgselected!,
-        });
-        log("storeimgselected! ===> ${storeimgselected!}");
-        // multipartFile = http.MultipartFile.fromString(
-        //   'image',
-        //   storeimgselected!,
-        // );
       }
+
+      log("addProfileData postUri ===> $postUri");
+      log("addProfileData request.headers ===> ${request.headers}");
+      log("addProfileData req data ===> $data");
+
+      // if (imageFile != null) {
+      // } else {
+      //   request.fields.addAll({
+      //     'image': storeimgselected!,
+      //   });
+      //   log("storeimgselected! ===> ${storeimgselected!}");
+      //   // multipartFile = http.MultipartFile.fromString(
+      //   //   'image',
+      //   //   storeimgselected!,
+      //   // );
+      // }
+
       http.StreamedResponse response = await request.send();
       log('code: ${response.statusCode}');
       final res = await http.Response.fromStream(response);
@@ -158,7 +185,7 @@ class AddProfilePictureController extends GetxController {
             backgroundColor: Colors.blue,
             textColor: Colors.white,
             fontSize: 16.0);
-        Get.back();
+        // Get.back();
       }
     } catch (e) {
       rethrow;

@@ -22,6 +22,7 @@ dependencies:
   provider: ^6.0.5
   flutter_html: ^3.0.0-beta.2
   badges: ^3.1.1
+  intl: ^0.18.1
   video_thumbnail: ^0.5.3
   http: ^0.13.5
   fluttertoast: ^8.2.1
@@ -30,6 +31,8 @@ dependencies:
   shared_preferences: ^2.1.0
   video_thumbnail_imageview: ^0.0.5
   cached_network_image: ^3.2.3
+  bottom_sheet: ^3.1.2
+  path_provider: ^2.0.15
   get_storage: ^2.1.1
   google_maps_flutter: ^2.2.6
   location: ^4.4.0

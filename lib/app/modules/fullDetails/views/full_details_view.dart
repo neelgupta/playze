@@ -14,7 +14,6 @@ import 'package:playze/Reusability/utils/app_colors.dart';
 import 'package:playze/app/modules/BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
 import 'package:playze/app/modules/home/controllers/home_controller.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
-import 'package:video_thumbnail_imageview/video_thumbnail_imageview.dart';
 
 import '../../../../Reusability/utils/util.dart';
 import '../../../routes/app_pages.dart';
@@ -357,7 +356,9 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                           ),
                                           w(10),
                                           Text(
-                                            "${double.parse(controller.wSData!.data.avgRating)}",
+                                            double.parse(controller
+                                                    .wSData!.data.avgRating)
+                                                .toStringAsFixed(1),
                                             style:
                                                 const TextStyle(fontSize: 12),
                                           )
@@ -1218,9 +1219,7 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                                   separatorBuilder:
                                                                       (context,
                                                                           index) {
-                                                                    return const SizedBox(
-                                                                        height:
-                                                                            5);
+                                                                    return const SizedBox();
                                                                   },
                                                                   itemBuilder:
                                                                       (context,
@@ -1230,42 +1229,55 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                                             .reviewAllData!
                                                                             .review[index];
                                                                     return Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
                                                                       children: [
-                                                                        Container(
-                                                                          // height:
-                                                                          //     Get.height * 0.35,
-                                                                          // width:
-                                                                          //     Get.width * 0.13,
-                                                                          padding: const EdgeInsets.symmetric(
-                                                                              horizontal: 10,
-                                                                              vertical: 10),
+                                                                        GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            Get.toNamed(
+                                                                              Routes.REVIEW_IMAGES,
+                                                                              arguments: [
+                                                                                singleReview.profileImage,
+                                                                                true,
+                                                                              ],
+                                                                            );
+                                                                          },
                                                                           child:
-                                                                              Column(
-                                                                            children: [
                                                                               Container(
-                                                                                height: Get.height * 0.1,
-                                                                                width: Get.width * 0.15,
-                                                                                decoration: const BoxDecoration(
-                                                                                  shape: BoxShape.circle,
-                                                                                ),
-                                                                                // child: Image.asset("assets/images/profilepic.png"),
-                                                                                child: CircleAvatar(
-                                                                                  backgroundColor: AppColors.lightPrimaryColor,
-                                                                                  child: CachedNetworkImage(
-                                                                                    imageUrl: singleReview.profileImage,
-                                                                                    errorWidget: (context, url, error) {
-                                                                                      return const Center(
-                                                                                          child: Text(
-                                                                                        "No Image",
-                                                                                        style: TextStyle(
-                                                                                          fontSize: 9,
-                                                                                        ),
-                                                                                      ));
-                                                                                    },
-                                                                                  ),
-                                                                                ),
+                                                                            margin:
+                                                                                const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+                                                                            height:
+                                                                                Get.height * 0.1,
+                                                                            width:
+                                                                                Get.width * 0.15,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              shape: BoxShape.circle,
+                                                                            ),
+                                                                            // child: Image.asset("assets/images/profilepic.png"),
+                                                                            child:
+                                                                                CircleAvatar(
+                                                                              backgroundColor: AppColors.greyColor.withOpacity(0.25),
+                                                                              child: CachedNetworkImage(
+                                                                                imageUrl: singleReview.profileImage,
+                                                                                fit: BoxFit.cover,
+                                                                                errorWidget: (context, url, error) {
+                                                                                  return const Center(
+                                                                                      child: Text(
+                                                                                    "No Image",
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 9,
+                                                                                      color: AppColors.blackColor,
+                                                                                    ),
+                                                                                  ));
+                                                                                },
                                                                               ),
-                                                                            ],
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                         w(20),
@@ -1319,70 +1331,157 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                                                   // "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum...",
                                                                                   style: const TextStyle(fontSize: 10),
                                                                                 ),
-                                                                                h(5),
-                                                                                SizedBox(
-                                                                                  width: Get.width * 0.7,
-                                                                                  height: Get.height * 0.1,
-                                                                                  // color: AppColors.greyColor,
-                                                                                  child: ListView.separated(
-                                                                                    shrinkWrap: true,
-                                                                                    scrollDirection: Axis.horizontal,
-                                                                                    padding: const EdgeInsets.symmetric(),
-                                                                                    itemCount: singleReview.video.length,
-                                                                                    separatorBuilder: (context, index) {
-                                                                                      return const SizedBox(width: 8);
-                                                                                    },
-                                                                                    itemBuilder: (context, index) {
-                                                                                      var singleVideo = singleReview.video[index];
-                                                                                      String thumbnailPath = '';
-                                                                                      // Future.delayed(
-                                                                                      //     const Duration(
-                                                                                      //       milliseconds: 10,
-                                                                                      //     ), () async {
-                                                                                      //   thumbnailPath = await VideoThumbnail.thumbnailFile(
-                                                                                      //         video: singleVideo.video,
-                                                                                      //         imageFormat: ImageFormat.JPEG,
-                                                                                      //         timeMs: 1,
-                                                                                      //         quality: 50,
-                                                                                      //       ) ??
-                                                                                      //       "";
+                                                                                h(15),
+                                                                                singleReview.files.isEmpty
+                                                                                    ? const SizedBox()
+                                                                                    : SizedBox(
+                                                                                        width: Get.width * 0.7,
+                                                                                        height: Get.height * 0.1,
+                                                                                        // color: AppColors.greyColor,
+                                                                                        child: ListView.separated(
+                                                                                          shrinkWrap: true,
+                                                                                          scrollDirection: Axis.horizontal,
+                                                                                          padding: const EdgeInsets.symmetric(),
+                                                                                          itemCount: singleReview.files.length,
+                                                                                          separatorBuilder: (context, index) {
+                                                                                            return const SizedBox(width: 8);
+                                                                                          },
+                                                                                          itemBuilder: (context, index) {
+                                                                                            var singleImage = singleReview.files[index];
 
-                                                                                      //   // log("thumbnailPath :; $thumbnailPath");
-                                                                                      // });
-                                                                                      return SizedBox(
-                                                                                        width: 130.0,
-                                                                                        height: 84.0,
-                                                                                        child: ClipRRect(
-                                                                                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                                                                          child: VTImageView(
-                                                                                            assetPlaceHolder: thumbnailPath,
-                                                                                            // singleVideo.video,
-                                                                                            color: AppColors.greyColor,
-                                                                                            videoUrl: singleVideo.video,
-                                                                                            width: 130.0,
-                                                                                            height: 84.0,
-                                                                                            errorBuilder: (context, error, stack) {
-                                                                                              return Container(
+                                                                                            return GestureDetector(
+                                                                                              onTap: () {
+                                                                                                Get.toNamed(
+                                                                                                  Routes.REVIEW_IMAGES,
+                                                                                                  arguments: [
+                                                                                                    singleReview.profileImage,
+                                                                                                    true,
+                                                                                                  ],
+                                                                                                );
+                                                                                              },
+                                                                                              child: SizedBox(
                                                                                                 width: 130.0,
                                                                                                 height: 84.0,
-                                                                                                color: Colors.blue,
-                                                                                                child: const Center(
-                                                                                                  child: Text(
-                                                                                                    "Video Loading Error",
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: TextStyle(
-                                                                                                      fontSize: 13,
+                                                                                                child: ClipRRect(
+                                                                                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                                                                  child: CachedNetworkImage(
+                                                                                                    imageUrl: singleImage.files,
+                                                                                                    fit: BoxFit.cover,
+                                                                                                    errorWidget: (context, url, error) {
+                                                                                                      return Container(
+                                                                                                        color: AppColors.greyColor.withOpacity(0.45),
+                                                                                                        child: const Center(
+                                                                                                          child: Text(
+                                                                                                            "Image\nNot Loaded",
+                                                                                                            textAlign: TextAlign.center,
+                                                                                                            style: TextStyle(
+                                                                                                              color: AppColors.blackColor,
+                                                                                                              fontSize: 12,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      );
+                                                                                                    },
+                                                                                                  ),
+
+                                                                                                  // VTImageView(
+                                                                                                  //   assetPlaceHolder: singleVideo.videoThumbnail,
+                                                                                                  //   // singleVideo.video,
+                                                                                                  //   color: AppColors.greyColor,
+                                                                                                  //   videoUrl: singleVideo.video,
+                                                                                                  //   width: 130.0,
+                                                                                                  //   height: 84.0,
+                                                                                                  //   errorBuilder: (context, error, stack) {
+                                                                                                  //     return Container(
+                                                                                                  //       width: 130.0,
+                                                                                                  //       height: 84.0,
+                                                                                                  //       color: Colors.blue,
+                                                                                                  //       child: const Center(
+                                                                                                  //         child: Text(
+                                                                                                  //           "Video Loading Error",
+                                                                                                  //           textAlign: TextAlign.center,
+                                                                                                  //           style: TextStyle(
+                                                                                                  //             fontSize: 13,
+                                                                                                  //           ),
+                                                                                                  //         ),
+                                                                                                  //       ),
+                                                                                                  //     );
+                                                                                                  //   },
+                                                                                                  // ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            );
+                                                                                          },
+                                                                                        ),
+                                                                                      ),
+                                                                                h(5),
+                                                                                singleReview.video.isEmpty || singleReview.files.isEmpty
+                                                                                    ? const SizedBox()
+                                                                                    : SizedBox(
+                                                                                        width: Get.width * 0.7,
+                                                                                        height: Get.height * 0.1,
+                                                                                        // color: AppColors.greyColor,
+                                                                                        child: ListView.separated(
+                                                                                          shrinkWrap: true,
+                                                                                          scrollDirection: Axis.horizontal,
+                                                                                          padding: const EdgeInsets.symmetric(),
+                                                                                          itemCount: singleReview.video.length,
+                                                                                          separatorBuilder: (context, index) {
+                                                                                            return const SizedBox(width: 8);
+                                                                                          },
+                                                                                          itemBuilder: (context, index) {
+                                                                                            var singleVideo = singleReview.video[index];
+
+                                                                                            return GestureDetector(
+                                                                                              onTap: () {
+                                                                                                Get.toNamed(
+                                                                                                  Routes.REVIEW_VIDEOS,
+                                                                                                  arguments: [
+                                                                                                    singleVideo.video,
+                                                                                                    true,
+                                                                                                  ],
+                                                                                                );
+                                                                                              },
+                                                                                              child: Stack(
+                                                                                                alignment: Alignment.center,
+                                                                                                children: [
+                                                                                                  SizedBox(
+                                                                                                    width: 130.0,
+                                                                                                    height: 84.0,
+                                                                                                    child: ClipRRect(
+                                                                                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                                                                      child: CachedNetworkImage(
+                                                                                                        imageUrl: singleVideo.thumbnail,
+                                                                                                        fit: BoxFit.cover,
+                                                                                                        errorWidget: (context, url, error) {
+                                                                                                          return Container(
+                                                                                                            color: AppColors.greyColor.withOpacity(0.45),
+                                                                                                            child: const Center(
+                                                                                                              child: Text(
+                                                                                                                "Video Image\nNot Loaded",
+                                                                                                                textAlign: TextAlign.center,
+                                                                                                                style: TextStyle(
+                                                                                                                  color: AppColors.blackColor,
+                                                                                                                  fontSize: 12,
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          );
+                                                                                                        },
+                                                                                                      ),
                                                                                                     ),
                                                                                                   ),
-                                                                                                ),
-                                                                                              );
-                                                                                            },
-                                                                                          ),
+                                                                                                  Image.asset(
+                                                                                                    "assets/images/play.png",
+                                                                                                    height: 16,
+                                                                                                    width: 16,
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            );
+                                                                                          },
                                                                                         ),
-                                                                                      );
-                                                                                    },
-                                                                                  ),
-                                                                                ),
+                                                                                      ),
                                                                                 h(10),
                                                                                 index == 0
                                                                                     ? controller.viewMoreReviews.value
@@ -1393,7 +1492,11 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                                                               controller.update();
                                                                                             },
                                                                                             textVal: "VIEW MORE",
-                                                                                            style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w400),
+                                                                                            style: const TextStyle(
+                                                                                              fontSize: 11,
+                                                                                              color: Colors.white,
+                                                                                              fontWeight: FontWeight.w400,
+                                                                                            ),
                                                                                             btnwidth: Get.width * 0.2,
                                                                                           )
                                                                                     : const SizedBox(),
@@ -1420,220 +1523,183 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                       SizedBox(
                                                         height:
                                                             Get.height * 0.28,
-                                                        child: ListView.builder(
-                                                          physics:
-                                                              const PageScrollPhysics(),
-                                                          scrollDirection:
-                                                              Axis.horizontal,
-                                                          itemCount: controller
-                                                              .nearByPlacesList
-                                                              .length,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            var singleNearBy =
-                                                                controller
-                                                                        .nearByPlacesList[
-                                                                    index];
-                                                            return Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    Stack(
-                                                                      children: [
-                                                                        Container(
+                                                        child: controller
+                                                                .nearByPlacesList
+                                                                .isEmpty
+                                                            ? const Center(
+                                                                child: Text(
+                                                                    "No Nearby Places"),
+                                                              )
+                                                            : ListView.builder(
+                                                                physics:
+                                                                    const PageScrollPhysics(),
+                                                                scrollDirection:
+                                                                    Axis.horizontal,
+                                                                itemCount:
+                                                                    controller
+                                                                        .nearByPlacesList
+                                                                        .length,
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        index) {
+                                                                  var singleNearBy =
+                                                                      controller
+                                                                              .nearByPlacesList[
+                                                                          index];
+                                                                  return Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Row(
+                                                                        children: [
+                                                                          Stack(
+                                                                            children: [
+                                                                              Container(
+                                                                                height: Get.height * 0.15,
+                                                                                width: Get.width * 0.5,
+                                                                                decoration: BoxDecoration(
+                                                                                  color: AppColors.greyColor.withOpacity(0.25),
+                                                                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                                                  // image:
+                                                                                  //     DecorationImage(image: AssetImage("assets/images/view.png"),
+                                                                                  //fit: BoxFit.fill),
+                                                                                ),
+                                                                                child: CachedNetworkImage(
+                                                                                  imageUrl: singleNearBy.placeImage,
+                                                                                  errorWidget: (context, url, error) {
+                                                                                    return const Center(
+                                                                                      child: Text("Image Not Loaded"),
+                                                                                    );
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                              Positioned(
+                                                                                top: 0,
+                                                                                left: 10,
+                                                                                child: SizedBox(
+                                                                                  height: Get.height * 0.06,
+                                                                                  width: Get.width * 0.06,
+                                                                                  child: Image.asset("assets/images/dil.png"),
+                                                                                ),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                          w(20),
+                                                                        ],
+                                                                      ),
+                                                                      h(5),
+                                                                      Text(
+                                                                        singleNearBy
+                                                                            .placesName,
+                                                                        // "Children’s Museum",
+                                                                      ),
+                                                                      SizedBox(
                                                                           height:
-                                                                              Get.height * 0.15,
-                                                                          width:
-                                                                              Get.width * 0.5,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                AppColors.greyColor.withOpacity(0.25),
-                                                                            borderRadius:
-                                                                                const BorderRadius.all(Radius.circular(10)),
-                                                                            // image:
-                                                                            //     DecorationImage(image: AssetImage("assets/images/view.png"),
-                                                                            //fit: BoxFit.fill),
-                                                                          ),
-                                                                          child:
-                                                                              CachedNetworkImage(
-                                                                            imageUrl:
-                                                                                singleNearBy.placeImage,
-                                                                            errorWidget: (context,
-                                                                                url,
-                                                                                error) {
-                                                                              return const Center(
-                                                                                child: Text("Image Not Loaded"),
-                                                                              );
-                                                                            },
-                                                                          ),
-                                                                        ),
-                                                                        Positioned(
-                                                                          top:
-                                                                              0,
-                                                                          left:
-                                                                              10,
-                                                                          child:
-                                                                              SizedBox(
+                                                                              Get.height * 0.01),
+                                                                      Row(
+                                                                        children: [
+                                                                          SizedBox(
                                                                             height:
-                                                                                Get.height * 0.06,
-                                                                            width:
-                                                                                Get.width * 0.06,
+                                                                                Get.height * 0.02,
                                                                             child:
-                                                                                Image.asset("assets/images/dil.png"),
+                                                                                const Image(
+                                                                              image: AssetImage("assets/images/star.png"),
+                                                                            ),
                                                                           ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                    w(20),
-                                                                  ],
-                                                                ),
-                                                                h(5),
-                                                                Text(
-                                                                  singleNearBy
-                                                                      .placesName,
-                                                                  // "Children’s Museum",
-                                                                ),
-                                                                SizedBox(
-                                                                    height: Get
-                                                                            .height *
-                                                                        0.01),
-                                                                Row(
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      height: Get
-                                                                              .height *
-                                                                          0.02,
-                                                                      child:
-                                                                          const Image(
-                                                                        image: AssetImage(
-                                                                            "assets/images/star.png"),
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width: Get.width *
-                                                                            0.02),
-                                                                    Text(
-                                                                      singleNearBy
-                                                                          .rating,
-                                                                      // "4.0",
-                                                                      style: const TextStyle(
-                                                                          fontSize:
-                                                                              16),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: Get
-                                                                              .width *
-                                                                          0.02,
-                                                                    ),
-                                                                    Text(
-                                                                      "${singleNearBy.totalReview} Reviews",
-                                                                      style: const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.grey),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  height:
-                                                                      Get.height *
-                                                                          0.01,
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      height: Get
-                                                                              .height *
-                                                                          0.02,
-                                                                      child:
-                                                                          const Image(
-                                                                        image: AssetImage(
-                                                                            "assets/images/log.png"),
-                                                                      ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: Get
-                                                                              .width *
-                                                                          0.02,
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width: Get.width *
-                                                                            0.35,
-                                                                        child:
-                                                                            Text(
-                                                                          singleNearBy
-                                                                              .address,
-                                                                          // "100 Laurier Street, Gatineau..",
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                Colors.grey,
+                                                                          SizedBox(
+                                                                              width: Get.width * 0.02),
+                                                                          Text(
+                                                                            singleNearBy.rating,
+                                                                            // "4.0",
+                                                                            style:
+                                                                                const TextStyle(fontSize: 16),
                                                                           ),
-                                                                        )),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                    height: Get
-                                                                            .height *
-                                                                        0.01),
-                                                                Row(
-                                                                  children: [
-                                                                    SizedBox(
-                                                                      height: Get
-                                                                              .height *
-                                                                          0.02,
-                                                                      child:
-                                                                          const Image(
-                                                                        image: AssetImage(
-                                                                            "assets/images/walking.png"),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                Get.width * 0.02,
+                                                                          ),
+                                                                          Text(
+                                                                            "${singleNearBy.totalReview} Reviews",
+                                                                            style:
+                                                                                const TextStyle(fontSize: 12, color: Colors.grey),
+                                                                          ),
+                                                                        ],
                                                                       ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width: Get.width *
-                                                                            0.02),
-                                                                    Text(
-                                                                      singleNearBy
-                                                                          .duration,
-                                                                      // "2 min",
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        color: Colors
-                                                                            .grey,
+                                                                      SizedBox(
+                                                                        height: Get.height *
+                                                                            0.01,
                                                                       ),
-                                                                    ),
-                                                                    SizedBox(
-                                                                        width: Get.width *
-                                                                            0.02),
-                                                                    Text(
-                                                                      "${singleNearBy.distance} away",
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            12,
-                                                                        color: Colors
-                                                                            .grey,
+                                                                      Row(
+                                                                        children: [
+                                                                          SizedBox(
+                                                                            height:
+                                                                                Get.height * 0.02,
+                                                                            child:
+                                                                                const Image(
+                                                                              image: AssetImage("assets/images/log.png"),
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                Get.width * 0.02,
+                                                                          ),
+                                                                          SizedBox(
+                                                                              width: Get.width * 0.35,
+                                                                              child: Text(
+                                                                                singleNearBy.address,
+                                                                                // "100 Laurier Street, Gatineau..",
+                                                                                style: const TextStyle(
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  fontSize: 12,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                              )),
+                                                                        ],
                                                                       ),
-                                                                    ),
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            );
-                                                          },
-                                                        ),
+                                                                      SizedBox(
+                                                                          height:
+                                                                              Get.height * 0.01),
+                                                                      Row(
+                                                                        children: [
+                                                                          SizedBox(
+                                                                            height:
+                                                                                Get.height * 0.02,
+                                                                            child:
+                                                                                const Image(
+                                                                              image: AssetImage("assets/images/walking.png"),
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                              width: Get.width * 0.02),
+                                                                          Text(
+                                                                            singleNearBy.duration,
+                                                                            // "2 min",
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                              width: Get.width * 0.02),
+                                                                          Text(
+                                                                            "${singleNearBy.distance} away",
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              ),
                                                       ),
                                                     ],
                                                   ),
@@ -1673,10 +1739,24 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                               controller
                                                                   .reviewAllData!
                                                                   .reviewFile[index];
-                                                          return CachedNetworkImage(
-                                                            imageUrl:
-                                                                singleImage
-                                                                    .file,
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              Get.toNamed(
+                                                                Routes
+                                                                    .REVIEW_IMAGES,
+                                                                arguments: [
+                                                                  singleImage
+                                                                      .file,
+                                                                  true,
+                                                                ],
+                                                              );
+                                                            },
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl:
+                                                                  singleImage
+                                                                      .file,
+                                                            ),
                                                           );
                                                         },
                                                       ),
@@ -1708,6 +1788,7 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                           childAspectRatio: 1,
                                                           crossAxisSpacing: 10,
                                                           mainAxisSpacing: 10,
+                                                          // mainAxisExtent: 120,
                                                         ),
                                                         itemBuilder:
                                                             (context, index) {
@@ -1726,39 +1807,66 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                           //       singleVideo
                                                           //           .video,
                                                           // );
-                                                          return VTImageView(
-                                                            assetPlaceHolder:
-                                                                singleVideo
-                                                                    .video,
-                                                            videoUrl:
-                                                                singleVideo
-                                                                    .video,
-                                                            // width: 200.0,
-                                                            // height: 200.0,
-                                                            errorBuilder:
-                                                                (context, error,
-                                                                    stack) {
-                                                              return Container(
-                                                                width: 200.0,
-                                                                height: 200.0,
-                                                                color:
-                                                                    Colors.blue,
-                                                                child:
-                                                                    const Center(
-                                                                  child: Text(
-                                                                    "Video Loading Error",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          13,
-                                                                    ),
-                                                                  ),
-                                                                ),
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              Get.toNamed(
+                                                                Routes
+                                                                    .REVIEW_VIDEOS,
+                                                                arguments: [
+                                                                  singleVideo
+                                                                      .video,
+                                                                  true,
+                                                                ],
                                                               );
                                                             },
+                                                            child: Stack(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              children: [
+                                                                AspectRatio(
+                                                                  aspectRatio:
+                                                                      1,
+                                                                  child:
+                                                                      CachedNetworkImage(
+                                                                    imageUrl:
+                                                                        singleVideo
+                                                                            .thumbnail,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                    errorWidget:
+                                                                        (context,
+                                                                            url,
+                                                                            error) {
+                                                                      return Container(
+                                                                        color: AppColors
+                                                                            .greyColor
+                                                                            .withOpacity(0.45),
+                                                                        child:
+                                                                            const Center(
+                                                                          child:
+                                                                              Text(
+                                                                            "Video Image\nNot Loaded",
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: AppColors.blackColor,
+                                                                              fontSize: 12,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                Image.asset(
+                                                                  "assets/images/play.png",
+                                                                  height: 16,
+                                                                  width: 16,
+                                                                ),
+                                                              ],
+                                                            ),
                                                           );
                                                         },
                                                       ),

@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:playze/Reusability/shared/commonTextField.dart';
@@ -134,30 +137,54 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                                           itemBuilder: (context, ind) {
                                             return GestureDetector(
                                               onTap: () async {
-                                                controller.storeimgselected =
-                                                    singleData
-                                                        .emojis[ind].images
-                                                        .toString();
-                                                print(
-                                                    "${controller.storeimgselected} ");
+                                                controller.isEmojiSelected
+                                                    .value = true;
+                                                controller.selectedEmoji =
+                                                    singleData.emojis[ind];
+                                                // controller.storeimgselected =
+                                                //     singleData
+                                                //         .emojis[ind].images
+                                                //         .toString();
+                                                log("controller.selectedEmoji!.images :: ${controller.selectedEmoji!.images}");
                                                 controller.isPicked.value =
                                                     true;
                                                 controller.ispic.value = false;
                                                 // controller.imageFile = File(controller.storeimgselected.toString());
                                               },
                                               child: Container(
-                                                decoration: BoxDecoration(
+                                                decoration: const BoxDecoration(
                                                   color: AppColors.whiteColor,
                                                   borderRadius:
-                                                      const BorderRadius.all(
+                                                      BorderRadius.all(
                                                           Radius.circular(5)),
-                                                  image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        singleData
-                                                            .emojis[ind].images
-                                                            .toString()),
-                                                    fit: BoxFit.cover,
-                                                  ),
+                                                  // image: DecorationImage(
+                                                  //   image: NetworkImage(
+                                                  //       singleData
+                                                  //           .emojis[ind].images
+                                                  //           .toString()),
+                                                  //   fit: BoxFit.cover,
+                                                  // ),
+                                                ),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: singleData
+                                                      .emojis[ind].images
+                                                      .toString(),
+                                                  fit: BoxFit.fill,
+                                                  errorWidget:
+                                                      (context, url, error) {
+                                                    return const Center(
+                                                      child: Text(
+                                                        "Image Not Loaded",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          color: AppColors
+                                                              .blackColor,
+                                                          fontSize: 11,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                             );
@@ -191,10 +218,11 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                                   child:
                                       Image.asset("assets/images/appIcon.png")),
                               h(20),
-                              Text(LocaleKeys.text_Add_Profile_Picture.tr,
-                                  style: AppTextStyle.size18Medium.copyWith(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600)),
+                              Text(
+                                LocaleKeys.text_Add_Profile_Picture.tr,
+                                style: AppTextStyle.size18Medium.copyWith(
+                                    fontSize: 20, fontWeight: FontWeight.w600),
+                              ),
                               h(20),
                               h(10),
                               Stack(
@@ -205,41 +233,58 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                                       onTap: () {
                                         controller.ispic.value = true;
                                         controller.imageFile = null;
-                                        controller.storeimgselected = "";
+                                        controller.selectedEmoji = null;
                                         print("hjh");
                                       },
                                       child: Container(
-                                          height: Get.height * 0.08,
-                                          width: Get.width * 0.2,
+                                        height: 70,
+                                        width: 70,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.orange,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Container(
                                           decoration: const BoxDecoration(
                                             color: Colors.orange,
                                             shape: BoxShape.circle,
                                           ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.orange,
-                                              shape: BoxShape.circle,
-                                              image: controller.imageFile !=
-                                                      null
-                                                  ? DecorationImage(
-                                                      image: FileImage(
-                                                          controller
-                                                              .imageFile!),
+                                          child: controller.imageFile != null
+                                              ? ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(200)),
+                                                  child: Image.file(
+                                                    controller.imageFile!,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                )
+                                              : controller.selectedEmoji != null
+                                                  ? CachedNetworkImage(
+                                                      imageUrl: controller
+                                                          .selectedEmoji!.images
+                                                          .toString(),
                                                       fit: BoxFit.fill,
+                                                      errorWidget: (context,
+                                                          url, error) {
+                                                        return const Center(
+                                                          child: Text(
+                                                            "Image Not Loaded",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              color: AppColors
+                                                                  .blackColor,
+                                                              fontSize: 10,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
                                                     )
-                                                  : controller.storeimgselected !=
-                                                          null
-                                                      ? DecorationImage(
-                                                          image: NetworkImage(
-                                                              controller
-                                                                  .storeimgselected
-                                                                  .toString()),
-                                                          fit: BoxFit.fill)
-                                                      : const DecorationImage(
-                                                          image: AssetImage(
-                                                              "assets/images/noman.png")),
-                                            ),
-                                          )),
+                                                  : Image.asset(
+                                                      "assets/images/noman.png",
+                                                    ),
+                                        ),
+                                      ),
                                     );
                                   }),
                                   Positioned(
@@ -295,6 +340,8 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
                               h(50),
                               ButtonWithStyle(
                                 onPressed: () {
+                                  log("controller.imageFile ;; ${controller.imageFile}");
+                                  // log("controller.storeimgselected ;; ${controller.selectedEmoji!.images}");
                                   if (controller
                                           .profileNameController.text.isEmpty ||
                                       controller.profileNameController.text ==
@@ -303,13 +350,22 @@ class AddProfilePictureView extends GetView<AddProfilePictureController> {
 
                                     controller.errorString.value =
                                         "Please Enter Profile Name";
-                                  } else if (controller.imageFile == null ||
-                                      controller.storeimgselected == null) {
+                                  } else if (controller.imageFile == null &&
+                                      controller.selectedEmoji == null) {
                                     controller.isError.value = true;
 
                                     controller.errorString.value =
-                                        "Please Choose Profile Image";
-                                  } else {
+                                        "Please Choose Profile Image Or Emoji";
+                                  }
+                                  //  else if (controller.isEmojiSelected.value) {
+                                  //   if (controller.storeimgselected == null) {
+                                  //     controller.isError.value = true;
+
+                                  //     controller.errorString.value =
+                                  //         "Please Choose Profile Image";
+                                  //   }
+                                  // }
+                                  else {
                                     controller.isError.value = false;
                                     controller.addProfileData();
                                   }

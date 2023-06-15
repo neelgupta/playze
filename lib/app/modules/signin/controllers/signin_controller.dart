@@ -14,17 +14,21 @@ import 'package:playze/app/routes/app_pages.dart';
 // import 'package:device_info_plus/device_info_plus.dart';
 
 class SigninController extends GetxController {
-  TextEditingController emailController = TextEditingController();
   RxBool isLoading = false.obs;
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController forgotPassController = TextEditingController();
   // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   loginService Loginervice = loginService();
   final count = 0.obs;
-  var emailstatus = false.obs;
-  var passwordstatus = false.obs;
+  // var emailstatus = false.obs;
+  // var passwordstatus = false.obs;
   String status = "";
   var firetoken;
   String? deviceId;
+
+  GlobalKey<FormState> signInKey = GlobalKey<FormState>();
+  GlobalKey<FormState> forgotPassFormKey = GlobalKey<FormState>();
   LoginModel? a;
   List<Child> childrenList = [];
 

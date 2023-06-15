@@ -57,6 +57,7 @@ class FilterController extends GetxController {
         update();
       }
 
+      selectedCount.value = filterProv.filteredCatdataList.length;
       for (int i = 0; i < filterList.length; i++) {
         // log("filterList[i].id : ${filterList[i].id}");
         for (var item in filterProv.filteredCatdataList) {

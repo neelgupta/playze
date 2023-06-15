@@ -4,11 +4,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:playze/Reusability/shared/commonTextField.dart';
 import 'package:playze/Reusability/shared/textStyle.dart';
 import 'package:playze/Reusability/utils/util.dart';
 import 'package:playze/generated/locales.g.dart';
 
+import '../../../../Reusability/shared/commonTextField.dart';
 import '../../../../Reusability/utils/app_colors.dart';
 import '../controllers/childinfo_controller.dart';
 
@@ -27,12 +27,9 @@ class ChildinfoView extends GetView<ChildinfoController> {
                     color: Colors.white,
                   ),
                 )
-              : Container(
-                  height: Get.height,
-                  width: Get.width,
-                  alignment: Alignment.center,
-                  color: Colors.blue,
-                  padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
+              : Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,461 +39,353 @@ class ChildinfoView extends GetView<ChildinfoController> {
                             width: Get.width * 0.4,
                             child: Image.asset("assets/images/appIcon.png")),
                         h(20),
-                        Text(LocaleKeys.text_create_account.tr,
-                            style: AppTextStyle.size18Medium.copyWith(
-                                letterSpacing: 1.8,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600)),
+                        Text(
+                          LocaleKeys.text_create_account.tr,
+                          style: AppTextStyle.size18Medium.copyWith(
+                              letterSpacing: 1.8,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
+                        ),
                         h(20),
-                        GetBuilder<ChildinfoController>(builder: (_) {
-                          return Column(
-                            children: [
-                              ListView.separated(
-                                separatorBuilder: (context, index) => h(20),
-                                itemCount: controller.weekPrice.length + 1,
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                              flex: 2,
-                                              child: index == 0
-                                                  ? Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Text(
-                                                                LocaleKeys
-                                                                    .labels_Children_information
-                                                                    .tr,
-                                                                style: AppTextStyle
-                                                                    .size18Medium
-                                                                    .copyWith(
-                                                                        fontSize:
-                                                                            16)),
-                                                          ],
-                                                        ),
-                                                        h(20),
-                                                        Text(
-                                                            LocaleKeys
-                                                                .text_Create_Account_nots
-                                                                .tr,
-                                                            style: AppTextStyle
-                                                                .size18Medium
-                                                                .copyWith(
-                                                                    fontSize:
-                                                                        12)),
-                                                        h(20),
-                                                        InputTextField(
-                                                          onChanged: () {
-                                                            controller
-                                                                .cnamestatus
-                                                                .value = false;
-                                                          },
-                                                          context: context,
-                                                          controller: controller
-                                                                  .nameControllersList[
-                                                              index],
-                                                          hintText:
-                                                              "${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_name.tr}",
-                                                        ),
-                                                        Obx(
-                                                          () => controller
-                                                                  .cnamestatus
-                                                                  .value
-                                                              ? SizedBox(
-                                                                  child: Text(
-                                                                    controller
-                                                                        .status,
-                                                                    style: const TextStyle(
-                                                                        color: Colors
-                                                                            .red),
-                                                                  ),
-                                                                )
-                                                              : Container(),
-                                                        ),
-                                                        h(15),
-                                                        Container(
-                                                          height: Get.height *
-                                                              0.065,
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      Get.width *
-                                                                          0.03),
-                                                          decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .white),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5.00)),
-                                                          child: TextFormField(
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .number,
-                                                            onChanged:
-                                                                (value) => () {
-                                                              controller
-                                                                  .cagestatus
-                                                                  .value = false;
-                                                            },
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                            cursorColor:
-                                                                Colors.white,
-                                                            controller: controller
-                                                                    .ageControllersList[
-                                                                index],
-                                                            decoration: InputDecoration(
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
-                                                                hintText:
-                                                                    "${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_age.tr}",
-                                                                hintStyle:
-                                                                    AppTextStyle
-                                                                        .size12Regular),
-                                                          ),
-                                                        ),
-                                                        Obx(
-                                                          () => controller
-                                                                  .cagestatus
-                                                                  .value
-                                                              ? SizedBox(
-                                                                  child: Text(
-                                                                    controller
-                                                                        .status,
-                                                                    style: const TextStyle(
-                                                                        color: Colors
-                                                                            .red),
-                                                                  ),
-                                                                )
-                                                              : Container(),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            InputTextField(
-                                                              onChanged: () {
-                                                                controller
-                                                                    .cnamestatus
-                                                                    .value = false;
-                                                              },
-                                                              width: Get.width *
-                                                                  0.8,
-                                                              context: context,
-                                                              controller: controller
-                                                                      .nameControllersList[
-                                                                  index],
-                                                              hintText:
-                                                                  "${LocaleKeys.labels_children.tr} ${LocaleKeys.labels_name.tr}",
-                                                            ),
-                                                            Obx(
-                                                              () => controller
-                                                                      .cnamestatus
-                                                                      .value
-                                                                  ? SizedBox(
-                                                                      child:
-                                                                          Text(
-                                                                        controller
-                                                                            .status,
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                Colors.red),
-                                                                      ),
-                                                                    )
-                                                                  : Container(),
-                                                            ),
-                                                            GestureDetector(
-                                                              onTap: (() {
-                                                                controller
-                                                                    .weekPrice
-                                                                    .removeAt(
-                                                                        index -
-                                                                            1);
-                                                                controller
-                                                                    .nameControllersList[
-                                                                        index]
-                                                                    .clear();
-                                                                controller
-                                                                    .nameControllersList[
-                                                                        index]
-                                                                    .dispose();
-                                                                controller
-                                                                    .nameControllersList
-                                                                    .removeLast();
-                                                                controller
-                                                                    .ageControllersList[
-                                                                        index]
-                                                                    .clear();
-                                                                controller
-                                                                    .ageControllersList[
-                                                                        index]
-                                                                    .dispose();
-                                                                controller
-                                                                    .ageControllersList
-                                                                    .removeLast();
-                                                                controller
-                                                                    .update();
-                                                              }),
-                                                              child: SizedBox(
-                                                                  height:
-                                                                      Get.height *
-                                                                          0.06,
-                                                                  width:
-                                                                      Get.width *
-                                                                          0.05,
-                                                                  child: Image
-                                                                      .asset(
-                                                                    "assets/images/delete.png",
-                                                                    color: Colors
-                                                                        .white,
-                                                                  )),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        h(15),
-                                                        Container(
-                                                          height: Get.height *
-                                                              0.065,
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      Get.width *
-                                                                          0.03),
-                                                          decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .white),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5.00)),
-                                                          child: TextFormField(
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .number,
-                                                            onChanged:
-                                                                (value) => () {
-                                                              controller
-                                                                  .cagestatus
-                                                                  .value = false;
-                                                            },
-                                                            controller: controller
-                                                                    .ageControllersList[
-                                                                index],
-                                                            style: const TextStyle(
-                                                                color: AppColors
-                                                                    .whiteColor),
-                                                            decoration: InputDecoration(
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
-                                                                hintText:
-                                                                    "${LocaleKeys.labels_children.tr} ${LocaleKeys.labels_age.tr}",
-                                                                hintStyle:
-                                                                    AppTextStyle
-                                                                        .size12Regular),
-                                                          ),
-                                                        ),
-                                                        Obx(
-                                                          () => controller
-                                                                  .cagestatus
-                                                                  .value
-                                                              ? SizedBox(
-                                                                  child: Text(
-                                                                    controller
-                                                                        .status,
-                                                                    style: const TextStyle(
-                                                                        color: Colors
-                                                                            .red),
-                                                                  ),
-                                                                )
-                                                              : Container(),
-                                                        ),
-
-                                                        // InputTextField(
-                                                        //   width: Get.width * 0.8,
-                                                        //   context: context,
-                                                        //   controller:
-                                                        //   controller.ageControllersList[index],
-                                                        //   hintText: LocaleKeys
-                                                        //           .labels_children.tr +
-                                                        //       " " +
-                                                        //       LocaleKeys.labels_age.tr,
-                                                        // ),
-                                                      ],
-                                                    )),
-                                        ],
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  controller.weekPrice.add(
-                                      (controller.weekPrice.length + 1) + 1);
-                                  controller.nameControllersList
-                                      .add(TextEditingController());
-                                  controller.ageControllersList
-                                      .add(TextEditingController());
-                                  controller.update();
-                                },
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.only(top: 20, bottom: 0),
-                                  alignment: Alignment.center,
-                                  height: 35,
-                                  width: 110,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  decoration: const BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(50),
-                                      )
-                                      // shape: BoxShape.circle,
-                                      ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text(
-                                        "Add Child",
-                                        style: TextStyle(
-                                          color: AppColors.whiteColor,
-                                          fontSize: 14,
+                        GetBuilder<ChildinfoController>(builder: (cont) {
+                          return ListView.separated(
+                            shrinkWrap: true,
+                            separatorBuilder: (context, index) => h(20),
+                            itemCount: controller.weekPrice.length + 1,
+                            padding: EdgeInsets.zero,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return index == 0
+                                  ? Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              LocaleKeys
+                                                  .labels_Children_information
+                                                  .tr,
+                                              style: AppTextStyle.size18Medium
+                                                  .copyWith(fontSize: 16),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      w(4),
-                                      const Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                        size: 18,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                                        h(20),
+                                        Text(
+                                          LocaleKeys
+                                              .text_Create_Account_nots.tr,
+                                          style: AppTextStyle.size18Medium
+                                              .copyWith(fontSize: 12),
+                                        ),
+                                        h(20),
+                                        SizedBox(
+                                          height: Get.height * 0.065,
+                                          width: double.infinity,
+                                          child: InputTextField(
+                                            onChanged: () {
+                                              controller.cnamestatus.value =
+                                                  false;
+                                            },
+                                            context: context,
+                                            controller: controller
+                                                .nameControllersList[index],
+                                            hintText:
+                                                "${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_name.tr}",
+                                          ),
+                                        ),
+                                        Obx(
+                                          () => controller.cnamestatus.value
+                                              ? SizedBox(
+                                                  child: Text(
+                                                    controller.status,
+                                                    style: const TextStyle(
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
+                                        ),
+                                        h(15),
+                                        Container(
+                                          height: Get.height * 0.065,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: Get.width * 0.03),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.white),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.00)),
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (value) => () {
+                                              controller.cagestatus.value =
+                                                  false;
+                                            },
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                            cursorColor: Colors.white,
+                                            controller: controller
+                                                .ageControllersList[index],
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText:
+                                                    "${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_age.tr}",
+                                                hintStyle:
+                                                    AppTextStyle.size12Regular),
+                                          ),
+                                        ),
+                                        Obx(
+                                          () => controller.cagestatus.value
+                                              ? SizedBox(
+                                                  child: Text(
+                                                    controller.status,
+                                                    style: const TextStyle(
+                                                        color: Colors.red),
+                                                  ),
+                                                )
+                                              : Container(),
+                                        ),
+                                      ],
+                                    )
+                                  : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: SizedBox(
+                                                height: Get.height * 0.065,
+                                                width: double.infinity,
+                                                child: InputTextField(
+                                                  onChanged: () {
+                                                    controller.cnamestatus
+                                                        .value = false;
+                                                  },
+                                                  width: Get.width * 0.8,
+                                                  context: context,
+                                                  controller: controller
+                                                          .nameControllersList[
+                                                      index],
+                                                  hintText:
+                                                      "${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_name.tr}",
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 15),
+                                            Obx(
+                                              () => controller.cnamestatus.value
+                                                  ? SizedBox(
+                                                      child: Text(
+                                                        controller.status,
+                                                        style: const TextStyle(
+                                                            color: Colors.red),
+                                                      ),
+                                                    )
+                                                  : Container(),
+                                            ),
+                                            GestureDetector(
+                                              onTap: (() {
+                                                controller.weekPrice
+                                                    .removeAt(index - 1);
+                                                controller.nameControllersList
+                                                    .removeAt(index - 1);
+                                                controller.ageControllersList
+                                                    .removeAt(index - 1);
+                                                // controller.nameControllersList
+                                                //     .removeLast();
+                                                // controller
+                                                //     .ageControllersList[index]
+                                                //     .clear();
+                                                // controller
+                                                //     .nameControllersList[index]
+                                                //     .dispose();
+                                                // controller
+                                                //     .ageControllersList[index]
+                                                //     .dispose();
+                                                controller.update();
+                                              }),
+                                              child: SizedBox(
+                                                  height: Get.height * 0.06,
+                                                  width: Get.width * 0.05,
+                                                  child: Image.asset(
+                                                    "assets/images/delete.png",
+                                                    color: Colors.white,
+                                                  )),
+                                            ),
+                                            const SizedBox(width: 10),
+                                          ],
+                                        ),
+                                        h(15),
+                                        Container(
+                                          height: Get.height * 0.065,
+                                          width: double.infinity,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: Get.width * 0.03),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.white),
+                                              borderRadius:
+                                                  BorderRadius.circular(5.00)),
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            onChanged: (value) => () {
+                                              controller.cagestatus.value =
+                                                  false;
+                                            },
+                                            controller: controller
+                                                .ageControllersList[index],
+                                            style: const TextStyle(
+                                                color: AppColors.whiteColor),
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText:
+                                                    "${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_age.tr}",
+                                                hintStyle:
+                                                    AppTextStyle.size12Regular),
+                                          ),
+                                        ),
+                                        Obx(
+                                          () => controller.cagestatus.value
+                                              ? SizedBox(
+                                                  child: Text(
+                                                    controller.status,
+                                                    style: const TextStyle(
+                                                        color: Colors.red),
+                                                  ),
+                                                )
+                                              : Container(),
+                                        ),
+                                      ],
+                                    );
+                            },
                           );
                         }),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                controller.weekPrice
+                                    .add((controller.weekPrice.length + 1) + 1);
+                                controller.nameControllersList
+                                    .add(TextEditingController());
+                                controller.ageControllersList
+                                    .add(TextEditingController());
+                                controller.update();
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(top: 20, bottom: 0),
+                                alignment: Alignment.center,
+                                height: 35,
+                                width: 110,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: const BoxDecoration(
+                                    color: Colors.orange,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(50),
+                                    )
+                                    // shape: BoxShape.circle,
+                                    ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "Add Child",
+                                      style: TextStyle(
+                                        color: AppColors.whiteColor,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    w(4),
+                                    const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         h(20),
                         Text("Interest ",
                             style: AppTextStyle.size18Medium
                                 .copyWith(fontSize: 16)),
                         h(10),
-                        Container(
-                          child: Wrap(
-                            spacing: 8.0, // gap between adjacent chips
-                            runSpacing: 4.0, // gap between lines
-                            children: <Widget>[
-                              SizedBox(
-                                height: Get.height * 0.3,
-                                child: GridView.builder(
-                                  itemCount: controller.interestsList.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 10,
-                                          crossAxisSpacing: 10,
-                                          childAspectRatio: 4),
-                                  itemBuilder: (context, index) {
-                                    return GetBuilder<ChildinfoController>(
-                                        builder: (control) {
-                                      return GestureDetector(
-                                          onTap: () {
-                                            control.interestsList[index]
-                                                    .isSelected =
-                                                !control.interestsList[index]
-                                                    .isSelected;
-                                            control.update();
-                                            if (control.interestsList[index]
-                                                    .isSelected ==
-                                                true) {
-                                              controller.selectedInterestIdList
-                                                  .add(control
-                                                      .interestsList[index].id);
-                                              print(controller
-                                                  .selectedInterestIdList);
-                                            } else if (control
-                                                    .interestsList[index]
-                                                    .isSelected ==
-                                                false) {
-                                              controller.selectedInterestIdList
-                                                  .remove(control
-                                                      .interestsList[index].id);
-                                              print(controller
-                                                  .selectedInterestIdList);
-                                            } else {}
-                                            log("control.selectedInterestIdList ${control.selectedInterestIdList}");
-                                          },
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              color: controller
-                                                      .interestsList[index]
-                                                      .isSelected
-                                                  ? Colors.white
-                                                  : Colors.blue,
-                                              border: Border.all(
-                                                color: Colors.white,
-                                              ),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(5),
-                                              ),
-                                            ),
-                                            child: Text(
-                                              controller
-                                                  .interestsList[index].name,
-                                              style: TextStyle(
-                                                  color: controller
-                                                          .interestsList[index]
-                                                          .isSelected
-                                                      ? Colors.blue
-                                                      : Colors.white),
-                                            ),
-                                          ));
-                                    });
+                        GridView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.interestsList.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 10,
+                                  childAspectRatio: 4),
+                          itemBuilder: (context, index) {
+                            return GetBuilder<ChildinfoController>(
+                                builder: (control) {
+                              return GestureDetector(
+                                  onTap: () {
+                                    control.interestsList[index].isSelected =
+                                        !control
+                                            .interestsList[index].isSelected;
+                                    control.update();
+                                    if (control
+                                            .interestsList[index].isSelected ==
+                                        true) {
+                                      controller.selectedInterestIdList
+                                          .add(control.interestsList[index].id);
+                                      print(controller.selectedInterestIdList);
+                                    } else if (control
+                                            .interestsList[index].isSelected ==
+                                        false) {
+                                      controller.selectedInterestIdList.remove(
+                                          control.interestsList[index].id);
+                                      print(controller.selectedInterestIdList);
+                                    } else {}
+                                    log("control.selectedInterestIdList ${control.selectedInterestIdList}");
                                   },
-                                ),
-                              )
-                            ],
-                          ),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: controller
+                                              .interestsList[index].isSelected
+                                          ? Colors.white
+                                          : Colors.blue,
+                                      border: Border.all(
+                                        color: Colors.white,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(5),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      controller.interestsList[index].name,
+                                      style: TextStyle(
+                                          color: controller.interestsList[index]
+                                                  .isSelected
+                                              ? Colors.blue
+                                              : Colors.white),
+                                    ),
+                                  ));
+                            });
+                          },
                         ),
-                        h(15),
+                        h(40),
                         ButtonWithStyle(
                           onPressed: () {
                             for (var namecon

@@ -22,23 +22,13 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    id = SharedPrefs().value.read(SharedPrefs.userIdKey);
     getAbout();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   Future<void> getAbout() async {
     isLoading(true);
     try {
+      id = SharedPrefs().value.read(SharedPrefs.userIdKey);
       a = await usersevise.getdata(id);
 
       if (a != null) {
@@ -55,7 +45,7 @@ class ProfileController extends GetxController {
 
       log("childrenList.length :: ${childrenList.length}");
     } catch (e) {
-      log("${e.toString()}");
+      log(e.toString());
       rethrow;
     } finally {
       isLoading(false);

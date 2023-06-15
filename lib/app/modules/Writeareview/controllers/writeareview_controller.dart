@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
@@ -11,6 +12,7 @@ import 'package:http/http.dart' as http;
 import '../../../../Reusability/utils/shared_prefs.dart';
 import '../../../data/service/Api_list.dart';
 import '../../../data/service/Userservise.dart';
+import '../../fullDetails/controllers/full_details_controller.dart';
 
 class WriteareviewController extends GetxController {
   //TODO: Implement WriteareviewController
@@ -26,6 +28,7 @@ class WriteareviewController extends GetxController {
   var isLoading = false.obs;
   RxDouble ratingValue = 0.0.obs;
 
+  GlobalKey<FormState> reviewFormKey = GlobalKey<FormState>();
   List<ImageFile> imageFiles = [];
   List<VideoFile> videoFiles = [];
 
@@ -181,12 +184,10 @@ class WriteareviewController extends GetxController {
       String newtokan = tokan![1];
 
       var reqBody = {
+        "places_id": placeId,
         "user_id": userId.toString(),
         "rating": ratingValue.value.toString(),
-        "type": "2",
-        "places_id": placeId,
         "review": reviewController.text.trim(),
-        // "image_video": videoFiles,
       };
 
       Map<String, String> headers = {
@@ -218,20 +219,20 @@ class WriteareviewController extends GetxController {
 
       request.files.addAll(newVideosList);
 
-      // List<http.MultipartFile> newImagesList = [];
+      List<http.MultipartFile> newImagesList = [];
 
-      // for (var img in imageFiles) {
-      //   if (img.filePath != "") {
-      //     var multipartFile = await http.MultipartFile.fromPath(
-      //       'image_video',
-      //       img.filePath,
-      //       // filename: vid.filePath.split('/').last,
-      //     );
-      //     newImagesList.add(multipartFile);
-      //   }
-      // }
+      for (var img in imageFiles) {
+        if (img.filePath != "") {
+          var multipartFile = await http.MultipartFile.fromPath(
+            'image_video[]',
+            img.filePath,
+            // filename: vid.filePath.split('/').last,
+          );
+          newImagesList.add(multipartFile);
+        }
+      }
 
-      // request.files.addAll(newImagesList);
+      request.files.addAll(newImagesList);
 
       log("request.url = ${request.url}");
       log("request.headers = ${request.headers}");
@@ -245,17 +246,24 @@ class WriteareviewController extends GetxController {
 
       if (result.statusCode == 200) {
         log("result.body :: ${result.body}");
-        // var resBody = jsonDecode(result.body);
-        Get.back();
-        Fluttertoast.showToast(
-          msg: 'Review Added Successfully.',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        var resBody = jsonDecode(result.body);
+        if (resBody["status"] == 200) {
+          Get.back();
+
+          var fullDetailsController = Get.find<FullDetailsController>();
+
+          fullDetailsController.viewMoreReviews.value = false;
+          fullDetailsController.getPlaceReviewsList();
+          Fluttertoast.showToast(
+            msg: 'Review Added Successfully.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
       }
     } catch (e) {
       rethrow;

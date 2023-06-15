@@ -10,6 +10,7 @@ import 'package:playze/Reusability/utils/util.dart';
 import 'package:playze/app/routes/app_pages.dart';
 import 'package:playze/generated/locales.g.dart';
 
+import '../../../../Reusability/utils/app_colors.dart';
 import '../controllers/signup_controller.dart';
 
 class SignupView extends GetView<SignupController> {
@@ -17,6 +18,13 @@ class SignupView extends GetView<SignupController> {
 
   @override
   Widget build(BuildContext context) {
+    var border = const OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+      borderSide: BorderSide(
+        color: AppColors.whiteColor,
+        width: 1,
+      ),
+    );
     return Scaffold(
       body: Container(
         height: Get.height,
@@ -25,256 +33,205 @@ class SignupView extends GetView<SignupController> {
         color: Colors.blue,
         padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
+          child: Form(
+            key: controller.signUpKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                h(50),
+                SizedBox(
                   width: Get.width * 0.4,
-                  child: Image.asset("assets/images/appIcon.png")),
-              h(20),
-              Text(LocaleKeys.text_create_account.tr,
+                  child: Image.asset("assets/images/appIcon.png"),
+                ),
+                h(20),
+                Text(
+                  LocaleKeys.text_create_account.tr,
                   style: AppTextStyle.size18Medium.copyWith(
-                      letterSpacing: 1.8,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600)),
-              h(20),
-              InputTextField(
-                onChanged: () {
-                  controller.fnamestatus.value = false;
-                },
-                context: context,
-                controller: controller.fNameController,
-                hintText: LocaleKeys.labels_fname.tr,
-              ),
-              Obx(
-                () => controller.fnamestatus.value
-                    ? SizedBox(
-                        child: Text(
-                          controller.status,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      )
-                    : Container(),
-              ),
-              h(15),
-              InputTextField(
-                onChanged: () {
-                  controller.lnamestatus.value = false;
-                },
-                context: context,
-                controller: controller.lNameController,
-                hintText: LocaleKeys.labels_lname.tr,
-              ),
-              Obx(
-                () => controller.lnamestatus.value
-                    ? SizedBox(
-                        child: Text(
-                          controller.status,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      )
-                    : Container(),
-              ),
-              h(15),
-              InputTextField(
-                onChanged: () {
-                  controller.emailstatus.value = false;
-                },
-                context: context,
-                controller: controller.emailController,
-                hintText: LocaleKeys.labels_email.tr,
-              ),
-              Obx(
-                () => controller.emailstatus.value
-                    ? SizedBox(
-                        child: Text(
-                          controller.status,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      )
-                    : Container(),
-              ),
-              h(15),
-              // InputTextField(
-              //   onChanged: (){
-              //     controller.phonestatus.value = false;
-              //   },
-              //   context: context,
-              //   controller: controller.phoneController,
-              //   hintText: LocaleKeys.labels_phone.tr,
-              // ),
-              Container(
-                height: Get.height * 0.065,
-                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(5.00)),
-                child: TextFormField(
-                  // inputFormatters: <TextInputFormatter>[
-                  //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  //   FilteringTextInputFormatter.digitsOnly
-                  // ],
+                    letterSpacing: 1.8,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                h(20),
+                InputTextField(
+                  context: context,
+                  controller: controller.fNameController,
+                  hintText: LocaleKeys.labels_fname.tr,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
+                  ],
+                  validator: (val) {
+                    if (val!.isEmpty || val == " ") {
+                      return "Please Enter First Name";
+                    }
+                    return null;
+                  },
+                ),
+                h(15),
+                InputTextField(
+                  validator: (val) {
+                    if (val!.isEmpty || val == " ") {
+                      return "Please Enter Last Name";
+                    }
+                    return null;
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
+                  ],
+                  context: context,
+                  controller: controller.lNameController,
+                  hintText: LocaleKeys.labels_lname.tr,
+                ),
+                h(15),
+                InputTextField(
+                  validator: (val) {
+                    String pattern =
+                        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                    RegExp emailRegex = RegExp(pattern);
+                    if (val!.isEmpty || val == " ") {
+                      return "Please Enter Email Address";
+                    } else if (!(emailRegex
+                        .hasMatch(controller.emailController.text.trim()))) {
+                      return "Please Enter Valid Email Address";
+                    }
+
+                    return null;
+                  },
+                  context: context,
+                  controller: controller.emailController,
+                  hintText: LocaleKeys.labels_email.tr,
+                ),
+                h(15),
+                TextFormField(
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(10),
                   ],
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
                   keyboardType: TextInputType.number,
-                  onChanged: (value) => () {
-                    controller.phonestatus.value = false;
+                  validator: (val) {
+                    if (val!.isEmpty || val == " ") {
+                      return "Please Enter Phone Number";
+                    } else if (val.length < 10) {
+                      return "Please Enter 10 Digits Phone Number";
+                    }
+                    return null;
                   },
                   controller: controller.phoneController,
                   decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: LocaleKeys.labels_phone.tr,
-                      hintStyle: AppTextStyle.size12Regular),
+                    isDense: true,
+                    border: border,
+                    enabledBorder: border,
+                    focusedBorder: border,
+                    errorBorder: border,
+                    focusedErrorBorder: border,
+                    hintText: LocaleKeys.labels_phone.tr,
+                    hintStyle: AppTextStyle.size12Regular,
+                  ),
                 ),
-              ),
-              Obx(
-                () => controller.phonestatus.value
-                    ? SizedBox(
-                        child: Text(
-                          controller.status,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      )
-                    : Container(),
-              ),
-              h(15),
-              Container(
-                height: Get.height * 0.065,
-                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(5.00)),
-                child: TextFormField(
-                  onChanged: (value) => () {
-                    controller.passwordstatus.value = false;
-                  },
+                h(15),
+                TextFormField(
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
                   obscureText: true,
                   controller: controller.passwordController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: LocaleKeys.labels_password.tr,
-                      hintStyle: AppTextStyle.size12Regular),
-                ),
-              ),
-              Obx(
-                () => controller.passwordstatus.value
-                    ? SizedBox(
-                        child: Text(
-                          controller.status,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      )
-                    : Container(),
-              ),
-              h(15),
-              Container(
-                height: Get.height * 0.065,
-                padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
-                    borderRadius: BorderRadius.circular(5.00)),
-                child: TextFormField(
-                  onChanged: (value) => () {
-                    controller.cPasswordstatus.value = false;
+                    isDense: true,
+                    border: border,
+                    enabledBorder: border,
+                    focusedBorder: border,
+                    errorBorder: border,
+                    focusedErrorBorder: border,
+                    hintText: LocaleKeys.labels_password.tr,
+                    hintStyle: AppTextStyle.size12Regular,
+                  ),
+                  validator: (val) {
+                    if (val!.isEmpty || val == " ") {
+                      return "Please Enter Password";
+                    } else if (val.length < 6) {
+                      return "Password Should Be Atleast 6 Characters Long !";
+                    }
+                    return null;
                   },
+                ),
+                h(15),
+                TextFormField(
+                  validator: (val) {
+                    if (val!.isEmpty || val == " ") {
+                      return "Please Enter Confirm Password";
+                    } else if (val.length < 6) {
+                      return "Confirm Password Should Be Atleast 6 Characters Long !";
+                    } else if (val != controller.passwordController.text) {
+                      return "Password And Confirm Password Does Not Match";
+                    }
+                    return null;
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   obscureText: true,
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
                   controller: controller.cPasswordController,
                   decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: LocaleKeys.labels_confirm_password.tr,
-                      hintStyle: AppTextStyle.size12Regular),
+                    isDense: true,
+                    border: border,
+                    enabledBorder: border,
+                    focusedBorder: border,
+                    errorBorder: border,
+                    focusedErrorBorder: border,
+                    hintText: LocaleKeys.labels_confirm_password.tr,
+                    hintStyle: AppTextStyle.size12Regular,
+                  ),
                 ),
-              ),
-              Obx(
-                () => controller.cPasswordstatus.value
-                    ? SizedBox(
-                        child: Text(
-                          controller.status,
-                          style: const TextStyle(color: Colors.red),
+                h(20),
+                ButtonWithStyle(
+                  onPressed: () {
+                    if (controller.signUpKey.currentState!.validate()) {
+                      SharedPrefs().value.write(SharedPrefs.fnamenKey,
+                          controller.fNameController.text);
+                      SharedPrefs().value.write(SharedPrefs.lnameKey,
+                          controller.lNameController.text);
+                      SharedPrefs().value.write(SharedPrefs.emailKey,
+                          controller.emailController.text);
+                      SharedPrefs().value.write(SharedPrefs.mnumbarKey,
+                          controller.phoneController.text);
+                      SharedPrefs().value.write(SharedPrefs.passwordKey,
+                          controller.passwordController.text);
+                      Get.toNamed(Routes.CHILDINFO);
+                    }
+                  },
+                  textVal: LocaleKeys.buttons_next.tr.toUpperCase(),
+                  btnwidth: Get.width,
+                ),
+                h(20),
+                Center(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                            text: LocaleKeys.text_already_have_account.tr,
+                            style: AppTextStyle.size14Medium),
+                        TextSpan(
+                          text: " ${LocaleKeys.buttons_log_in.tr}",
+                          style: AppTextStyle.size14Medium.copyWith(
+                              color: Colors.orange,
+                              decoration: TextDecoration.underline,
+                              height: 1.5),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Get.back();
+                            },
                         ),
-                      )
-                    : Container(),
-              ),
-              h(20),
-              ButtonWithStyle(
-                onPressed: () {
-                  bool emailValid = RegExp(
-                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                      .hasMatch(controller.emailController.text);
-                  if (controller.fNameController.text.isEmpty) {
-                    controller.fnamestatus.value = true;
-                    controller.status = "Please Enter FristName";
-                  } else if (controller.lNameController.text.isEmpty) {
-                    controller.lnamestatus.value = true;
-                    controller.status = "Please Enter LastName";
-                  } else if (controller.emailController.text.isEmpty) {
-                    controller.emailstatus.value = true;
-                    controller.status = "Please Enter Email";
-                  } else if (!emailValid) {
-                    controller.emailstatus.value = true;
-                    controller.status = "Please Enter Valid Email";
-                  } else if (controller.phoneController.text.isEmpty) {
-                    controller.phonestatus.value = true;
-                    controller.status = "Please Enter PhoneNumber";
-                  } else if (controller.passwordController.text.isEmpty) {
-                    controller.passwordstatus.value = true;
-                    controller.status = "Please Enter Password";
-                  } else if (controller.passwordController.text.length < 6) {
-                    controller.passwordstatus.value = true;
-                    controller.status = "Please Enter Six Charter";
-                  } else if (controller.cPasswordController.text.isEmpty) {
-                    controller.cPasswordstatus.value = true;
-                    controller.status = "Please Enter Confirm Password";
-                  } else if (controller.passwordController.text !=
-                      controller.cPasswordController.text) {
-                    controller.cPasswordstatus.value = true;
-                    controller.status = "Password does not match";
-                  } else {
-                    SharedPrefs().value.write(
-                        SharedPrefs.fnamenKey, controller.fNameController.text);
-                    SharedPrefs().value.write(
-                        SharedPrefs.lnameKey, controller.lNameController.text);
-                    SharedPrefs().value.write(
-                        SharedPrefs.emailKey, controller.emailController.text);
-                    SharedPrefs().value.write(SharedPrefs.mnumbarKey,
-                        controller.phoneController.text);
-                    SharedPrefs().value.write(SharedPrefs.passwordKey,
-                        controller.passwordController.text);
-                    Get.toNamed(Routes.CHILDINFO);
-                  }
-                },
-                textVal: LocaleKeys.buttons_next.tr.toUpperCase(),
-                btnwidth: Get.width,
-              ),
-              h(10),
-              Center(
-                child: RichText(
-                    text: TextSpan(children: [
-                  TextSpan(
-                      text: LocaleKeys.text_already_have_account.tr,
-                      style: AppTextStyle.size12Medium),
-                  TextSpan(
-                      text: " ${LocaleKeys.buttons_log_in.tr}",
-                      style: AppTextStyle.size12Medium.copyWith(
-                          color: Colors.orange,
-                          decoration: TextDecoration.underline,
-                          height: 1.5),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Get.back();
-                        }),
-                ])),
-              ),
-            ],
+                      ],
+                    ),
+                  ),
+                ),
+                h(20),
+              ],
+            ),
           ),
         ),
       ),

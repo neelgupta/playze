@@ -307,7 +307,7 @@ class ProfileView extends GetView<ProfileController> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          ("${LocaleKeys.labels_children.tr} ${LocaleKeys.labels_name.tr}"),
+                                                          ("${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_name.tr}"),
                                                           style:
                                                               const TextStyle(
                                                                   fontSize: 16),
@@ -342,7 +342,7 @@ class ProfileView extends GetView<ProfileController> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          ("${LocaleKeys.labels_children.tr} ${LocaleKeys.labels_age.tr}"),
+                                                          ("${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_age.tr}"),
                                                           style:
                                                               const TextStyle(
                                                                   fontSize: 16),
@@ -380,7 +380,7 @@ class ProfileView extends GetView<ProfileController> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          ("${LocaleKeys.labels_children.tr} ${LocaleKeys.labels_name.tr}"),
+                                                          ("${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_name.tr}"),
                                                           style:
                                                               const TextStyle(
                                                                   fontSize: 16),
@@ -415,7 +415,7 @@ class ProfileView extends GetView<ProfileController> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          ("${LocaleKeys.labels_children.tr} ${LocaleKeys.labels_age.tr}"),
+                                                          ("${LocaleKeys.labels_childs.tr} ${LocaleKeys.labels_age.tr}"),
                                                           style:
                                                               const TextStyle(
                                                                   fontSize: 16),

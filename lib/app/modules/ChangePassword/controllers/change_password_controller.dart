@@ -25,16 +25,6 @@ class ChangePasswordController extends GetxController {
     print(id);
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> userChengpassword() async {
     isLoading(true);
     try {

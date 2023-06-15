@@ -43,6 +43,7 @@ class HomeView extends GetView<HomeController> {
                     GestureDetector(
                       onTap: () {
                         _key.currentState!.openDrawer();
+                        controllerc.locateWindowPop.value = false;
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8),
@@ -132,7 +133,7 @@ class HomeView extends GetView<HomeController> {
                                   scrollGesturesEnabled: true,
                                   zoomControlsEnabled: false,
                                   // myLocationButtonEnabled: true,
-                                  // tiltGesturesEnabled: true,
+                                  tiltGesturesEnabled: false,
                                   compassEnabled: false,
 
                                   markers: Set<Marker>.of(controller.markers),

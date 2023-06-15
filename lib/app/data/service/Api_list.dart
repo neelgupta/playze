@@ -38,4 +38,14 @@ class ApiUrlList {
   static String userAddprofile = '${baseUrl}profile';
   static String categoryPlaceFilter = '${baseUrl}place-filter';
   static String searchFilter = '${baseUrl}search';
+
+  //plan manage apis
+  static String planDayGetlist = '${baseUrl}day/plandaylist';
+  static String addPlanToDay = '${baseUrl}addplan';
+  static String dayAddToList = '${baseUrl}day/add';
+  static String dayDeleteFromList = '${baseUrl}day/delete';
+  static String planDeleteFromlist = '${baseUrl}plandelete';
+  static String planDayChange = '${baseUrl}plandaychange';
+  static String planDayReorder = '${baseUrl}plandayreorder';
+  static String planGetlistByDay = '${baseUrl}planlist';
 }

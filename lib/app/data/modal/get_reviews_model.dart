@@ -135,20 +135,24 @@ class FileElement {
 class VideoData {
   String id;
   String video;
+  String thumbnail;
 
   VideoData({
     required this.id,
     required this.video,
+    required this.thumbnail,
   });
 
   factory VideoData.fromJson(Map<String, dynamic> json) => VideoData(
         id: json["id"] ?? "",
         video: json["video"] ?? "",
+        thumbnail: json["thumbnail "] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "video": video,
+        "thumbnail ": thumbnail,
       };
 }
 

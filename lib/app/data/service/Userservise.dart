@@ -152,7 +152,7 @@ class Usersevise {
     }
   }
 
-  Future<GetNearByModel?> getNearbyPlaces({longitude, latitude, client}) async {
+  Future<GetNearByModel?> getNearbyPlaces({placeId, client}) async {
     client ??= http.Client();
     var url = ApiUrlList.nearbyPlaces;
     String newtokan = tokan![1];
@@ -162,8 +162,7 @@ class Usersevise {
       client,
       newtokan,
       model: {
-        "longitude": longitude,
-        "latitude": latitude,
+        "place_id": placeId,
       },
     );
     log("getNearbyPlaces result is $result");
@@ -179,6 +178,8 @@ class Usersevise {
     var url = ApiUrlList.pleaseReview;
     String newtokan = tokan![1];
     log(newtokan);
+    log("getPlaceReviews url is $url");
+    log("getPlaceReviews placeId is $placeId");
     var result = await NetworkHandler()
         .post(url, client, newtokan, model: {"places_id": placeId});
     log("getPlaceReviews result is $result");

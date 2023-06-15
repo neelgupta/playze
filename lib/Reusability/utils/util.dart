@@ -4,7 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:playze/Reusability/shared/lodding.dart';
 import 'package:playze/Reusability/shared/textStyle.dart';
 
-Util() async {}
+// ignore: non_constant_identifier_names
+// Util() async {
+// }
+
+TimeOfDay minutesToTimeOfDay(int minutes) {
+  Duration duration = Duration(minutes: minutes);
+  List<String> parts = duration.toString().split(':');
+  return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+}
 
 Widget w(double count) => SizedBox(
       width: count,

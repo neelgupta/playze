@@ -21,8 +21,8 @@ class FullDetailsController extends GetxController {
   var isImagesAddSelected = "".obs;
   Usersevise usersevise = Usersevise();
   RxBool isLoading = false.obs;
-    RxBool viewMoreReviews = false.obs;
-    int reviewsCount = 1;
+  RxBool viewMoreReviews = false.obs;
+  int reviewsCount = 1;
   WorkSpaceDetailModel? wSData;
 
   GetNearByModel? getNearByModel;
@@ -77,8 +77,7 @@ class FullDetailsController extends GetxController {
       currentLongitude.value = currentLocation.longitude.toString();
 
       getNearByModel = await usersevise.getNearbyPlaces(
-        longitude: currentLongitude.value,
-        latitude: currentLattitude.value,
+        placeId: placeDataId,
       );
 
       if (getNearByModel != null) {
@@ -101,6 +100,21 @@ class FullDetailsController extends GetxController {
 
       if (getReviewsModel != null) {
         reviewAllData = getReviewsModel!.data;
+
+        // for (var vidFile in reviewAllData!.reviewVideo) {
+        //   final thumbnailPath = await VideoThumbnail.thumbnailFile(
+        //     video: vidFile.video,
+        //     thumbnailPath: (await getTemporaryDirectory()).path,
+        //     imageFormat: ImageFormat.PNG,
+
+        //     // maxHeight: 64, // specify the height of the thumbnail, let the width auto-scaled to keep the source aspect ratio
+        //     quality: 75,
+        //   );
+
+        //   log("Image thumbnailPath : $thumbnailPath");
+
+        //   vidFile.videoThumbnail = thumbnailPath!;
+        // }
         // placeLocation = LatLng(
         //   double.parse(wSData!.data.latitude),
         //   double.parse(wSData!.data.longitude),

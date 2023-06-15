@@ -46,15 +46,15 @@ class ChildinfoController extends GetxController {
   String? cpassword;
   @override
   void onInit() {
-    fname = SharedPrefs().value.read(SharedPrefs.fnamenKey);
-    lname = SharedPrefs().value.read(SharedPrefs.lnameKey);
-    email = SharedPrefs().value.read(SharedPrefs.emailKey);
-    pnumbar = SharedPrefs().value.read(SharedPrefs.mnumbarKey);
-    password = SharedPrefs().value.read(SharedPrefs.passwordKey);
-    cpassword = SharedPrefs().value.read(SharedPrefs.passwordKey);
     // print(argumentData[1]);
     super.onInit();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      fname = SharedPrefs().value.read(SharedPrefs.fnamenKey);
+      lname = SharedPrefs().value.read(SharedPrefs.lnameKey);
+      email = SharedPrefs().value.read(SharedPrefs.emailKey);
+      pnumbar = SharedPrefs().value.read(SharedPrefs.mnumbarKey);
+      password = SharedPrefs().value.read(SharedPrefs.passwordKey);
+      cpassword = SharedPrefs().value.read(SharedPrefs.passwordKey);
       getinterest(Get.context!);
     });
   }
