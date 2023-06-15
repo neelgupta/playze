@@ -41,11 +41,11 @@ class ApiUrlList {
 
   //plan manage apis
   static String planDayGetlist = '${baseUrl}day/plandaylist';
+  static String planGetlistByDay = '${baseUrl}planlist';
   static String addPlanToDay = '${baseUrl}addplan';
   static String dayAddToList = '${baseUrl}day/add';
   static String dayDeleteFromList = '${baseUrl}day/delete';
   static String planDeleteFromlist = '${baseUrl}plandelete';
   static String planDayChange = '${baseUrl}plandaychange';
   static String planDayReorder = '${baseUrl}plandayreorder';
-  static String planGetlistByDay = '${baseUrl}planlist';
 }

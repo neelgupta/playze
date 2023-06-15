@@ -59,13 +59,12 @@ class _MyPlansListviewState extends State<MyPlansListview>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     controller.dayTabBarController =
         TabController(length: controller.daysList.length, vsync: this);
 
-    List dsasList = [1, 2, 3];
+    // List dsasList = [1, 2, 3];
     controller.dayTabBarController!.addListener(() {
       if (controller.dayTabBarController!.indexIsChanging) {
         // Tab Changed tapping on new tab
@@ -74,8 +73,9 @@ class _MyPlansListviewState extends State<MyPlansListview>
           controller.dayTabBarController!.previousIndex) {
         // Tab Changed swiping to a new tab
         // onTabDrag();
-        controller.selectedDay.value =
-            dsasList[controller.dayTabBarController!.index];
+        controller.selectedDayData =
+            controller.daysList[controller.dayTabBarController!.index];
+        controller.planGetlistByDayFunction();
         // log("controller.dayTabBarController!.index :${controller.dayTabBarController!.index}");
 
         // log("controller.selectedDay.value :${controller.selectedDay.value}");
@@ -90,371 +90,462 @@ class _MyPlansListviewState extends State<MyPlansListview>
       return Container(
         height: Get.height * 0.74,
         margin: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TabBar(
-              controller: controller.dayTabBarController,
-              padding: const EdgeInsets.only(bottom: 15),
-              onTap: (day) {
-                controller.selectedDay.value = day + 1;
-                controller.update();
-                log("controller.selectedDay.value :${controller.selectedDay.value}");
-              },
-              indicator: const BoxDecoration(),
-              isScrollable: true,
-              indicatorColor: Colors.white,
-              labelPadding: const EdgeInsets.symmetric(horizontal: 15.0),
-              tabs: controller.daysList.map((day) {
-                return Row(
-                  children: [
-                    const Text(
-                      "Day",
-                      style: TextStyle(
-                        color: AppColors.blackColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    w(8),
-                    Container(
-                      alignment: Alignment.center,
-                      height: Get.height * 0.05,
-                      width: Get.width * 0.06,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: day.dayNumber.contains(controller
-                                .selectedDayData!.dayNumber
-                                .toString())
-                            ? Colors.orange
-                            : AppColors.whiteColor,
-                      ),
-                      child: Text(
-                        day.dayNumber,
-                        style: TextStyle(
-                          color: day.dayNumber.contains(controller
-                                  .selectedDayData!.dayNumber
-                                  .toString())
-                              ? AppColors.whiteColor
-                              : AppColors.blackColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              }).toList(),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: controller.dayTabBarController,
-                children: controller.daysList.map((d) {
-                  return controller.planDataList.isEmpty
-                      ? const Center(
-                          child: Text("No pla ns Add some from plus button"),
-                        )
-                      : ReorderableListView.builder(
-                          onReorder: (int oldIndex, int newIndex) {
-                            if (oldIndex < newIndex) {
-                              newIndex -= 1;
-                            }
-                            final int item =
-                                controller.items.removeAt(oldIndex);
-                            controller.items.insert(newIndex, item);
-                          },
-                          shrinkWrap: true,
-                          itemCount: controller.planDataList.length,
-                          itemBuilder: (context, index) {
-                            var singlePlan = controller.planDataList[index];
-                            return Container(
-                              key: Key('$index'),
-                              child: Column(
-                                children: [
-                                  Card(
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20))),
-                                      // height: Get.height*0.3,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  height: Get.height * 0.12,
-                                                  width: Get.width * 0.8,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    // image: DecorationImage(
-                                                    //     image: AssetImage(
-                                                    //         "assets/images/pic.png"),
-                                                    //     fit: BoxFit.fill),
-                                                    color: Colors.cyan,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                10)),
-                                                  ),
-                                                  child: Stack(
-                                                    children: [
-                                                      CachedNetworkImage(
-                                                        imageUrl: singlePlan
-                                                            .placeImage,
-                                                        fit: BoxFit.fill,
-                                                        errorWidget: (context,
-                                                            url, error) {
-                                                          return const Center(
-                                                            child: Text(
-                                                              "Image Not Loaded",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                color: AppColors
-                                                                    .blackColor,
-                                                                fontSize: 11,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                      ),
-                                                      Positioned(
-                                                        top: 10,
-                                                        left: 10,
-                                                        child: Container(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          decoration: const BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          20))),
-                                                          height:
-                                                              Get.height * 0.04,
-                                                          width:
-                                                              Get.width * 0.15,
-                                                          child: const Text(
-                                                            "10:00",
-                                                            style: TextStyle(
-                                                                fontSize: 12),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Positioned(
-                                                        top: 10,
-                                                        left: 70,
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            showModalBottomSheet(
-                                                                context:
-                                                                    context,
-                                                                isScrollControlled:
-                                                                    true,
-                                                                shape:
-                                                                    const RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            20),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            20),
-                                                                  ),
-                                                                ),
-                                                                constraints: BoxConstraints(
-                                                                    maxHeight: Get
-                                                                            .size
-                                                                            .height *
-                                                                        0.7),
-                                                                builder:
-                                                                    (BuildContext
-                                                                        context) {
-                                                                  return BottomEditPlanBody();
-                                                                });
-                                                          },
-                                                          child: Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(7),
-                                                            alignment: Alignment
-                                                                .center,
-                                                            decoration: const BoxDecoration(
-                                                                color: Colors
-                                                                    .white,
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20))),
-                                                            height: Get.height *
-                                                                0.04,
-                                                            width:
-                                                                Get.width * 0.1,
-                                                            child: Image.asset(
-                                                              "assets/images/edit-line.png",
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+        child: myPlanCon.isLoading.value
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TabBar(
+                    controller: controller.dayTabBarController,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    onTap: (day) {
+                      controller.selectedDay.value = day + 1;
+                      // controller.update();
+                      // Future.delayed(
+                      //   const Duration(milliseconds: 20),
+                      //   () {
+                      //   },
+                      // );
+
+                      controller.planGetlistByDayFunction();
+                      log("controller.selectedDay.value :${controller.selectedDay.value}");
+                    },
+                    indicator: const BoxDecoration(),
+                    isScrollable: true,
+                    indicatorColor: Colors.white,
+                    labelPadding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    tabs: controller.daysList.map((day) {
+                      return Row(
+                        children: [
+                          const Text(
+                            "Day",
+                            style: TextStyle(
+                              color: AppColors.blackColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          w(8),
+                          Container(
+                            alignment: Alignment.center,
+                            height: Get.height * 0.05,
+                            width: Get.width * 0.06,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: day.dayNumber.contains(controller
+                                      .selectedDayData!.dayNumber
+                                      .toString())
+                                  ? Colors.orange
+                                  : AppColors.whiteColor,
+                            ),
+                            child: Text(
+                              day.dayNumber,
+                              style: TextStyle(
+                                color: day.dayNumber.contains(controller
+                                        .selectedDayData!.dayNumber
+                                        .toString())
+                                    ? AppColors.whiteColor
+                                    : AppColors.blackColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          )
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: controller.dayTabBarController,
+                      children: controller.daysList.map((d) {
+                        return myPlanCon.isPlansLoading.value
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : controller.planDataList.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                        "No plans Add some from plus button"),
+                                  )
+                                : ReorderableListView.builder(
+                                    onReorder:
+                                        (int oldIndex, int newIndex) async {
+                                      if (newIndex > oldIndex) {
+                                        newIndex -= 1;
+                                      }
+                                      bool reordered = await controller
+                                          .planReorderInListFunction(
+                                        oldIndex: oldIndex + 1,
+                                        newIndex: newIndex,
+                                      );
+                                      if (reordered) {
+                                        final items = controller.planDataList
+                                            .removeAt(oldIndex);
+                                        controller.planDataList
+                                            .insert(newIndex, items);
+
+                                        controller.update();
+                                      }
+                                      // if (oldIndex < newIndex) {
+                                      //   newIndex -= 1;
+                                      // }
+                                      // final int item =
+                                      //     controller.items.removeAt(oldIndex);
+                                      // controller.items.insert(newIndex, item);
+                                    },
+                                    shrinkWrap: true,
+                                    itemCount: controller.planDataList.length,
+                                    itemBuilder: (context, index) {
+                                      var singlePlan =
+                                          controller.planDataList[index];
+                                      return Container(
+                                        key: Key('$index'),
+                                        child: Column(
+                                          children: [
+                                            Card(
+                                              elevation: 2,
+                                              color: Colors.white,
+                                              shape:
+                                                  const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          SizedBox(height: Get.height * 0.025),
-                                          Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 10, right: 10),
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  const Text(
-                                                    "Children’s Museum",
-                                                    style:
-                                                        TextStyle(fontSize: 16),
-                                                  ),
-                                                  h(5),
-                                                  const Text(
-                                                    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut",
-                                                    style:
-                                                        TextStyle(fontSize: 12),
-                                                  ),
-                                                  h(10),
-                                                  const Divider(),
                                                   Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
                                                     children: [
                                                       Expanded(
-                                                        // width: Get.width * 0.3,
-                                                        child: Row(
-                                                          children: [
-                                                            Container(
-                                                                padding:
-                                                                    const EdgeInsets.all(
-                                                                        7),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                decoration: const BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    borderRadius:
-                                                                        BorderRadius.all(Radius.circular(
-                                                                            20))),
-                                                                height:
-                                                                    Get.height *
-                                                                        0.04,
-                                                                width:
-                                                                    Get.width *
-                                                                        0.1,
-                                                                child: Image.asset(
-                                                                    "assets/images/Navigate.png")),
-                                                            w(10),
-                                                            const Text(
-                                                              "Navigate",
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
-                                                            )
-                                                          ],
+                                                        child: Container(
+                                                          height: 121,
+                                                          width:
+                                                              Get.width * 0.8,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            // image: DecorationImage(
+                                                            //     image: AssetImage(
+                                                            //         "assets/images/pic.png"),
+                                                            //     fit: BoxFit.fill),
+                                                            color: Colors.cyan,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                            ),
+                                                          ),
+                                                          child: Stack(
+                                                            children: [
+                                                              ClipRRect(
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                ),
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      singlePlan
+                                                                          .placeImage,
+                                                                  height: 121,
+                                                                  width: double
+                                                                      .infinity,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  errorWidget:
+                                                                      (context,
+                                                                          url,
+                                                                          error) {
+                                                                    return const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        "Image Not Loaded",
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              AppColors.blackColor,
+                                                                          fontSize:
+                                                                              11,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                              Positioned(
+                                                                top: 10,
+                                                                left: 10,
+                                                                child:
+                                                                    Container(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  decoration: const BoxDecoration(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(20))),
+                                                                  height:
+                                                                      Get.height *
+                                                                          0.04,
+                                                                  width:
+                                                                      Get.width *
+                                                                          0.15,
+                                                                  child: Text(
+                                                                    singlePlan
+                                                                        .startTime,
+                                                                    style: const TextStyle(
+                                                                        fontSize:
+                                                                            12),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Positioned(
+                                                                top: 10,
+                                                                left: 70,
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    showModalBottomSheet(
+                                                                      context:
+                                                                          context,
+                                                                      isScrollControlled:
+                                                                          true,
+                                                                      shape:
+                                                                          const RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topLeft:
+                                                                              Radius.circular(20),
+                                                                          topRight:
+                                                                              Radius.circular(20),
+                                                                        ),
+                                                                      ),
+                                                                      constraints:
+                                                                          BoxConstraints(
+                                                                              maxHeight: Get.size.height * 0.7),
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
+                                                                        return BottomEditPlanBody(
+                                                                          planId:
+                                                                              singlePlan.id,
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(7),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    decoration: const BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(20))),
+                                                                    height:
+                                                                        Get.height *
+                                                                            0.04,
+                                                                    width:
+                                                                        Get.width *
+                                                                            0.1,
+                                                                    child: Image
+                                                                        .asset(
+                                                                      "assets/images/edit-line.png",
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
-                                                      Expanded(
-                                                        // width: Get.width * 0.3,
-                                                        child: Row(
-                                                          children: [
-                                                            Container(
-                                                                padding:
-                                                                    const EdgeInsets.all(
-                                                                        7),
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                decoration: const BoxDecoration(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    borderRadius:
-                                                                        BorderRadius.all(Radius.circular(
-                                                                            20))),
-                                                                height:
-                                                                    Get.height *
-                                                                        0.04,
-                                                                width:
-                                                                    Get.width *
-                                                                        0.1,
-                                                                child: Image.asset(
-                                                                    "assets/images/clock.png")),
-                                                            w(10),
-                                                            const Text(
-                                                              "Open",
-                                                              style: TextStyle(
-                                                                  fontSize: 14),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )
                                                     ],
                                                   ),
-                                                  h(10),
+                                                  SizedBox(
+                                                      height:
+                                                          Get.height * 0.025),
+                                                  Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              left: 10,
+                                                              right: 10),
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            singlePlan
+                                                                .placeName,
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        16),
+                                                          ),
+                                                          h(5),
+                                                          Text(
+                                                            singlePlan
+                                                                .placeDescription,
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        12),
+                                                          ),
+                                                          h(10),
+                                                          const Divider(),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Expanded(
+                                                                // width: Get.width * 0.3,
+                                                                child: Row(
+                                                                  children: [
+                                                                    Container(
+                                                                        padding:
+                                                                            const EdgeInsets.all(
+                                                                                7),
+                                                                        alignment:
+                                                                            Alignment
+                                                                                .center,
+                                                                        decoration: const BoxDecoration(
+                                                                            color: Colors
+                                                                                .white,
+                                                                            borderRadius: BorderRadius.all(Radius.circular(
+                                                                                20))),
+                                                                        height: Get.height *
+                                                                            0.04,
+                                                                        width: Get.width *
+                                                                            0.1,
+                                                                        child: Image.asset(
+                                                                            "assets/images/Navigate.png")),
+                                                                    w(10),
+                                                                    const Text(
+                                                                      "Navigate",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              14),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                // width: Get.width * 0.3,
+                                                                child: Row(
+                                                                  children: [
+                                                                    Container(
+                                                                        padding:
+                                                                            const EdgeInsets.all(
+                                                                                7),
+                                                                        alignment:
+                                                                            Alignment
+                                                                                .center,
+                                                                        decoration: const BoxDecoration(
+                                                                            color: Colors
+                                                                                .white,
+                                                                            borderRadius: BorderRadius.all(Radius.circular(
+                                                                                20))),
+                                                                        height: Get.height *
+                                                                            0.04,
+                                                                        width: Get.width *
+                                                                            0.1,
+                                                                        child: Image.asset(
+                                                                            "assets/images/clock.png")),
+                                                                    w(10),
+                                                                    Text(
+                                                                      singlePlan
+                                                                          .time,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                          h(10),
+                                                        ],
+                                                      )),
                                                 ],
-                                              )),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  index != 4
-                                      ? Container(
-                                          padding:
-                                              const EdgeInsets.only(left: 20),
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                height: Get.height * 0.08,
-                                                width: Get.width * 0.02,
-                                                child: Image.asset(
-                                                    "assets/images/Line.png"),
                                               ),
-                                              w(10),
-                                              SizedBox(
-                                                height: Get.height * 0.08,
-                                                width: Get.width * 0.04,
-                                                child: Image.asset(
-                                                    "assets/images/Blueman.png"),
-                                              ),
-                                              w(5),
-                                              const Text(
-                                                "2 min by walking",
-                                                style: TextStyle(fontSize: 12),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      : Container()
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                }).toList(),
+                                            ),
+                                            controller.planDataList.length -
+                                                        1 ==
+                                                    index
+                                                ? const SizedBox()
+                                                : Container(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 20),
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          height:
+                                                              Get.height * 0.08,
+                                                          width:
+                                                              Get.width * 0.02,
+                                                          child: Image.asset(
+                                                              "assets/images/Line.png"),
+                                                        ),
+                                                        w(10),
+                                                        SizedBox(
+                                                          height:
+                                                              Get.height * 0.08,
+                                                          width:
+                                                              Get.width * 0.04,
+                                                          child: Image.asset(
+                                                              "assets/images/Blueman.png"),
+                                                        ),
+                                                        w(5),
+                                                        Text(
+                                                          singlePlan.duration,
+                                                          // "2 min by walking",
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 12),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                      }).toList(),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
       );
     });
   }
@@ -463,8 +554,10 @@ class _MyPlansListviewState extends State<MyPlansListview>
 class BottomEditPlanBody extends StatelessWidget {
   BottomEditPlanBody({
     super.key,
+    required this.planId,
   });
 
+  final String planId;
   final controller = Get.find<MyplanController>();
 
   @override
@@ -579,41 +672,46 @@ class BottomEditPlanBody extends StatelessWidget {
                               thickness: 1,
                             ),
                             IntrinsicHeight(
-                                child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: AppColors.whiteColor,
-                                      foregroundColor: AppColors.primaryColor,
-                                    ),
-                                    child: const Text(
-                                      "No",
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: AppColors.whiteColor,
+                                        foregroundColor: AppColors.primaryColor,
+                                      ),
+                                      child: const Text(
+                                        "No",
+                                      ),
                                     ),
                                   ),
-                                ),
-                                VerticalDivider(
-                                  color: AppColors.greyColor.withOpacity(0.254),
-                                  thickness: 1,
-                                  width: 1,
-                                ),
-                                Expanded(
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: AppColors.whiteColor,
-                                      foregroundColor: AppColors.primaryColor,
-                                    ),
-                                    child: const Text("Yes"),
+                                  VerticalDivider(
+                                    color:
+                                        AppColors.greyColor.withOpacity(0.254),
+                                    thickness: 1,
+                                    width: 1,
                                   ),
-                                ),
-                              ],
-                            )),
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Get.back();
+                                        controller.deletePlanFromList(
+                                          planId: planId,
+                                        );
+                                      },
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: AppColors.whiteColor,
+                                        foregroundColor: AppColors.primaryColor,
+                                      ),
+                                      child: const Text("Yes"),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -701,7 +799,7 @@ class BottomEditPlanBody extends StatelessWidget {
                   bottomSheetColor: AppColors.whiteColor,
                   context: context,
                   builder: (context, scrollController, bottomSheetOffset) {
-                    return ChangeDayListviewBody();
+                    return ChangeDayListviewBody(planId: planId);
                   },
                   // anchors: [0, 0.5, 1],
                 );
@@ -724,7 +822,7 @@ class BottomEditPlanBody extends StatelessWidget {
             h(15),
             GestureDetector(
               onTap: () {
-                controller.reorderDayList();
+                // controller.reorderDayList();
                 Get.back();
 
                 showFlexibleBottomSheet(
@@ -958,7 +1056,9 @@ class ChangeDurationListviewBody extends StatelessWidget {
 }
 
 class ChangeDayListviewBody extends StatelessWidget {
-  ChangeDayListviewBody({super.key});
+  ChangeDayListviewBody({super.key, required this.planId});
+
+  final String planId;
 
   final controller = Get.find<MyplanController>();
 
@@ -989,18 +1089,19 @@ class ChangeDayListviewBody extends StatelessWidget {
           child: ListView.separated(
             shrinkWrap: true,
             physics: const BouncingScrollPhysics(),
-            itemCount: controller.changeDayList.length,
+            itemCount: controller.daysList.length,
             itemBuilder: (context, index) {
-              var singleDay = controller.changeDayList[index];
+              var singleDay = controller.daysList[index];
               // String displayTime = DateFormat("h:mmaa").format(singleTime);
 
               return ListTile(
                 dense: true,
                 onTap: () {},
                 title: Text(
-                  singleDay.contains(controller.selectedDay.value.toString())
-                      ? "Day $singleDay (current)"
-                      : "Day $singleDay",
+                  singleDay.dayNumber
+                          .contains(controller.selectedDay.value.toString())
+                      ? "${singleDay.day} (current)"
+                      : singleDay.day,
                   style: const TextStyle(
                     color: AppColors.blackColor,
                     fontSize: 15,
@@ -1009,7 +1110,12 @@ class ChangeDayListviewBody extends StatelessWidget {
                 ),
                 contentPadding: const EdgeInsets.only(left: 20, right: 5),
                 trailing: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.dayPlanChangeFunction(
+                      planId: planId,
+                      dayNumber: singleDay.dayNumber,
+                    );
+                  },
                   icon: const Icon(
                     Icons.play_circle_outline_outlined,
                     color: AppColors.blackColor,
@@ -1080,59 +1186,75 @@ class ReorderDayListviewBody extends StatelessWidget {
         ),
         Expanded(
           child: GetBuilder<MyplanController>(builder: (cont) {
-            return ReorderableListView.builder(
-              onReorder: (oldIndex, newIndex) {
-                if (newIndex > oldIndex) {
-                  newIndex -= 1;
-                }
-                final items = controller.reorderPlacesList.removeAt(oldIndex);
-                controller.reorderPlacesList.insert(newIndex, items);
+            return cont.isPlansLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ReorderableListView.builder(
+                    onReorder: (oldIndex, newIndex) async {
+                      // if (newIndex > oldIndex) {
+                      //   newIndex -= 1;
+                      // }
+                      bool reordered =
+                          await controller.planReorderInListFunction(
+                        oldIndex: oldIndex + 1,
+                        newIndex: newIndex,
+                      );
+                      if (reordered) {
+                        // if (newIndex > oldIndex) {
+                        //   newIndex -= 1;
+                        // }
+                        final items =
+                            controller.planDataList.removeAt(oldIndex);
+                        controller.planDataList.insert(newIndex, items);
 
-                controller.update();
-              },
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemCount: controller.reorderPlacesList.length,
-              itemBuilder: (context, index) {
-                var singlePlace = controller.reorderPlacesList[index];
-                var singlePlaceKey = controller.reorderPlacesKeyList[index];
-                // String displayTime = DateFormat("h:mmaa").format(singleTime);
+                        controller.update();
+                      }
+                    },
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: controller.planDataList.length,
+                    itemBuilder: (context, index) {
+                      var singlePlace = controller.planDataList[index];
+                      var singlePlaceKey =
+                          controller.reorderPlacesKeyList[index];
+                      // String displayTime = DateFormat("h:mmaa").format(singleTime);
 
-                return Card(
-                  key: ValueKey(singlePlaceKey),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        dense: true,
-                        onTap: () {},
-                        title: Text(
-                          singlePlace,
-                          style: const TextStyle(
-                            color: AppColors.blackColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w300,
-                          ),
+                      return Card(
+                        key: ValueKey(singlePlaceKey),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              dense: true,
+                              onTap: () {},
+                              title: Text(
+                                singlePlace.placeName,
+                                style: const TextStyle(
+                                  color: AppColors.blackColor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              horizontalTitleGap: 0,
+                              contentPadding:
+                                  const EdgeInsets.only(left: 15, right: 5),
+                              leading: const Icon(
+                                Icons.menu,
+                                color: AppColors.blackColor,
+                              ),
+                            ),
+                            Divider(
+                              height: 1,
+                              thickness: 1,
+                              color: AppColors.greyColor.withOpacity(0.25),
+                              indent: 5,
+                              endIndent: 5,
+                            )
+                          ],
                         ),
-                        horizontalTitleGap: 0,
-                        contentPadding:
-                            const EdgeInsets.only(left: 15, right: 5),
-                        leading: const Icon(
-                          Icons.menu,
-                          color: AppColors.blackColor,
-                        ),
-                      ),
-                      Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: AppColors.greyColor.withOpacity(0.25),
-                        indent: 5,
-                        endIndent: 5,
-                      )
-                    ],
-                  ),
-                );
-              },
-            );
+                      );
+                    },
+                  );
           }),
         ),
       ],
@@ -1147,112 +1269,120 @@ class ManageDaysListviewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListTile(
-          dense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-          leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: const Icon(
-              Icons.close,
-              color: AppColors.blackColor,
-            ),
-          ),
-          title: const Text("Manage Days"),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            SizedBox(
-              height: 35,
-              width: 85,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: AppColors.whiteColor,
-                  foregroundColor: AppColors.primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(
-                      color: AppColors.primaryColor,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  controller.manageDaysList.add("Day New (empty)");
-                  controller.update();
-                },
-                child: const Text(
-                  "Add Day",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 15),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Expanded(
-          child: GetBuilder<MyplanController>(builder: (context) {
-            return ListView.separated(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemCount: controller.manageDaysList.length,
-              itemBuilder: (context, index) {
-                var singleDay = controller.manageDaysList[index];
-                // String displayTime = DateFormat("h:mmaa").format(singleTime);
-
-                return ListTile(
+    return Obx(
+      () => controller.isLoading.value
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: [
+                ListTile(
                   dense: true,
-                  // onTap: () {},
-                  title: Text(
-                    // singleDay.contains(controller.selectedDay.value)
-                    //     ? "Day $singleDay (current)"
-                    //     :
-                    singleDay,
-                    style: const TextStyle(
-                      color: AppColors.blackColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.only(left: 20, right: 5),
-                  leading: const Icon(
-                    Icons.menu,
-                    color: AppColors.blackColor,
-                  ),
-                  horizontalTitleGap: 0,
-                  trailing: IconButton(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+                  leading: IconButton(
                     onPressed: () {
-                      controller.manageDaysList.removeAt(index);
-                      controller.update();
+                      Get.back();
                     },
-                    icon: Icon(
-                      Icons.delete_outline_rounded,
-                      size: 25,
-                      color: AppColors.blackColor.withOpacity(0.8),
+                    icon: const Icon(
+                      Icons.close,
+                      color: AppColors.blackColor,
                     ),
                   ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: AppColors.greyColor.withOpacity(0.25),
-                  indent: 5,
-                  endIndent: 5,
-                );
-              },
-            );
-          }),
-        ),
-      ],
+                  title: const Text("Manage Days"),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      height: 35,
+                      width: 85,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: AppColors.whiteColor,
+                          foregroundColor: AppColors.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: const BorderSide(
+                              color: AppColors.primaryColor,
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          // controller.day.add("Day New (empty)");
+                          controller.addDayToList();
+                        },
+                        child: const Text(
+                          "Add Day",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Expanded(
+                  child: GetBuilder<MyplanController>(builder: (context) {
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: controller.daysList.length,
+                      itemBuilder: (context, index) {
+                        var singleDay = controller.daysList[index];
+                        // String displayTime = DateFormat("h:mmaa").format(singleTime);
+
+                        return ListTile(
+                          dense: true,
+                          // onTap: () {},
+                          title: Text(
+                            // singleDay.contains(controller.selectedDay.value)
+                            //     ? "Day  (current)"
+                            //     :
+                            singleDay.day,
+                            style: const TextStyle(
+                              color: AppColors.blackColor,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          contentPadding:
+                              const EdgeInsets.only(left: 20, right: 5),
+                          leading: const Icon(
+                            Icons.menu,
+                            color: AppColors.blackColor,
+                          ),
+                          horizontalTitleGap: 0,
+                          trailing: IconButton(
+                            onPressed: () {
+                              // controller.daysList.removeAt(index);
+                              controller.deleteDayFromList(
+                                  dayNumber: singleDay.dayNumber);
+                            },
+                            icon: Icon(
+                              Icons.delete_outline_rounded,
+                              size: 25,
+                              color: AppColors.blackColor.withOpacity(0.8),
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: AppColors.greyColor.withOpacity(0.25),
+                          indent: 5,
+                          endIndent: 5,
+                        );
+                      },
+                    );
+                  }),
+                ),
+              ],
+            ),
     );
   }
 }

@@ -81,14 +81,14 @@ class AddplacesController extends GetxController {
           Get.back();
           myplanController.planDaysGetListFunction();
         } else {
-          Fluttertoast.showToast(
-              msg: 'Place Not Added Something Went wrong',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.blue,
-              textColor: Colors.white,
-              fontSize: 16.0);
+          // Fluttertoast.showToast(
+          //     msg: 'Place Not Added Something Went wrong',
+          //     toastLength: Toast.LENGTH_SHORT,
+          //     gravity: ToastGravity.BOTTOM,
+          //     timeInSecForIosWeb: 1,
+          //     backgroundColor: Colors.blue,
+          //     textColor: Colors.white,
+          //     fontSize: 16.0);
         }
         update();
       } catch (e) {

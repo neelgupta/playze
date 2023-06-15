@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:playze/app/data/service/plan_service.dart';
 
+import '../../../../Reusability/utils/shared_prefs.dart';
 import '../../../../Reusability/utils/util.dart';
 import '../../../data/modal/plan_days_get_list.dart';
 import '../../../data/modal/plan_get_list.dart';
@@ -20,6 +22,7 @@ class MyplanController extends GetxController {
 
   PlanService planService = PlanService();
   RxBool isLoading = false.obs;
+  RxBool isPlansLoading = false.obs;
 
   List startTimeList = [];
   List<TimeOfDay> changeDurationList = [];
@@ -97,26 +100,26 @@ class MyplanController extends GetxController {
     // log("changeDayList length ;: $changeDayList");
   }
 
-  reorderDayList() {
-    reorderPlacesList = [];
-    reorderPlacesKeyList = [];
+  // reorderDayList() {
+  //   reorderPlacesList = [];
+  //   reorderPlacesKeyList = [];
 
-    reorderPlacesList.add("9:00AM The Place");
-    reorderPlacesKeyList.add("The Place");
-    reorderPlacesList.add("11:22AM The Second polkace");
-    reorderPlacesKeyList.add("The Second polkace");
-    reorderPlacesList.add("2:00PM The Sida");
-    reorderPlacesKeyList.add("The Sida");
-    reorderPlacesList.add("3:45PM Uglasia");
-    reorderPlacesKeyList.add("Uglasia");
+  //   reorderPlacesList.add("9:00AM The Place");
+  //   reorderPlacesKeyList.add("The Place");
+  //   reorderPlacesList.add("11:22AM The Second polkace");
+  //   reorderPlacesKeyList.add("The Second polkace");
+  //   reorderPlacesList.add("2:00PM The Sida");
+  //   reorderPlacesKeyList.add("The Sida");
+  //   reorderPlacesList.add("3:45PM Uglasia");
+  //   reorderPlacesKeyList.add("Uglasia");
 
-    // for (int i = 0; i < 3; i++) {
-    //   countDay++;
-    //   changeDayList.add(countDay.toString());
-    // }
-    // log("reorderPlacesList length ;: $reorderPlacesList");
-    // log("reorderPlacesKeyList length ;: $reorderPlacesKeyList");
-  }
+  //   // for (int i = 0; i < 3; i++) {
+  //   //   countDay++;
+  //   //   changeDayList.add(countDay.toString());
+  //   // }
+  //   // log("reorderPlacesList length ;: $reorderPlacesList");
+  //   // log("reorderPlacesKeyList length ;: $reorderPlacesKeyList");
+  // }
 
   makeManageDaysList() {
     manageDaysList = [];
@@ -174,32 +177,226 @@ class MyplanController extends GetxController {
 
   planGetlistByDayFunction() async {
     try {
-      isLoading(true);
+      isPlansLoading(true);
 
       permission = await Geolocator.requestPermission();
       currentLocation = await locateUser();
 
+      log("selectedDayData!.dayNumber : ${selectedDayData!.dayNumber}");
+      planDataList.clear();
       PlanGetList? planGetList = await planService.planGetlistByDay(
         latitude: currentLocation.latitude,
         longitude: currentLocation.latitude,
         day: selectedDayData!.dayNumber,
       );
-      planDataList.clear();
 
       if (planGetList != null) {
         planDataList = planGetList.data;
         // selectedDayData = daysList.first;
+
+        if (planDataList.isNotEmpty) {
+          for (var item in planDataList) {
+            reorderPlacesKeyList.add(item.id);
+          }
+        }
         log("planDataList len is : ${planDataList.length}");
         update();
+        isPlansLoading(false);
       }
 
       update();
     } catch (e) {
+      isPlansLoading(false);
       log("error is :: ${e.toString()}");
       rethrow;
     } finally {
       isLoading(false);
     }
+  }
+
+  addDayToList() async {
+    try {
+      isLoading(true);
+
+      bool dayAdded = await planService.addDayToList() ?? false;
+
+      if (dayAdded) {
+        Fluttertoast.showToast(
+            msg: 'Day Added Successfully',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        planDaysGetListFunction();
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Day Not Added Something Went wrong',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        isLoading(false);
+      }
+    } catch (e) {
+      isLoading(false);
+      log("error is :: ${e.toString()}");
+      rethrow;
+    } finally {
+      // isLoading(false);
+    }
+  }
+
+  deleteDayFromList({dayNumber}) async {
+    try {
+      isLoading(true);
+
+      bool dayAdded =
+          await planService.deleteDayFromList(dayNumber: dayNumber) ?? false;
+
+      if (dayAdded) {
+        Fluttertoast.showToast(
+            msg: 'Day Deleted Successfully',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        planDaysGetListFunction();
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Day Not Deleted Something Went wrong',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        isLoading(false);
+      }
+    } catch (e) {
+      isLoading(false);
+      log("error is :: ${e.toString()}");
+      rethrow;
+    } finally {}
+  }
+
+  deletePlanFromList({planId}) async {
+    try {
+      isLoading(true);
+
+      bool dayAdded =
+          await planService.planDeleteFromList(planId: planId) ?? false;
+
+      if (dayAdded) {
+        Fluttertoast.showToast(
+            msg: 'Plan Deleted Successfully',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        planDaysGetListFunction();
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Plan Not Deleted Something Went wrong',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        isLoading(false);
+      }
+    } catch (e) {
+      isLoading(false);
+      log("error is :: ${e.toString()}");
+      rethrow;
+    } finally {}
+  }
+
+  dayPlanChangeFunction({planId, dayNumber}) async {
+    try {
+      isLoading(true);
+
+      bool dayPlanChanged = await planService.planDayChangeApi(
+              planId: planId, dayNumber: dayNumber) ??
+          false;
+
+      if (dayPlanChanged) {
+        Fluttertoast.showToast(
+            msg: 'Plan Moved to day $dayNumber',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        planGetlistByDayFunction();
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Moving Plan to day $dayNumber failed. Something Went wrong',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        isLoading(false);
+      }
+    } catch (e) {
+      isLoading(false);
+      log("error is :: ${e.toString()}");
+      rethrow;
+    } finally {}
+  }
+
+  Future<bool> planReorderInListFunction({oldIndex, newIndex}) async {
+    try {
+      isLoading(true);
+
+      var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
+
+      bool dayPlanChanged = await planService.planReorderInDayApi(
+            userId: userId,
+            oldIndexNumber: oldIndex,
+            newIndexNumber: newIndex,
+          ) ??
+          false;
+
+      if (dayPlanChanged) {
+        Fluttertoast.showToast(
+            msg: 'Plan Reordered Sucessfully.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        planGetlistByDayFunction();
+        return true;
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Plan Reordering failed. Something Went wrong',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        isLoading(false);
+        return false;
+      }
+    } catch (e) {
+      isLoading(false);
+      log("error is :: ${e.toString()}");
+      rethrow;
+    } finally {}
   }
 
   @override

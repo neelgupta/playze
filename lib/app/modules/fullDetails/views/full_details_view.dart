@@ -1415,7 +1415,7 @@ class FullDetailsView extends GetView<FullDetailsController> {
                                                                                         ),
                                                                                       ),
                                                                                 h(5),
-                                                                                singleReview.video.isEmpty || singleReview.files.isEmpty
+                                                                                singleReview.video.isEmpty
                                                                                     ? const SizedBox()
                                                                                     : SizedBox(
                                                                                         width: Get.width * 0.7,
