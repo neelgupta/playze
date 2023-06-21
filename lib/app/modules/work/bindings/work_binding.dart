@@ -1,12 +1,12 @@
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 
-import '../controllers/work_controller.dart';
+// import '../controllers/work_controller.dart';
 
-class WorkBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<WorkController>(
-      () => WorkController(),
-    );
-  }
-}
+// class WorkBinding extends Bindings {
+//   @override
+//   void dependencies() {
+//     Get.lazyPut<WorkController>(
+//       () => WorkController(),
+//     );
+//   }
+// }

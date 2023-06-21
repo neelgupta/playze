@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:get/get.dart';
-import 'package:playze/Reusability/utils/app_colors.dart';
+import 'package:playze/app/data/modal/filters_model.dart';
+import 'package:playze/reusability/utils/app_colors.dart';
 
-import '../../../data/modal/class.dart';
 import '../controllers/filter_controller.dart';
 
 class FilterView extends GetView<FilterController> {
@@ -32,9 +32,6 @@ class FilterView extends GetView<FilterController> {
                   GestureDetector(
                     onTap: () {
                       Get.back();
-
-                      // Navigator.pop(context);
-                      print("00");
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8),
@@ -133,32 +130,6 @@ class FilterView extends GetView<FilterController> {
                                 ),
                               ),
                             );
-                            // SizedBox(
-                            //   height: Get.height * 0.06,
-                            //   child: Row(
-                            //     children: [
-                            //       Obx(
-                            //         () => Checkbox(
-                            //           activeColor: Colors.blue,
-                            //           value: checks[index],
-                            //           side: const BorderSide(
-                            //               color: Colors.black12),
-                            //           onChanged: (newValue) {
-                            //             checks[index] = newValue!;
-                            //             print(controlles.isbool[index]);
-                            //           },
-                            //         ),
-                            //       ),
-                            //       Text(
-                            //         controller.filterList[index].name,
-                            //         style: const TextStyle(
-                            //           color: Colors.grey,
-                            //           fontSize: 14,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // );
                           },
                         );
                       },
@@ -183,8 +154,8 @@ class FilterView extends GetView<FilterController> {
                   // for (var item in controller.filterList) {
                   //   item.isSelected = false;
                   // }
-                  controller.clearFilterHomeScreenPlacesList();
                   // controller.update();
+                  controller.clearFilterHomeScreenPlacesList();
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -213,7 +184,7 @@ class FilterView extends GetView<FilterController> {
                   //filter api call
                   controller.selectedCatIdList = [];
 
-                  List<dp> selectedList = [];
+                  List<FilterData> selectedList = [];
                   for (var item in controller.filterList) {
                     if (item.isSelected) {
                       log("item.isSelected ::  ${item.id}");

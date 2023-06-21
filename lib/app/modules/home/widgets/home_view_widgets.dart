@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../../Reusability/utils/util.dart';
-import '../../../data/modal/plaseModel.dart';
+import '../../../../reusability/utils/util.dart';
+import '../../../data/modal/place_data_model.dart';
 import '../../../routes/app_pages.dart';
-import '../../BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
+import '../../bottom_navigation_bar/controllers/bottom_navigation_bar_controller.dart';
 import '../controllers/home_controller.dart';
 
 class SinglePlaceWidget extends StatelessWidget {
@@ -16,263 +16,255 @@ class SinglePlaceWidget extends StatelessWidget {
   });
 
   final PlaceDetails placeData;
-  // final HomeController controller;
-  // final BottomNavigationbarController controllerc;
-
   final controller = Get.find<HomeController>();
-  final bottomCont = Get.find<BottomNavigationbarController>();
+  final bottomCont = Get.find<BottomNavigationBarController>();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          color: Colors.white,
-          margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-          // height: Get.height * 0.25,
-
-          child: Column(
+    return Container(
+      // margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+      padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        children: [
+          Row(
             children: [
-              Row(
+              Stack(
                 children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: Get.height * 0.12,
-                        width: Get.width * 0.4,
-                        decoration: const BoxDecoration(
-                          color: Colors.cyan,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        // decoration:
-                        //     BoxDecoration(
-                        //   borderRadius:
-                        //       const BorderRadius
-                        //               .all(
-                        //           Radius
-                        //               .circular(
-                        //                   10)),
-                        //   image:
-                        //       DecorationImage(
-                        //     image:
-                        //         NetworkImage(
-                        //       controller
-                        //           .Data[index]
-                        //           .logo
-                        //           .toString(),
-                        //     ),
-                        //   ),
-                        // ),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: placeData.images!.first.images!,
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) {
-                              return const Center(
-                                child: Text("No Image"),
-                              );
-                            },
-                          ),
-                        ),
+                  Container(
+                    height: Get.height * 0.12,
+                    width: Get.width * 0.4,
+                    decoration: const BoxDecoration(
+                      color: Colors.cyan,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
                       ),
-                      Positioned(
-                        top: 10,
-                        left: 10,
-                        child: SizedBox(
-                          height: Get.height * 0.02,
-                          child: const Image(
-                              image: AssetImage("assets/images/dil.png")),
-                        ),
-                      )
-                    ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: placeData.images.first.images,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) {
+                          return const Center(
+                            child: Text("No Image"),
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("${placeData.placesName}"),
-                          SizedBox(
-                            height: Get.height * 0.01,
-                          ),
-                          placeData.avgRating != "0" ||
-                                  placeData.totalReview != "0"
-                              ? Row(
-                                  children: [
-                                    placeData.avgRating != "0"
-                                        ? SizedBox(
-                                            height: Get.height * 0.02,
-                                            child: const Image(
-                                                image: AssetImage(
-                                                    "assets/images/star.png")))
-                                        : h(1),
-                                    placeData.avgRating != "0"
-                                        ? SizedBox(
-                                            width: Get.width * 0.02,
-                                          )
-                                        : h(1),
-                                    placeData.avgRating != "0"
-                                        ? Text(
-                                            double.parse(placeData.avgRating
-                                                    .toString())
-                                                .toStringAsFixed(1),
-                                            style:
-                                                const TextStyle(fontSize: 16),
-                                          )
-                                        : h(1),
-                                    SizedBox(width: Get.width * 0.02),
-                                    placeData.totalReview != "0"
-                                        ? Text(
-                                            '${placeData.totalReview}',
-                                            style: const TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey),
-                                          )
-                                        : h(1),
-                                    placeData.totalReview != "0"
-                                        ? const Text(
-                                            ' Reviews',
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.grey),
-                                          )
-                                        : h(1),
-                                  ],
-                                )
-                              : h(1),
-                          SizedBox(height: Get.height * 0.01),
-                          Row(
-                            children: [
-                              SizedBox(
-                                height: Get.height * 0.02,
-                                child: const Image(
-                                  image: AssetImage("assets/images/log.png"),
-                                ),
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.02,
-                              ),
-                              SizedBox(
-                                width: Get.width * 0.35,
-                                child: Text(
-                                  "${placeData.address}",
-                                  style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 12,
-                                      color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: Get.height * 0.01),
-                          Row(
-                            children: [
-                              SizedBox(
-                                height: Get.height * 0.02,
-                                child: const Image(
-                                  image:
-                                      AssetImage("assets/images/walking.png"),
-                                ),
-                              ),
-                              SizedBox(width: Get.width * 0.02),
-                              Expanded(
-                                child: Text(
-                                  "${placeData.duration} ${placeData.distance} away",
-                                  // "2 min",
-                                  maxLines: 2,
-                                  style: const TextStyle(
-                                    overflow: TextOverflow.ellipsis,
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                              // SizedBox(width: Get.width * 0.02),
-                              // Text(
-                              //   "${placeData.distance} away",
-                              //   style: const TextStyle(
-                              //     fontSize: 12,
-                              //     color: Colors.grey,
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                        ],
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.addTowishListFunction(
+                          placeId: placeData.id,
+                        );
+                        // controller.removeFromWishListFunction(
+                        //   placeId: placeData.id,
+                        // );
+                      },
+                      child: SizedBox(
+                        height: Get.height * 0.02,
+                        child: const Image(
+                          image: AssetImage("assets/images/dil.png"),
+                        ),
                       ),
                     ),
                   )
                 ],
               ),
-              SizedBox(
-                height: Get.height * 0.025,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      controller.isMapView.value = true;
-                      controller.selectedPlaceLocation = placeData;
-                      controller.initialCameraPosition = CameraPosition(
-                        target: LatLng(
-                            double.parse(
-                                controller.selectedPlaceLocation!.latitude!),
-                            double.parse(
-                                controller.selectedPlaceLocation!.longitude!)),
-                        tilt: 10,
-                        zoom: 14.5,
-                      );
-
-                      bottomCont.locateWindowPop.value = true;
-                    },
-                    child: const Row(
-                      children: [
-                        Image(
-                          image: AssetImage("assets/images/go.png"),
-                          width: 25,
-                        ),
-                        Text("  Go"),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: Get.width * 0.025,
-                  ),
-                  const Row(
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image(
-                        image: AssetImage("assets/images/plan.png"),
-                        width: 25,
+                      Text(placeData.placesName),
+                      SizedBox(
+                        height: Get.height * 0.01,
                       ),
-                      Text("  My Plan"),
+                      placeData.avgRating != "0" || placeData.totalReview != "0"
+                          ? Row(
+                              children: [
+                                placeData.avgRating != "0"
+                                    ? SizedBox(
+                                        height: Get.height * 0.02,
+                                        child: const Image(
+                                          image: AssetImage(
+                                              "assets/images/star.png"),
+                                        ),
+                                      )
+                                    : h(1),
+                                placeData.avgRating != "0"
+                                    ? SizedBox(
+                                        width: Get.width * 0.02,
+                                      )
+                                    : h(1),
+                                placeData.avgRating != "0"
+                                    ? Text(
+                                        double.parse(
+                                                placeData.avgRating.toString())
+                                            .toStringAsFixed(1),
+                                        style: const TextStyle(fontSize: 16),
+                                      )
+                                    : h(1),
+                                SizedBox(width: Get.width * 0.02),
+                                placeData.totalReview != "0"
+                                    ? Text(
+                                        placeData.totalReview,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
+                                      )
+                                    : h(1),
+                                placeData.totalReview != "0"
+                                    ? const Text(
+                                        ' Reviews',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.grey,
+                                        ),
+                                      )
+                                    : h(1),
+                              ],
+                            )
+                          : h(1),
+                      SizedBox(height: Get.height * 0.01),
+                      Row(
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                            child: const Image(
+                              image: AssetImage("assets/images/log.png"),
+                            ),
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.02,
+                          ),
+                          SizedBox(
+                            width: Get.width * 0.35,
+                            child: Text(
+                              placeData.address,
+                              style: const TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: Get.height * 0.01),
+                      Row(
+                        children: [
+                          SizedBox(
+                            height: Get.height * 0.02,
+                            child: const Image(
+                              image: AssetImage("assets/images/walking.png"),
+                            ),
+                          ),
+                          SizedBox(width: Get.width * 0.02),
+                          Expanded(
+                            child: Text(
+                              "${placeData.duration} ${placeData.distance} away",
+                              // "2 min",
+                              maxLines: 2,
+                              style: const TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          // SizedBox(width: Get.width * 0.02),
+                          // Text(
+                          //   "${placeData.distance} away",
+                          //   style: const TextStyle(
+                          //     fontSize: 12,
+                          //     color: Colors.grey,
+                          //   ),
+                          // ),
+                        ],
+                      ),
                     ],
                   ),
-                  ButtonWithStyle(
-                    onPressed: () {
-                      Get.toNamed(
-                        Routes.FULL_DETAILS,
-                        arguments: [
-                          placeData.id,
-                        ],
-                      );
-                    },
-                    textVal: "Details",
-                    btnwidth: Get.width * 0.3,
-                  ),
-                ],
+                ),
               )
             ],
           ),
-        ),
-        h(15)
-      ],
+          SizedBox(height: Get.height * 0.025),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: () {
+                  controller.isMapView.value = true;
+                  controller.selectedPlaceLocation = placeData;
+                  controller.initialCameraPosition = CameraPosition(
+                    target: LatLng(
+                      double.parse(controller.selectedPlaceLocation!.latitude),
+                      double.parse(controller.selectedPlaceLocation!.longitude),
+                    ),
+                    tilt: 10,
+                    zoom: 14.5,
+                  );
+
+                  bottomCont.locateWindowPop.value = true;
+                },
+                child: const Row(
+                  children: [
+                    Image(
+                      image: AssetImage("assets/images/go.png"),
+                      width: 25,
+                    ),
+                    Text("  Go"),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: Get.width * 0.025,
+              ),
+              GestureDetector(
+                onTap: () {
+                  controller.addPlanToSelectedDay(
+                    placeId: placeData.id,
+                  );
+                },
+                child: const Row(
+                  children: [
+                    Image(
+                      image: AssetImage("assets/images/plan.png"),
+                      width: 25,
+                    ),
+                    Text("  My Plan"),
+                  ],
+                ),
+              ),
+              ButtonWithStyle(
+                onPressed: () {
+                  Get.toNamed(
+                    Routes.FULL_DETAILS,
+                    arguments: [
+                      placeData.id,
+                    ],
+                  );
+                },
+                textVal: "Details",
+                btnwidth: Get.width * 0.3,
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

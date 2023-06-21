@@ -2,21 +2,19 @@ import 'package:get_storage/get_storage.dart';
 
 class SharedPrefs {
   final value = GetStorage();
-  Function? disposeListen;
 
-  static String userIdKey = "usersId";
-  static String DiviseKey = "usersId";
-  static String tokenKey = "token";
-  static String idKey = "id";
-  static String fnamenKey = "first_name";
-  static String lnameKey = "last_name";
-  static String passwordKey = "password";
-  static String mnumbarKey = "mobile_number";
-  static String emailKey = "email";
-  static String otpKey = "otp";
-  static String childrenKey = "children";
-  static String interestKey = "interest";
-  static String setBool = "login";
+  static String userIdKey = "userIdKey";
+  static String tokenKey = "tokenKey";
+  static String idKey = "idKey";
+  static String firstNameKey = "firstNameKey";
+  static String lastNameKey = "lastNameKey";
+  static String passwordKey = "passwordKey";
+  static String mobileNumbarKey = "mobileNumbarKey";
+  static String emailKey = "emailKey";
+  static String otpKey = "otpKey";
+  static String childrenKey = "childrenKey";
+  static String interestKey = "interestKey";
+  static String setBool = "setBool";
 
   // setotpData({
   //    String? token,

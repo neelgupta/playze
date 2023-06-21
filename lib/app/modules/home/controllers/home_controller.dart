@@ -2,22 +2,25 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:ui' as ui;
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:playze/Reusability/shared/drawer.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:playze/app/data/service/plan_service.dart';
+import 'package:playze/app/data/service/user_service.dart';
+import 'package:playze/reusability/shared/custom_drawer.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/modal/plaseModel.dart';
+import '../../../../reusability/utils/shared_prefs.dart';
+import '../../../data/modal/place_data_model.dart';
 import '../../../data/provider/filter_provider.dart';
-import '../../../data/service/Userservise.dart';
-import '../../BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
+import '../../bottom_navigation_bar/controllers/bottom_navigation_bar_controller.dart';
+import '../../myplan/controllers/myplan_controller.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
-
   final count = 0.obs;
   var index = 0;
   String action = "Home";
@@ -25,11 +28,15 @@ class HomeController extends GetxController {
 
   RxBool isLoading = false.obs;
   RxBool isFiltered = false.obs;
+  RxBool locWhenInUseGranted = false.obs;
+  RxBool locAlwaysGranted = false.obs;
   LatLng? positionStream;
   static const LatLng location1 = LatLng(21.230557, 72.821677);
   static const LatLng location2 = LatLng(21.224772, 72.821394);
 
-  Usersevise usersevise = Usersevise();
+  GoogleMapController? gMapController;
+
+  UserService userService = UserService();
 
   PlaceDetails? selectedPlaceLocation;
 
@@ -63,6 +70,8 @@ class HomeController extends GetxController {
   ];
   BitmapDescriptor icons = BitmapDescriptor.defaultMarker;
   LatLng? center;
+
+  //  = const LatLng(23.812433, 79.305474);
   late Position currentLocation;
   LocationPermission? permission;
 
@@ -71,9 +80,6 @@ class HomeController extends GetxController {
     super.onInit();
 
     getUserLocation();
-    // getPlasedata();
-
-    // searchController.text = filterProv.searchString;
   }
 
   // void setcoustommarkerIcon(){
@@ -96,6 +102,33 @@ class HomeController extends GetxController {
     return Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
+  }
+
+  Future requestLocationPermission() async {
+    await Permission.location.request();
+  }
+
+  Future<void> goToMyCurrentLocation() async {
+    // final GoogleMapController controller = await gMapController.;
+    permission = await Geolocator.requestPermission();
+    currentLocation = await locateUser();
+    center = LatLng(currentLocation.latitude, currentLocation.longitude);
+    initialCameraPosition = CameraPosition(
+      target: center!,
+      tilt: 10,
+      zoom: 14.5,
+    );
+    gMapController!
+        .animateCamera(CameraUpdate.newCameraPosition(initialCameraPosition!));
+    locAlwaysGranted.value =
+        await Permission.locationAlways.request().isGranted;
+
+    locWhenInUseGranted.value =
+        await Permission.locationWhenInUse.request().isGranted;
+    log('permission.value ::  $permission');
+    log('locAlwaysGranted.value ::  ${locAlwaysGranted.value}');
+    log('locWhenInUseGranted.value ::  ${locWhenInUseGranted.value}');
+    update();
   }
 
   getUserLocation() async {
@@ -130,45 +163,55 @@ class HomeController extends GetxController {
     } catch (e) {
       log("exc :: ${e.toString()}");
     } finally {
-      getPlasedata();
+      getPlacesList();
+
+      locAlwaysGranted.value =
+          await Permission.locationAlways.request().isGranted;
+
+      locWhenInUseGranted.value =
+          await Permission.locationWhenInUse.request().isGranted;
+      log('permission.value ::  $permission');
+      log('locAlwaysGranted.value ::  ${locAlwaysGranted.value}');
+      log('locWhenInUseGranted.value ::  ${locWhenInUseGranted.value}');
+
       // isLoading(false);
     }
   }
 
-  // loadData() async {
-  //   isLoading(true);
-  //   // locateUser();
-  //   getUserLocation();
-  // }
-
-  Future<void> getPlasedata() async {
+  Future<void> getPlacesList() async {
     try {
       isLoading(true);
-      await usersevise
-          .getPlasedata(
+      await userService
+          .getAllPlacesListMethod(
         latitudeValue: currentLocation.latitude,
         longitudeValue: currentLocation.longitude,
       )
           .then((value) {
         placeModel = value;
-        placeDataList.clear();
-        placeModel?.data?.forEach((element) {
-          placeDataList.add(element);
-          // lip.add(element.name);
-        });
-        log("placeDataList len is : ${placeDataList.length}");
+        if (placeModel != null) {
+          placeDataList.clear();
+          for (var element in placeModel!.data) {
+            placeDataList.add(element);
+            // lip.add(element.name);
+          }
+          log("placeDataList len is : ${placeDataList.length}");
+        } else {
+          Fluttertoast.showToast(
+            msg: 'Please try again later...!',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
       });
 
       if (placeDataList.isNotEmpty) {
         selectedPlaceLocation = placeDataList.first;
         for (int i = 0; i < placeDataList.length; i++) {
-          // final Uint8List markerIcon =
-          //     await getBytesFromAsset(images[i].toString(), 100);
-
           var singlePlace = placeDataList[i];
-
-          // log(" singlePlace.latitude!.toDouble() ${singlePlace.latitude!.toDouble()}");
-          // log(" singlePlace.longitude!.toDouble() ${singlePlace.longitude!.toDouble()}");
           markers.add(
             Marker(
               onTap: () {
@@ -177,8 +220,7 @@ class HomeController extends GetxController {
                 selectedPlaceLocation = singlePlace;
               },
               infoWindow: InfoWindow(
-                  title: "${singlePlace.placesName}",
-                  snippet: "${singlePlace.address}"),
+                  title: singlePlace.placesName, snippet: singlePlace.address),
               flat: true,
               rotation: 1.1,
               zIndex: 10,
@@ -187,8 +229,8 @@ class HomeController extends GetxController {
 
               markerId: MarkerId(singlePlace.id.toString()),
               position: LatLng(
-                double.parse(singlePlace.latitude!),
-                double.parse(singlePlace.longitude!),
+                double.parse(singlePlace.latitude),
+                double.parse(singlePlace.longitude),
               ),
               // icon: BitmapDescriptor.fromBytes(markerIcon),
             ),
@@ -202,15 +244,114 @@ class HomeController extends GetxController {
 
       update();
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> addTowishListFunction({placeId}) async {
+    try {
+      var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
+
+      isLoading(true);
+      await userService
+          .addToWishListMethod(
+        userId: userId,
+        placeId: placeId,
+        status: 1,
+      )
+          .then((value) {
+        // placeModel = value;
+        // if (placeModel != null) {
+        //   placeDataList.clear();
+        //   placeModel?.data?.forEach((element) {
+        //     placeDataList.add(element);
+        //     // lip.add(element.name);
+        //   });
+        //   log("addTowishListFunction len is : ${placeDataList.length}");
+        // } else {
+        //   Fluttertoast.showToast(
+        //     msg: 'Please try again later...!',
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.blue,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0,
+        //   );
+        // }
+      });
+
+      // if (placeDataList.isNotEmpty) {
+      //   selectedPlaceLocation = placeDataList.first;
+      //   for (int i = 0; i < placeDataList.length; i++) {
+      //     var singlePlace = placeDataList[i];
+      //     markers.add(
+      //       Marker(
+      //         onTap: () {
+      //           controller.locateWindowPop.value =
+      //               !controller.locateWindowPop.value;
+      //           selectedPlaceLocation = singlePlace;
+      //         },
+      //         infoWindow: InfoWindow(
+      //             title: "${singlePlace.placesName}",
+      //             snippet: "${singlePlace.address}"),
+      //         flat: true,
+      //         rotation: 1.1,
+      //         zIndex: 10,
+
+      //         visible: true,
+
+      //         markerId: MarkerId(singlePlace.id.toString()),
+      //         position: LatLng(
+      //           double.parse(singlePlace.latitude!),
+      //           double.parse(singlePlace.longitude!),
+      //         ),
+      //         // icon: BitmapDescriptor.fromBytes(markerIcon),
+      //       ),
+      //     );
+
+      //     log("markers  len is : ${markers.length}");
+      //     update();
+      //     // isLoading(false);
+      //   }
+      // }
+
+      update();
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> removeFromWishListFunction({placeId}) async {
+    try {
+      var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
+
+      isLoading(true);
+      await userService
+          .addToWishListMethod(
+        userId: userId,
+        placeId: placeId,
+        status: 0,
+      )
+          .then((value) {
+        if (value! == true) {
+          getPlacesList();
+        }
+      });
+
+      update();
+    } catch (e) {
+      log(e.toString());
     } finally {
       isLoading(false);
     }
   }
 
   clearFilterHomeScreenPlacesList() {
-    // if (Get.isRegistered<HomeController>()) {
-    //   var homeCont = Get.find<HomeController>();
     isLoading(true);
     isFiltered.value = false;
     placeFilteredList = [];
@@ -235,7 +376,7 @@ class HomeController extends GetxController {
         var singlePlace = placeDataList[i];
 
         // if (Get.isRegistered<HomeController>()) {
-        var bottombarController = Get.find<BottomNavigationbarController>();
+        var bottombarController = Get.find<BottomNavigationBarController>();
 
         // log(" singlePlace.latitude!.toDouble() ${singlePlace.latitude!.toDouble()}");
         // log(" singlePlace.longitude!.toDouble() ${singlePlace.longitude!.toDouble()}");
@@ -248,8 +389,7 @@ class HomeController extends GetxController {
               selectedPlaceLocation = singlePlace;
             },
             infoWindow: InfoWindow(
-                title: "${singlePlace.placesName}",
-                snippet: "${singlePlace.address}"),
+                title: singlePlace.placesName, snippet: singlePlace.address),
             flat: true,
             rotation: 1.1,
             zIndex: 10,
@@ -258,8 +398,8 @@ class HomeController extends GetxController {
 
             markerId: MarkerId(singlePlace.id.toString()),
             position: LatLng(
-              double.parse(singlePlace.latitude!),
-              double.parse(singlePlace.longitude!),
+              double.parse(singlePlace.latitude),
+              double.parse(singlePlace.longitude),
             ),
             // icon: BitmapDescriptor.fromBytes(markerIcon),
           ),
@@ -274,6 +414,45 @@ class HomeController extends GetxController {
     isLoading(false);
   }
 
-  // Get.back();
-  // }
+  addPlanToSelectedDay({placeId}) async {
+    if (Get.isRegistered<MyplanController>()) {
+      var myplanController = Get.find<MyplanController>();
+      PlanService planService = PlanService();
+      isLoading(true);
+      try {
+        bool planAdded = await planService.addPlanToDayMethod(
+              placeId: placeId,
+              dayNumber: myplanController.selectedDayData!.dayNumber,
+            ) ??
+            false;
+        if (planAdded) {
+          Fluttertoast.showToast(
+              msg: 'Place Added Successfully',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.blue,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          Get.back();
+          myplanController.planDaysGetListFunction();
+        } else {
+          Fluttertoast.showToast(
+            msg: 'Place Not Added.\nPlease try again later',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
+        }
+        update();
+      } catch (e) {
+        log(e.toString());
+      } finally {
+        isLoading(false);
+      }
+    }
+  }
 }

@@ -5,23 +5,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:playze/app/data/modal/class.dart';
-import 'package:playze/app/data/service/Userservise.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/modal/filters_model.dart';
 import '../../../data/modal/get_category_filter_model.dart';
 import '../../../data/modal/get_search_filter_model.dart';
 import '../../../data/provider/filter_provider.dart';
-import '../../BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
+import '../../../data/service/user_service.dart';
+import '../../bottom_navigation_bar/controllers/bottom_navigation_bar_controller.dart';
 import '../../home/controllers/home_controller.dart';
 
 class SearchScreenController extends GetxController {
-  //TODO: Implement SearchController
-
-  hp? a;
-  Usersevise usersevise = Usersevise();
+  FiltersModel? filtersModel;
+  UserService userService = UserService();
   RxBool isLoading = false.obs;
-  List<dp> CategoryList = [];
+  List<FilterData> categoryList = [];
 
   List<CategoryFilterData> filteredCatList = [];
   var filterProv = Provider.of<FilterProvider>(Get.context!);
@@ -51,23 +49,36 @@ class SearchScreenController extends GetxController {
   Future<void> getCategorylist() async {
     isLoading(true);
     try {
-      a = await usersevise.getCategorylist();
-      for (var element in a!.data) {
-        CategoryList.add(element);
-        // lip.add(element.name);
-      }
-      for (int i = 0; i < CategoryList.length; i++) {
-        log("CategoryList[i].id : ${CategoryList[i].id}");
-        for (var item in filterProv.filteredCatdataList) {
-          log("item.id : ${item.id}");
-          if (CategoryList[i].id == item.id) {
-            CategoryList[i].isSelected = true;
+      filtersModel = await userService.getCategorylistMethod();
+
+      if (filtersModel != null) {
+        for (var element in filtersModel!.data) {
+          categoryList.add(element);
+          // lip.add(element.name);
+        }
+        for (int i = 0; i < categoryList.length; i++) {
+          log("categoryList[i].id : ${categoryList[i].id}");
+          for (var item in filterProv.filteredCatdataList) {
+            log("item.id : ${item.id}");
+            if (categoryList[i].id == item.id) {
+              categoryList[i].isSelected = true;
+            }
           }
         }
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
       update();
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
     } finally {
       isLoading(false);
     }
@@ -82,7 +93,7 @@ class SearchScreenController extends GetxController {
     homeCont.isFiltered.value = false;
     homeCont.placeFilteredList.clear();
 
-    for (var item in CategoryList) {
+    for (var item in categoryList) {
       item.isSelected = false;
     }
     filterProv.updateFilterDataList([]);
@@ -95,7 +106,7 @@ class SearchScreenController extends GetxController {
     try {
       isLoading(true);
 
-      for (var item in CategoryList) {
+      for (var item in categoryList) {
         item.isSelected = false;
       }
       filterProv.updateFilterDataList([]);
@@ -113,7 +124,7 @@ class SearchScreenController extends GetxController {
 
       filterProv.updateSearchData(searchController.text.trim());
 
-      getSearchFilterModel = await usersevise.searchDataGetList(
+      getSearchFilterModel = await userService.searchDataGetListMethod(
         searchData: searchController.text.trim(),
       );
       // filteredCatList.forEach((element) {
@@ -140,13 +151,23 @@ class SearchScreenController extends GetxController {
           );
         }
 
+        // for (int i = 0; i < filteredCatList.length; i++) {
+        //   log("filteredCatList[i].name ::${filteredCatList[i].name}");
+        // }
         // <FilterProvider>;
         filterHomeScreenPlacesBySearchData();
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
 
-      for (int i = 0; i < filteredCatList.length; i++) {
-        log("filteredCatList[i].name ::${filteredCatList[i].name}");
-      }
       update();
     } catch (e) {
       log(e.toString());
@@ -181,7 +202,7 @@ class SearchScreenController extends GetxController {
           var singlePlace = homeCont.placeFilteredList[i];
 
           // if (Get.isRegistered<HomeController>()) {
-          var bottombarController = Get.find<BottomNavigationbarController>();
+          var bottombarController = Get.find<BottomNavigationBarController>();
 
           // log(" singlePlace.latitude!.toDouble() ${singlePlace.latitude!.toDouble()}");
           // log(" singlePlace.longitude!.toDouble() ${singlePlace.longitude!.toDouble()}");
@@ -194,8 +215,9 @@ class SearchScreenController extends GetxController {
                 homeCont.selectedPlaceLocation = singlePlace;
               },
               infoWindow: InfoWindow(
-                  title: "${singlePlace.placesName}",
-                  snippet: "${singlePlace.address}"),
+                title: singlePlace.placesName,
+                snippet: singlePlace.address,
+              ),
               flat: true,
               rotation: 1.1,
               zIndex: 10,
@@ -204,8 +226,8 @@ class SearchScreenController extends GetxController {
 
               markerId: MarkerId(singlePlace.id.toString()),
               position: LatLng(
-                double.parse(singlePlace.latitude!),
-                double.parse(singlePlace.longitude!),
+                double.parse(singlePlace.latitude),
+                double.parse(singlePlace.longitude),
               ),
               // icon: BitmapDescriptor.fromBytes(markerIcon),
             ),
@@ -242,7 +264,7 @@ class SearchScreenController extends GetxController {
       // var catStringids =
       //     selectedCatIdList.toString().split("[")[1].split("]")[0];
 
-      getCategoryFilterModel = await usersevise.categoryFilterGetList(
+      getCategoryFilterModel = await userService.categoryFilterGetListMethod(
         categoryFilterIdList: selectedId.value,
         latitude: currentLattitude.value,
         longitude: currentLongitude.value,
@@ -269,13 +291,23 @@ class SearchScreenController extends GetxController {
           );
         }
 
+        for (int i = 0; i < filteredCatList.length; i++) {
+          log("filteredCatList[i].name ::${filteredCatList[i].name}");
+        }
         // <FilterProvider>;
         filterHomeScreenPlacesList();
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
 
-      for (int i = 0; i < filteredCatList.length; i++) {
-        log("filteredCatList[i].name ::${filteredCatList[i].name}");
-      }
       update();
     } catch (e) {
       log(e.toString());
@@ -309,7 +341,7 @@ class SearchScreenController extends GetxController {
           var singlePlace = homeCont.placeFilteredList[i];
 
           // if (Get.isRegistered<HomeController>()) {
-          var bottombarController = Get.find<BottomNavigationbarController>();
+          var bottombarController = Get.find<BottomNavigationBarController>();
 
           // log(" singlePlace.latitude!.toDouble() ${singlePlace.latitude!.toDouble()}");
           // log(" singlePlace.longitude!.toDouble() ${singlePlace.longitude!.toDouble()}");
@@ -322,8 +354,7 @@ class SearchScreenController extends GetxController {
                 homeCont.selectedPlaceLocation = singlePlace;
               },
               infoWindow: InfoWindow(
-                  title: "${singlePlace.placesName}",
-                  snippet: "${singlePlace.address}"),
+                  title: singlePlace.placesName, snippet: singlePlace.address),
               flat: true,
               rotation: 1.1,
               zIndex: 10,
@@ -332,8 +363,8 @@ class SearchScreenController extends GetxController {
 
               markerId: MarkerId(singlePlace.id.toString()),
               position: LatLng(
-                double.parse(singlePlace.latitude!),
-                double.parse(singlePlace.longitude!),
+                double.parse(singlePlace.latitude),
+                double.parse(singlePlace.longitude),
               ),
               // icon: BitmapDescriptor.fromBytes(markerIcon),
             ),

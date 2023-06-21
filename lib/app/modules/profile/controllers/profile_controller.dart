@@ -1,39 +1,39 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:playze/Reusability/utils/shared_prefs.dart';
-import 'package:playze/app/data/service/Userservise.dart';
+import 'package:playze/reusability/utils/shared_prefs.dart';
 
-import '../../../data/modal/userdata.dart';
+import '../../../data/modal/user_data_model.dart';
+import '../../../data/service/user_service.dart';
 
 class ProfileController extends GetxController {
-  //TODO: Implement ProfileController
-
   final count = 0.obs;
   String? id;
   String? lname;
   String? email;
   String? mnumbar;
   List<ChildrenDetails> childrenList = [];
-  Usersevise usersevise = Usersevise();
+  UserService userService = UserService();
   RxBool isLoading = false.obs;
-  DataModal? a;
+  UserDataModal? userDataModal;
 
   @override
   void onInit() {
     super.onInit();
-    getAbout();
+    getUserProfileData();
   }
 
-  Future<void> getAbout() async {
+  Future<void> getUserProfileData() async {
     isLoading(true);
     try {
       id = SharedPrefs().value.read(SharedPrefs.userIdKey);
-      a = await usersevise.getdata(id);
+      userDataModal = await userService.getUserDetailsMethod(id);
 
-      if (a != null) {
+      if (userDataModal != null) {
         childrenList.clear();
-        childrenList.addAll(a!.data.children);
+        childrenList.addAll(userDataModal!.data.children);
         // for (var element in a!.data.children) {
         // }
 
@@ -41,6 +41,17 @@ class ProfileController extends GetxController {
         //   log("childrenList[i].name :: ${childrenList[i].name}");
         // }
         update();
+      } else {
+        Fluttertoast.showToast(
+          msg:
+              'Something went wrong getting user details. Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
 
       log("childrenList.length :: ${childrenList.length}");

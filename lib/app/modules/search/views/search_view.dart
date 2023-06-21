@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:playze/Reusability/utils/app_colors.dart';
+import 'package:playze/reusability/utils/app_colors.dart';
 
-import '../../../../Reusability/utils/util.dart';
+import '../../../../reusability/utils/util.dart';
 import '../controllers/search_controller.dart';
 
 class SearchView extends GetView<SearchScreenController> {
@@ -120,7 +120,7 @@ class SearchView extends GetView<SearchScreenController> {
                     GetBuilder<SearchScreenController>(builder: (context) {
                       return ListView.separated(
                         shrinkWrap: true,
-                        itemCount: controller.CategoryList.length,
+                        itemCount: controller.categoryList.length,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 0, vertical: 0),
                         separatorBuilder: (context, index) {
@@ -130,10 +130,10 @@ class SearchView extends GetView<SearchScreenController> {
                           return ListTile(
                             onTap: () {
                               controller.selectedId.value =
-                                  controller.CategoryList[index].id;
+                                  controller.categoryList[index].id;
                               controller.filterProv.updateFilterDataList(
                                 [
-                                  controller.CategoryList[index],
+                                  controller.categoryList[index],
                                 ],
                               );
                               controller.searchController.clear();
@@ -142,12 +142,12 @@ class SearchView extends GetView<SearchScreenController> {
                               controller.filterPlacesListByCategory();
                             },
                             dense: true,
-                            selected: controller.CategoryList[index].isSelected,
+                            selected: controller.categoryList[index].isSelected,
                             selectedTileColor: AppColors.primaryColor,
                             title: Text(
-                              controller.CategoryList[index].name,
+                              controller.categoryList[index].name,
                               style: TextStyle(
-                                color: controller.CategoryList[index].isSelected
+                                color: controller.categoryList[index].isSelected
                                     ? AppColors.whiteColor
                                     : AppColors.greyColor,
                               ),
@@ -166,30 +166,12 @@ class SearchView extends GetView<SearchScreenController> {
                                 horizontal: 10, vertical: 0),
                             trailing: Icon(
                               Icons.arrow_forward_ios,
-                              color: controller.CategoryList[index].isSelected
+                              color: controller.categoryList[index].isSelected
                                   ? AppColors.whiteColor
                                   : AppColors.greyColor,
                               size: 16,
                             ),
                           );
-
-                          // SizedBox(
-                          //   height: Get.height * 0.06,
-                          //   child: Row(
-                          //     children: [
-                          //       Text(
-                          //         controller.CategoryList[index].name,
-                          //         style: const TextStyle(color: Colors.grey),
-                          //       ),
-                          //       const Spacer(),
-                          //       const Icon(
-                          //         Icons.arrow_forward_ios,
-                          //         color: Colors.grey,
-                          //         size: 16,
-                          //       )
-                          //     ],
-                          //   ),
-                          // );
                         },
                       );
                     }),

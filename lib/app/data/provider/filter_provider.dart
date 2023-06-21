@@ -2,13 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import '../modal/class.dart';
+import '../modal/filters_model.dart';
 
 class FilterProvider extends ChangeNotifier {
   int filterCategoryCount = 0;
   String searchString = "";
 
-  List<dp> filteredCatdataList = [];
+  List<FilterData> filteredCatdataList = [];
 
   void updateSearchData(String searchData) {
     searchString = searchData;
@@ -24,7 +24,7 @@ class FilterProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateFilterDataList(List<dp> filterDataList) {
+  void updateFilterDataList(List<FilterData> filterDataList) {
     filteredCatdataList = filterDataList;
 
     updateFilterCount(filteredCatdataList.length);

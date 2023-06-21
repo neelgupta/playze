@@ -1,16 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:playze/Reusability/utils/shared_prefs.dart';
-import 'package:playze/app/data/service/loginservice.dart';
+import 'package:playze/app/data/modal/otp_model.dart';
+import 'package:playze/reusability/utils/shared_prefs.dart';
+import 'package:playze/app/data/service/login_service.dart';
 import 'package:playze/app/routes/app_pages.dart';
 
-class VerificationController extends GetxController {
-  //TODO: Implement VerificationController
+import '../../../data/modal/common_message_data.dart';
 
+class VerificationController extends GetxController {
   final count = 0.obs;
   TextEditingController otpController = TextEditingController();
-  loginService Loginervice = loginService();
+  LoginService loginService = LoginService();
   var argumentData = Get.arguments;
   RxBool isLoading = false.obs;
   String? usersId;
@@ -23,59 +26,74 @@ class VerificationController extends GetxController {
     super.onInit();
     usersId = SharedPrefs().value.read(SharedPrefs.userIdKey);
     email = SharedPrefs().value.read(SharedPrefs.emailKey);
-    phonenumbar = SharedPrefs().value.read(SharedPrefs.mnumbarKey);
-    print("usersId:+>$usersId");
-    print("usersId:+>$email");
-    print("usersId:+>$phonenumbar");
+    phonenumbar = SharedPrefs().value.read(SharedPrefs.mobileNumbarKey);
+    log("usersId:+>$usersId");
+    log("usersId:+>$email");
+    log("usersId:+>$phonenumbar");
     formattedPhoneNumber =
         phonenumbar?.replaceFirst("(d{3})(d{3})(d+)", "\$1) \$2-\$3");
   }
 
-  Future<void> otp() async {
+  Future<void> sendOtpMethod() async {
     if (otpController.text.trim().isEmpty ||
         otpController.text.trim().length < 4) {
       Fluttertoast.showToast(
-          msg: 'Please Enter Correct OTP',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0);
+        msg: 'Please Enter Correct OTP',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     } else {
       isLoading(true);
       try {
-        var sigin = await Loginervice.postotp(
+        OtpModel? otpSent = await loginService.sendOtpMethod(
             argumentData[0], otpController.text.trim());
-        if (sigin?.status == 200) {
-          Fluttertoast.showToast(
-              msg: '${sigin?.message}',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.blue,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          SharedPrefs().value.write(SharedPrefs.tokenKey, sigin?.data.token);
-          SharedPrefs().value.write(SharedPrefs.userIdKey, sigin?.data.usersId);
-          SharedPrefs().value.write(SharedPrefs.setBool, true);
-          print("====>${(SharedPrefs().value.read(SharedPrefs.tokenKey))}");
-          print("====>${(SharedPrefs().value.read(SharedPrefs.userIdKey))}");
-          isLoading(false);
-          Get.offNamedUntil(
-            Routes.ADD_PROFILE_PICTURE,
-            (route) => false,
-          );
+        if (otpSent != null) {
+          if (otpSent.status == 200) {
+            Fluttertoast.showToast(
+                msg: otpSent.message,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.blue,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            SharedPrefs().value.write(SharedPrefs.tokenKey, otpSent.data.token);
+            SharedPrefs()
+                .value
+                .write(SharedPrefs.userIdKey, otpSent.data.usersId);
+            SharedPrefs().value.write(SharedPrefs.setBool, true);
+            log("====>${(SharedPrefs().value.read(SharedPrefs.tokenKey))}");
+            log("====>${(SharedPrefs().value.read(SharedPrefs.userIdKey))}");
+            isLoading(false);
+            Get.offNamedUntil(
+              Routes.ADD_PROFILE_PICTURE,
+              (route) => false,
+            );
+          } else {
+            isLoading(false);
+            //  Fluttertoast.showToast(
+            //      msg: '${sigin?.message}',
+            //      toastLength: Toast.LENGTH_SHORT,
+            //      gravity: ToastGravity.BOTTOM,
+            //      timeInSecForIosWeb: 1,
+            //      backgroundColor: Colors.blue,
+            //      textColor: Colors.white,
+            //      fontSize: 16.0);
+          }
         } else {
-          isLoading(false);
-          //  Fluttertoast.showToast(
-          //      msg: '${sigin?.message}',
-          //      toastLength: Toast.LENGTH_SHORT,
-          //      gravity: ToastGravity.BOTTOM,
-          //      timeInSecForIosWeb: 1,
-          //      backgroundColor: Colors.blue,
-          //      textColor: Colors.white,
-          //      fontSize: 16.0);
+          Fluttertoast.showToast(
+            msg: 'Something went wrong. Please try again later...!',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0,
+          );
         }
       } catch (e) {
         rethrow;
@@ -85,31 +103,43 @@ class VerificationController extends GetxController {
     }
   }
 
-  Future<void> Rotp() async {
+  Future<void> resendOtpMethod() async {
     isLoading(true);
     try {
-      var sigin = await Loginervice.postRotp(email);
-      if (sigin?.status == 200) {
-        isLoading(false);
-        Fluttertoast.showToast(
-            msg: '${sigin?.message}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.blue,
-            textColor: Colors.white,
-            fontSize: 16.0);
+      CommonMessageData? otpResent = await loginService.resendOtpMethod(email);
+      if (otpResent != null) {
+        if (otpResent.status == 200) {
+          isLoading(false);
+          Fluttertoast.showToast(
+              msg: otpResent.message,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.blue,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        } else {
+          isLoading(false);
+          Fluttertoast.showToast(
+              msg: otpResent.message,
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.blue,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          Get.back();
+        }
       } else {
-        isLoading(false);
         Fluttertoast.showToast(
-            msg: '${sigin?.message}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.blue,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        Get.back();
+          msg: 'Something went wrong. Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
     } catch (e) {
       rethrow;

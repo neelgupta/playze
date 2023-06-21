@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+// ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 import '../../routes/app_pages.dart';
-import 'appexception.dart';
+import 'app_exception.dart';
 
 class NetworkHandler {
   Future<dynamic> post(String url, http.Client client, token,
@@ -15,9 +17,9 @@ class NetworkHandler {
       HttpHeaders.authorizationHeader: "Bearer $token"
     };
 
-    var responseJson;
-    print(jsonEncode(model));
-    print('url: $url');
+    dynamic responseJson;
+    log(jsonEncode(model));
+    log('url: $url');
     try {
       final http.Response response = await client.post(Uri.parse(url),
           headers: headers, body: model != null ? jsonEncode(model) : null);
@@ -40,9 +42,9 @@ class NetworkHandler {
       'Content-Type': 'application/json; charset=UTF-8',
       HttpHeaders.authorizationHeader: token
     };
-    var responseJson;
-    print(jsonEncode(model));
-    print('token: ' + token);
+    dynamic responseJson;
+    log(jsonEncode(model));
+    log('token: $token');
     try {
       final http.Response response = await client.delete(Uri.parse(url),
           headers: headers, body: model != null ? jsonEncode(model) : null);
@@ -64,9 +66,9 @@ class NetworkHandler {
       HttpHeaders.authorizationHeader: "Bearer $token"
     };
 
-    var responseJson;
-    print(jsonEncode(model));
-    print('token: ' + token);
+    dynamic responseJson;
+    log(jsonEncode(model));
+    log('token: $token');
     try {
       var mimeType = "";
       if (fileType == "png") {
@@ -100,9 +102,9 @@ class NetworkHandler {
       'Content-Type': 'application/json; charset=UTF-8',
       HttpHeaders.authorizationHeader: token
     };
-    var responseJson;
-    print(jsonEncode(model));
-    print('token: ' + token);
+    dynamic responseJson;
+    log(jsonEncode(model));
+    log('token: $token');
     try {
       final http.Response response = await client.put(Uri.parse(url),
           headers: headers, body: model != null ? jsonEncode(model) : null);
@@ -117,7 +119,7 @@ class NetworkHandler {
     // Map<String, String> headers = {
     //   'Content-Type': 'application/json; charset=UTF-8',
     // };
-    print(data);
+    log(data);
     final http.Response response;
     try {
       response = await client.put(Uri.parse(url), body: data);
@@ -137,12 +139,12 @@ class NetworkHandler {
       'Content-Type': 'application/json; charset=UTF-8',
       HttpHeaders.authorizationHeader: "Bearer $token"
     };
-    var responseJson;
-    print(url);
+    dynamic responseJson;
+    log(url);
     try {
       http.Response response =
           await client.get(Uri.parse(url), headers: headers);
-      print(response.body);
+      log(response.body);
       if (response.statusCode == 502) {
         response = await check502(url, client, response);
         responseJson = returnResponse(response, url, "GET");
@@ -160,18 +162,18 @@ class NetworkHandler {
   Future<http.Response> check502(
       String url, http.Client client, http.Response res) async {
     logger(method: 'GET', response: res, url: url, model: '');
-    print('502 error : ${res.statusCode}');
-    print('502 error : $url');
+    log('502 error : ${res.statusCode}');
+    log('502 error : $url');
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=UTF-8',
       // HttpHeaders.authorizationHeader: token
     };
     http.Response response = await client.get(Uri.parse(url), headers: headers);
-    print('502 error : 1 ${response.statusCode}');
+    log('502 error : 1 ${response.statusCode}');
     if (response.statusCode == 502) {
       http.Response response1 =
           await client.get(Uri.parse(url), headers: headers);
-      print('502 error : 2 ${response1.statusCode}');
+      log('502 error : 2 ${response1.statusCode}');
       return response1;
     } else {
       return response;
@@ -185,7 +187,7 @@ class NetworkHandler {
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=UTF-8',
     };
-    var responseJson;
+    dynamic responseJson;
     try {
       final http.Response response =
           await client.get(Uri.parse(url), headers: headers);
@@ -199,7 +201,7 @@ class NetworkHandler {
   Future<dynamic> postwithoutToken(String url, http.Client client,
       {dynamic model}) async {
     Map<String, String> headers = {'Content-Type': 'application/json'};
-    var responseJson;
+    dynamic responseJson;
     try {
       final http.Response response = await client.post(Uri.parse(url),
           headers: headers, body: jsonEncode(model));
@@ -218,7 +220,7 @@ class NetworkHandler {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: btoken
     };
-    var responseJson;
+    dynamic responseJson;
     try {
       final http.Response response = await client.post(Uri.parse(url),
           headers: headers, body: jsonEncode(model));
@@ -236,14 +238,14 @@ class NetworkHandler {
 
   dynamic returnResponse(http.Response response, url, method,
       {bool toLogin = true, model, bool showError = true}) async {
-    print(response.body);
-    print(response.statusCode);
+    log(response.body);
+    log("response.statusCode : ${response.statusCode}");
     switch (response.statusCode) {
       case 200:
-        var responseJson = response.body;
+        dynamic responseJson = response.body;
         return responseJson;
       case 201:
-        var responseJson = response.body;
+        dynamic responseJson = response.body;
         return responseJson;
 
       // throw FetchDataException(
@@ -251,7 +253,7 @@ class NetworkHandler {
     }
   }
 
-  _futureDelayed() {
+  futureDelayed() {
     Future.delayed(const Duration(seconds: 3), () {
       // LoginSession.shared.logOutExpire();
       Get.offAllNamed(Routes.SIGNIN);

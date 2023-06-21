@@ -22,10 +22,8 @@ class GetEmojiModel {
 
   factory GetEmojiModel.fromJson(Map<String, dynamic> json) => GetEmojiModel(
         status: json["status"] ?? 0,
-        data: json["data"] == null
-            ? []
-            : List<ActiveEmojiData>.from(
-                json["data"]!.map((x) => ActiveEmojiData.fromJson(x))),
+        data: List<ActiveEmojiData>.from(
+            (json["data"] ?? []).map((x) => ActiveEmojiData.fromJson(x))),
         message: json["message"] ?? "",
       );
 
@@ -37,9 +35,9 @@ class GetEmojiModel {
 }
 
 class ActiveEmojiData {
-  String id;
-  String title;
-  List<EmojiData> emojis;
+  final String id;
+  final String title;
+  final List<EmojiData> emojis;
 
   ActiveEmojiData({
     required this.id,
@@ -51,10 +49,8 @@ class ActiveEmojiData {
       ActiveEmojiData(
         id: json["id"] ?? "",
         title: json["title"] ?? "",
-        emojis: json["emojis"] == null
-            ? []
-            : List<EmojiData>.from(
-                json["emojis"]!.map((x) => EmojiData.fromJson(x))),
+        emojis: List<EmojiData>.from(
+            (json["emojis"] ?? []).map((x) => EmojiData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,8 +61,8 @@ class ActiveEmojiData {
 }
 
 class EmojiData {
-  String id;
-  String images;
+  final String id;
+  final String images;
 
   EmojiData({
     required this.id,

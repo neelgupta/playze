@@ -5,10 +5,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:playze/Reusability/utils/app_colors.dart';
+import 'package:playze/reusability/utils/app_colors.dart';
 
-import '../../../../Reusability/shared/textStyle.dart';
-import '../../../../Reusability/utils/util.dart';
+import '../../../../reusability/shared/app_text_style.dart';
+import '../../../../reusability/utils/util.dart';
 import '../../../../generated/locales.g.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/myplan_controller.dart';
@@ -168,378 +168,422 @@ class _MyPlansListviewState extends State<MyPlansListview>
                             : controller.planDataList.isEmpty
                                 ? const Center(
                                     child: Text(
-                                        "No plans Add some from plus button"),
+                                      "You Have No plans.\n\nAdd some by clicking add button",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: AppColors.blackColor,
+                                        fontSize: 14,
+                                      ),
+                                    ),
                                   )
-                                : ReorderableListView.builder(
-                                    onReorder:
-                                        (int oldIndex, int newIndex) async {
-                                      if (newIndex > oldIndex) {
-                                        newIndex -= 1;
-                                      }
-                                      bool reordered = await controller
-                                          .planReorderInListFunction(
-                                        oldIndex: oldIndex + 1,
-                                        newIndex: newIndex,
-                                      );
-                                      if (reordered) {
-                                        final items = controller.planDataList
-                                            .removeAt(oldIndex);
-                                        controller.planDataList
-                                            .insert(newIndex, items);
-
-                                        controller.update();
-                                      }
-                                      // if (oldIndex < newIndex) {
-                                      //   newIndex -= 1;
-                                      // }
-                                      // final int item =
-                                      //     controller.items.removeAt(oldIndex);
-                                      // controller.items.insert(newIndex, item);
+                                : RefreshIndicator(
+                                    onRefresh: () {
+                                      return controller
+                                          .planGetlistByDayFunction();
                                     },
-                                    shrinkWrap: true,
-                                    itemCount: controller.planDataList.length,
-                                    itemBuilder: (context, index) {
-                                      var singlePlan =
-                                          controller.planDataList[index];
-                                      return Container(
-                                        key: Key('$index'),
-                                        child: Column(
-                                          children: [
-                                            Card(
-                                              elevation: 2,
-                                              color: Colors.white,
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
+                                    child: ReorderableListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      onReorder:
+                                          (int oldIndex, int newIndex) async {
+                                        if (newIndex > oldIndex) {
+                                          newIndex -= 1;
+                                        }
+                                        bool reordered = await controller
+                                            .planReorderInListFunction(
+                                          oldIndex: oldIndex + 1,
+                                          newIndex: newIndex,
+                                        );
+                                        if (reordered) {
+                                          final items = controller.planDataList
+                                              .removeAt(oldIndex);
+                                          controller.planDataList
+                                              .insert(newIndex, items);
+
+                                          controller.update();
+                                        }
+                                        // if (oldIndex < newIndex) {
+                                        //   newIndex -= 1;
+                                        // }
+                                        // final int item =
+                                        //     controller.items.removeAt(oldIndex);
+                                        // controller.items.insert(newIndex, item);
+                                      },
+                                      shrinkWrap: true,
+                                      itemCount: controller.planDataList.length,
+                                      itemBuilder: (context, index) {
+                                        var singlePlan =
+                                            controller.planDataList[index];
+                                        return Padding(
+                                          key: Key('$index'),
+                                          padding:
+                                              const EdgeInsets.only(bottom: 0),
+                                          child: Column(
+                                            children: [
+                                              // controller.planDataList.length -
+                                              //             1 ==
+                                              //         index
+                                              //     ? const SizedBox()
+                                              //     :
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20),
+                                                child: Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: Get.height * 0.08,
+                                                      width: Get.width * 0.02,
+                                                      child: Image.asset(
+                                                          "assets/images/Line.png"),
+                                                    ),
+                                                    w(10),
+                                                    SizedBox(
+                                                      height: Get.height * 0.08,
+                                                      width: Get.width * 0.04,
+                                                      child: Image.asset(
+                                                          "assets/images/Blueman.png"),
+                                                    ),
+                                                    w(5),
+                                                    Text(
+                                                      singlePlan.duration,
+                                                      // "2 min by walking",
+                                                      style: const TextStyle(
+                                                          fontSize: 12),
+                                                    )
+                                                  ],
                                                 ),
                                               ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Container(
-                                                          height: 121,
-                                                          width:
-                                                              Get.width * 0.8,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            // image: DecorationImage(
-                                                            //     image: AssetImage(
-                                                            //         "assets/images/pic.png"),
-                                                            //     fit: BoxFit.fill),
-                                                            color: Colors.cyan,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                            ),
-                                                          ),
-                                                          child: Stack(
-                                                            children: [
-                                                              ClipRRect(
-                                                                borderRadius:
-                                                                    const BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
+                                              Container(
+                                                // margin:
+                                                //     const EdgeInsets.only(bottom: 15),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(10),
+                                                  ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: AppColors.greyColor
+                                                          .withOpacity(0.12),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 5,
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Column(
+                                                  children: [
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Container(
+                                                                height: 121,
+                                                                width:
+                                                                    Get.width *
+                                                                        0.8,
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  // image: DecorationImage(
+                                                                  //     image: AssetImage(
+                                                                  //         "assets/images/pic.png"),
+                                                                  //     fit: BoxFit.fill),
+                                                                  color: Colors
+                                                                      .cyan,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            10),
+                                                                  ),
                                                                 ),
-                                                                child:
-                                                                    CachedNetworkImage(
-                                                                  imageUrl:
-                                                                      singlePlan
-                                                                          .placeImage,
-                                                                  height: 121,
-                                                                  width: double
-                                                                      .infinity,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                  errorWidget:
-                                                                      (context,
-                                                                          url,
-                                                                          error) {
-                                                                    return const Center(
+                                                                child: Stack(
+                                                                  children: [
+                                                                    ClipRRect(
+                                                                      borderRadius:
+                                                                          const BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(10),
+                                                                        topRight:
+                                                                            Radius.circular(10),
+                                                                      ),
                                                                       child:
-                                                                          Text(
-                                                                        "Image Not Loaded",
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              AppColors.blackColor,
-                                                                          fontSize:
-                                                                              11,
+                                                                          CachedNetworkImage(
+                                                                        imageUrl:
+                                                                            singlePlan.placeImage,
+                                                                        height:
+                                                                            121,
+                                                                        width: double
+                                                                            .infinity,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        errorWidget: (context,
+                                                                            url,
+                                                                            error) {
+                                                                          return const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              "Image Not Loaded",
+                                                                              textAlign: TextAlign.center,
+                                                                              style: TextStyle(
+                                                                                color: AppColors.blackColor,
+                                                                                fontSize: 11,
+                                                                              ),
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                    Positioned(
+                                                                      top: 10,
+                                                                      left: 10,
+                                                                      child:
+                                                                          Container(
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        decoration: const BoxDecoration(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            borderRadius: BorderRadius.all(Radius.circular(20))),
+                                                                        height: Get.height *
+                                                                            0.04,
+                                                                        width: Get.width *
+                                                                            0.15,
+                                                                        child:
+                                                                            Text(
+                                                                          singlePlan
+                                                                              .startTime,
+                                                                          style:
+                                                                              const TextStyle(fontSize: 12),
                                                                         ),
                                                                       ),
-                                                                    );
-                                                                  },
+                                                                    ),
+                                                                    Positioned(
+                                                                      top: 10,
+                                                                      left: 70,
+                                                                      child:
+                                                                          GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          showModalBottomSheet(
+                                                                            context:
+                                                                                context,
+                                                                            isScrollControlled:
+                                                                                true,
+                                                                            shape:
+                                                                                const RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(20),
+                                                                                topRight: Radius.circular(20),
+                                                                              ),
+                                                                            ),
+                                                                            constraints:
+                                                                                BoxConstraints(maxHeight: Get.size.height * 0.7),
+                                                                            builder:
+                                                                                (BuildContext context) {
+                                                                              return BottomEditPlanBody(
+                                                                                planId: singlePlan.id,
+                                                                              );
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          padding:
+                                                                              const EdgeInsets.all(7),
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          decoration: const BoxDecoration(
+                                                                              color: Colors.white,
+                                                                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                                                                          height:
+                                                                              Get.height * 0.04,
+                                                                          width:
+                                                                              Get.width * 0.1,
+                                                                          child:
+                                                                              Image.asset(
+                                                                            "assets/images/edit-line.png",
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ),
-                                                              Positioned(
-                                                                top: 10,
-                                                                left: 10,
-                                                                child:
-                                                                    Container(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  decoration: const BoxDecoration(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      borderRadius:
-                                                                          BorderRadius.all(
-                                                                              Radius.circular(20))),
-                                                                  height:
-                                                                      Get.height *
-                                                                          0.04,
-                                                                  width:
-                                                                      Get.width *
-                                                                          0.15,
-                                                                  child: Text(
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                            height: Get.height *
+                                                                0.025),
+                                                        Stack(
+                                                          children: [
+                                                            Container(
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 10,
+                                                                      right:
+                                                                          10),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
                                                                     singlePlan
-                                                                        .startTime,
+                                                                        .placeName,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                    ),
+                                                                  ),
+                                                                  h(5),
+                                                                  Text(
+                                                                    singlePlan
+                                                                        .placeDescription,
                                                                     style: const TextStyle(
                                                                         fontSize:
                                                                             12),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                              Positioned(
-                                                                top: 10,
-                                                                left: 70,
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    showModalBottomSheet(
-                                                                      context:
-                                                                          context,
-                                                                      isScrollControlled:
-                                                                          true,
-                                                                      shape:
-                                                                          const RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topLeft:
-                                                                              Radius.circular(20),
-                                                                          topRight:
-                                                                              Radius.circular(20),
+                                                                  h(10),
+                                                                  const Divider(),
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Expanded(
+                                                                        // width: Get.width * 0.3,
+                                                                        child:
+                                                                            GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            // controller
+                                                                            //     .gotoMapPlaceLocation(placeId: singlePlan.id);
+                                                                          },
+                                                                          child:
+                                                                              Row(
+                                                                            children: [
+                                                                              Container(padding: const EdgeInsets.all(7), alignment: Alignment.center, decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20))), height: Get.height * 0.04, width: Get.width * 0.1, child: Image.asset("assets/images/Navigate.png")),
+                                                                              w(10),
+                                                                              const Text(
+                                                                                "Navigate",
+                                                                                style: TextStyle(fontSize: 14),
+                                                                              )
+                                                                            ],
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                      constraints:
-                                                                          BoxConstraints(
-                                                                              maxHeight: Get.size.height * 0.7),
-                                                                      builder:
-                                                                          (BuildContext
-                                                                              context) {
-                                                                        return BottomEditPlanBody(
-                                                                          planId:
-                                                                              singlePlan.id,
-                                                                        );
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(7),
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    decoration: const BoxDecoration(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(20))),
-                                                                    height:
-                                                                        Get.height *
-                                                                            0.04,
-                                                                    width:
-                                                                        Get.width *
-                                                                            0.1,
-                                                                    child: Image
-                                                                        .asset(
-                                                                      "assets/images/edit-line.png",
-                                                                    ),
+                                                                      Expanded(
+                                                                        // width: Get.width * 0.3,
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Container(
+                                                                                padding: const EdgeInsets.all(7),
+                                                                                alignment: Alignment.center,
+                                                                                decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20))),
+                                                                                height: Get.height * 0.04,
+                                                                                width: Get.width * 0.1,
+                                                                                child: Image.asset("assets/images/clock.png")),
+                                                                            w(10),
+                                                                            Text(
+                                                                              singlePlan.time,
+                                                                              style: const TextStyle(
+                                                                                fontSize: 14,
+                                                                              ),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      )
+                                                                    ],
                                                                   ),
+                                                                  h(10),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Positioned(
+                                                              right: 10,
+                                                              top: 0,
+                                                              child: Text(
+                                                                singlePlan
+                                                                    .changeDuration,
+                                                                // "1 hours 30 mins",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 13,
+                                                                  color: AppColors
+                                                                      .greyColor,
                                                                 ),
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                      height:
-                                                          Get.height * 0.025),
-                                                  Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              left: 10,
-                                                              right: 10),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            singlePlan
-                                                                .placeName,
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        16),
-                                                          ),
-                                                          h(5),
-                                                          Text(
-                                                            singlePlan
-                                                                .placeDescription,
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        12),
-                                                          ),
-                                                          h(10),
-                                                          const Divider(),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Expanded(
-                                                                // width: Get.width * 0.3,
-                                                                child: Row(
-                                                                  children: [
-                                                                    Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(
-                                                                                7),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        decoration: const BoxDecoration(
-                                                                            color: Colors
-                                                                                .white,
-                                                                            borderRadius: BorderRadius.all(Radius.circular(
-                                                                                20))),
-                                                                        height: Get.height *
-                                                                            0.04,
-                                                                        width: Get.width *
-                                                                            0.1,
-                                                                        child: Image.asset(
-                                                                            "assets/images/Navigate.png")),
-                                                                    w(10),
-                                                                    const Text(
-                                                                      "Navigate",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              14),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                // width: Get.width * 0.3,
-                                                                child: Row(
-                                                                  children: [
-                                                                    Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(
-                                                                                7),
-                                                                        alignment:
-                                                                            Alignment
-                                                                                .center,
-                                                                        decoration: const BoxDecoration(
-                                                                            color: Colors
-                                                                                .white,
-                                                                            borderRadius: BorderRadius.all(Radius.circular(
-                                                                                20))),
-                                                                        height: Get.height *
-                                                                            0.04,
-                                                                        width: Get.width *
-                                                                            0.1,
-                                                                        child: Image.asset(
-                                                                            "assets/images/clock.png")),
-                                                                    w(10),
-                                                                    Text(
-                                                                      singlePlan
-                                                                          .time,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                          h(10),
-                                                        ],
-                                                      )),
-                                                ],
-                                              ),
-                                            ),
-                                            controller.planDataList.length -
-                                                        1 ==
-                                                    index
-                                                ? const SizedBox()
-                                                : Container(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 20),
-                                                    child: Row(
-                                                      children: [
-                                                        SizedBox(
-                                                          height:
-                                                              Get.height * 0.08,
-                                                          width:
-                                                              Get.width * 0.02,
-                                                          child: Image.asset(
-                                                              "assets/images/Line.png"),
-                                                        ),
-                                                        w(10),
-                                                        SizedBox(
-                                                          height:
-                                                              Get.height * 0.08,
-                                                          width:
-                                                              Get.width * 0.04,
-                                                          child: Image.asset(
-                                                              "assets/images/Blueman.png"),
-                                                        ),
-                                                        w(5),
-                                                        Text(
-                                                          singlePlan.duration,
-                                                          // "2 min by walking",
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 12),
-                                                        )
                                                       ],
                                                     ),
-                                                  ),
-                                          ],
-                                        ),
-                                      );
-                                    },
+                                                    // controller.planDataList.length -
+                                                    //             1 ==
+                                                    //         index
+                                                    //     ? const SizedBox()
+                                                    //     : Container(
+                                                    //         padding:
+                                                    //             const EdgeInsets.only(
+                                                    //                 left: 20),
+                                                    //         child: Row(
+                                                    //           children: [
+                                                    //             SizedBox(
+                                                    //               height: Get.height *
+                                                    //                   0.08,
+                                                    //               width: Get.width *
+                                                    //                   0.02,
+                                                    //               child: Image.asset(
+                                                    //                   "assets/images/Line.png"),
+                                                    //             ),
+                                                    //             w(10),
+                                                    //             SizedBox(
+                                                    //               height: Get.height *
+                                                    //                   0.08,
+                                                    //               width: Get.width *
+                                                    //                   0.04,
+                                                    //               child: Image.asset(
+                                                    //                   "assets/images/Blueman.png"),
+                                                    //             ),
+                                                    //             w(5),
+                                                    //             Text(
+                                                    //               singlePlan.duration,
+                                                    //               // "2 min by walking",
+                                                    //               style:
+                                                    //                   const TextStyle(
+                                                    //                       fontSize:
+                                                    //                           12),
+                                                    //             )
+                                                    //           ],
+                                                    //         ),
+                                                    //       ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   );
                       }).toList(),
                     ),
@@ -593,7 +637,9 @@ class BottomEditPlanBody extends StatelessWidget {
                   bottomSheetColor: AppColors.whiteColor,
                   context: context,
                   builder: (context, scrollController, bottomSheetOffset) {
-                    return StartTimeListviewBody();
+                    return StartTimeListviewBody(
+                      planId: planId,
+                    );
                   },
                   // anchors: [0, 0.5, 1],
                 );
@@ -758,7 +804,9 @@ class BottomEditPlanBody extends StatelessWidget {
                   bottomSheetColor: AppColors.whiteColor,
                   context: context,
                   builder: (context, scrollController, bottomSheetOffset) {
-                    return ChangeDurationListviewBody();
+                    return ChangeDurationListviewBody(
+                      planId: planId,
+                    );
                   },
                   // anchors: [0, 0.5, 1],
                 );
@@ -920,8 +968,10 @@ class BottomEditPlanBody extends StatelessWidget {
 class StartTimeListviewBody extends StatelessWidget {
   StartTimeListviewBody({
     super.key,
+    required this.planId,
   });
 
+  final String planId;
   final controller = Get.find<MyplanController>();
 
   @override
@@ -955,10 +1005,17 @@ class StartTimeListviewBody extends StatelessWidget {
             itemBuilder: (context, index) {
               var singleTime = controller.startTimeList[index];
               String displayTime = DateFormat("h:mmaa").format(singleTime);
+              String apiSendTime = DateFormat("hh:mm").format(singleTime);
 
               return ListTile(
                 dense: true,
-                onTap: () {},
+                onTap: () {
+                  controller.changeStartTimeOfPlanInDayApiMethod(
+                    planId: planId,
+                    dayNumber: controller.selectedDayData!.dayNumber,
+                    startTime: apiSendTime,
+                  );
+                },
                 title: Text(
                   displayTime.toUpperCase(),
                   style: const TextStyle(
@@ -986,8 +1043,9 @@ class StartTimeListviewBody extends StatelessWidget {
 }
 
 class ChangeDurationListviewBody extends StatelessWidget {
-  ChangeDurationListviewBody({super.key});
+  ChangeDurationListviewBody({super.key, required this.planId});
 
+  final String planId;
   final controller = Get.find<MyplanController>();
 
   @override
@@ -1021,10 +1079,22 @@ class ChangeDurationListviewBody extends StatelessWidget {
             itemBuilder: (context, index) {
               var singleHour = controller.changeDurationList[index];
               // String displayTime = DateFormat("h:mmaa").format(singleTime);
+              // final now = DateTime.now();
+              // final dt = DateTime(now.year, now.month, now.day, singleHour.hour,
+              //     singleHour.minute);
+              // final hmFormat = DateFormat("hh:mm"); //"6:00 AM"
+              // return format.format(dt);
 
               return ListTile(
                 dense: true,
-                onTap: () {},
+                onTap: () {
+                  controller.changeTimeDurationOfPlanInDayApiMethod(
+                    planId: planId,
+                    dayNumber: controller.selectedDayData!.dayNumber,
+                    durationTime: singleHour.to24hours(),
+                    // "${singleHour.hour}:${singleHour.minute}",
+                  );
+                },
                 title: Text(
                   singleHour.hour == 0
                       ? "${singleHour.minute} minutes"

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
+import '../../bottom_navigation_bar/controllers/bottom_navigation_bar_controller.dart';
 import '../controllers/wishlist_controller.dart';
 
 class WishlistBinding extends Bindings {
@@ -9,8 +9,8 @@ class WishlistBinding extends Bindings {
     Get.lazyPut<WishlistController>(
       () => WishlistController(),
     );
-    Get.lazyPut<BottomNavigationbarController>(
-          () => BottomNavigationbarController(),
+    Get.lazyPut<BottomNavigationBarController>(
+      () => BottomNavigationBarController(),
     );
   }
 }

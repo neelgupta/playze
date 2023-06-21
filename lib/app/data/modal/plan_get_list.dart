@@ -42,6 +42,7 @@ class PlanData {
   final String placeName;
   final String placeDescription;
   final String time;
+  final String changeDuration;
   final String duration;
 
   PlanData({
@@ -52,6 +53,7 @@ class PlanData {
     required this.placeName,
     required this.placeDescription,
     required this.time,
+    required this.changeDuration,
     required this.duration,
   });
 
@@ -63,6 +65,7 @@ class PlanData {
         placeName: json["place_name"] ?? "",
         placeDescription: json["place_description"] ?? "",
         time: json["time"] ?? "",
+        changeDuration: json["change_duration"] ?? "",
         duration: json["duration"] ?? "",
       );
 
@@ -74,6 +77,7 @@ class PlanData {
         "place_name": placeName,
         "place_description": placeDescription,
         "time": time,
+        "change_duration": changeDuration,
         "duration": duration,
       };
 }

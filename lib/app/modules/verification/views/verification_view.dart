@@ -2,9 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:playze/Reusability/shared/commonTextField.dart';
-import 'package:playze/Reusability/shared/textStyle.dart';
-import 'package:playze/Reusability/utils/util.dart';
+import 'package:playze/reusability/shared/common_text_field.dart';
+import 'package:playze/reusability/shared/app_text_style.dart';
+import 'package:playze/reusability/utils/util.dart';
 import 'package:playze/generated/locales.g.dart';
 
 import '../controllers/verification_controller.dart';
@@ -27,31 +27,45 @@ class VerificationView extends GetView<VerificationController> {
                 width: Get.width,
                 alignment: Alignment.center,
                 color: Colors.blue,
-                padding: const EdgeInsets.only(left: 10, right: 10, top: 150),
                 child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    left: 18,
+                    right: 18,
+                    top: Get.size.height * 0.14,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                          width: Get.width * 0.4,
-                          child: Image.asset("assets/images/appIcon.png")),
+                        width: Get.width * 0.4,
+                        child: Image.asset("assets/images/appIcon.png"),
+                      ),
                       h(20),
-                      Text(LocaleKeys.text_otp_verification.tr,
-                          style: AppTextStyle.size18Medium.copyWith(
-                              letterSpacing: 1.8,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600)),
+                      Text(
+                        LocaleKeys.text_otp_verification.tr,
+                        style: AppTextStyle.size18Medium.copyWith(
+                          letterSpacing: 1.8,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       h(10),
                       Text(
-                          "An OTP has been sent to your registered mobile number ${controller.getInitialFormattedNumber('xxx-xxx-xxxx', controller.phonenumbar ?? '')}",
-                          style: AppTextStyle.size14Medium.copyWith(
-                              letterSpacing: 1, fontWeight: FontWeight.w600)),
+                        "An OTP has been sent to your registered mobile number ${controller.getInitialFormattedNumber('xxx-xxx-xxxx', controller.phonenumbar ?? '')}",
+                        style: AppTextStyle.size16Medium.copyWith(
+                          letterSpacing: 1,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       h(20),
                       Text(
-                          "${LocaleKeys.labels_enter.tr} ${LocaleKeys.text_otp_here.tr}",
-                          style: AppTextStyle.size14Medium.copyWith(
-                              letterSpacing: 1, fontWeight: FontWeight.w600)),
+                        "${LocaleKeys.labels_enter.tr} ${LocaleKeys.text_otp_here.tr}",
+                        style: AppTextStyle.size14Medium.copyWith(
+                          letterSpacing: 1,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       h(10),
                       InputTextField(
                         context: context,
@@ -67,23 +81,24 @@ class VerificationView extends GetView<VerificationController> {
                               text: LocaleKeys.text_didnt_receive_code.tr,
                               style: AppTextStyle.size14Medium),
                           TextSpan(
-                              text: " ${LocaleKeys.links_resend_code.tr}",
-                              style: AppTextStyle.size14Medium.copyWith(
-                                  color: Colors.orange,
-                                  decoration: TextDecoration.underline,
-                                  height: 1.5),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  controller.Rotp();
-                                }),
+                            text: " ${LocaleKeys.links_resend_code.tr}",
+                            style: AppTextStyle.size14Medium.copyWith(
+                                color: Colors.orange,
+                                decoration: TextDecoration.underline,
+                                height: 1.5),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                controller.resendOtpMethod();
+                              },
+                          ),
                         ])),
                       ),
                       h(50),
                       ButtonWithStyle(
                         onPressed: () {
-                          controller.otp();
+                          controller.sendOtpMethod();
                         },
-                        textVal: LocaleKeys.buttons_verify.tr.toUpperCase(),
+                        textVal: LocaleKeys.buttons_verify.tr,
                         btnwidth: Get.width,
                       ),
                       h(30),

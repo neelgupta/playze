@@ -5,12 +5,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:playze/app/data/service/plan_service.dart';
 
-import '../../../../Reusability/utils/shared_prefs.dart';
-import '../../../../Reusability/utils/util.dart';
+import '../../../../reusability/utils/shared_prefs.dart';
+import '../../../../reusability/utils/util.dart';
+import '../../../data/modal/place_data_model.dart';
 import '../../../data/modal/plan_days_get_list.dart';
 import '../../../data/modal/plan_get_list.dart';
+import '../../bottom_navigation_bar/controllers/bottom_navigation_bar_controller.dart';
+import '../../home/controllers/home_controller.dart';
 
 class MyplanController extends GetxController {
   final count = 0.obs;
@@ -32,7 +36,11 @@ class MyplanController extends GetxController {
   List<String> manageDaysList = [];
   TabController? dayTabBarController;
 
+  RxBool locWhenInUseGranted = false.obs;
+  RxBool locAlwaysGranted = false.obs;
+
   LatLng? location;
+  // = const LatLng(23.812433, 79.305474);
   late Position currentLocation;
   LocationPermission? permission;
 
@@ -79,7 +87,7 @@ class MyplanController extends GetxController {
       countMins.value += interval;
 
       TimeOfDay calHoursTime = minutesToTimeOfDay(countMins.value);
-      log("calHoursTime \nhour : ${calHoursTime.hour} minute : ${calHoursTime.minute}");
+      // log("calHoursTime \nhour : ${calHoursTime.hour} minute : ${calHoursTime.minute}");
       changeDurationList.add(calHoursTime);
     }
     // log("changeDurationList length ;: ${changeDurationList.length}");
@@ -152,7 +160,8 @@ class MyplanController extends GetxController {
   planDaysGetListFunction() async {
     try {
       isLoading(true);
-      PlanDaysGetList? planDaysGetList = await planService.planDaysGetList();
+      PlanDaysGetList? planDaysGetList =
+          await planService.planDaysGetListMethod();
 
       daysList.clear();
       if (planDaysGetList != null) {
@@ -163,6 +172,17 @@ class MyplanController extends GetxController {
         }
         log("daysList len is : ${daysList.length}");
         update();
+      } else {
+        Fluttertoast.showToast(
+          msg:
+              'Something went wrong getting plans list. Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
 
       update();
@@ -182,17 +202,17 @@ class MyplanController extends GetxController {
       permission = await Geolocator.requestPermission();
       currentLocation = await locateUser();
 
-      log("selectedDayData!.dayNumber : ${selectedDayData!.dayNumber}");
       planDataList.clear();
-      PlanGetList? planGetList = await planService.planGetlistByDay(
+      PlanGetList? planGetList = await planService.planGetlistByDayMethod(
         latitude: currentLocation.latitude,
-        longitude: currentLocation.latitude,
+        longitude: currentLocation.longitude,
         day: selectedDayData!.dayNumber,
       );
 
       if (planGetList != null) {
         planDataList = planGetList.data;
-        // selectedDayData = daysList.first;
+        selectedDayData = daysList.first;
+        log("selectedDayData!.dayNumber : ${selectedDayData!.dayNumber}");
 
         if (planDataList.isNotEmpty) {
           for (var item in planDataList) {
@@ -202,6 +222,16 @@ class MyplanController extends GetxController {
         log("planDataList len is : ${planDataList.length}");
         update();
         isPlansLoading(false);
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
 
       update();
@@ -210,6 +240,14 @@ class MyplanController extends GetxController {
       log("error is :: ${e.toString()}");
       rethrow;
     } finally {
+      locAlwaysGranted.value =
+          await Permission.locationAlways.request().isGranted;
+
+      locWhenInUseGranted.value =
+          await Permission.locationWhenInUse.request().isGranted;
+      log('permission.value ::  $permission');
+      log('locAlwaysGranted.value ::  ${locAlwaysGranted.value}');
+      log('locWhenInUseGranted.value ::  ${locWhenInUseGranted.value}');
       isLoading(false);
     }
   }
@@ -218,7 +256,7 @@ class MyplanController extends GetxController {
     try {
       isLoading(true);
 
-      bool dayAdded = await planService.addDayToList() ?? false;
+      bool dayAdded = await planService.addDayToListMethod() ?? false;
 
       if (dayAdded) {
         Fluttertoast.showToast(
@@ -255,7 +293,8 @@ class MyplanController extends GetxController {
       isLoading(true);
 
       bool dayAdded =
-          await planService.deleteDayFromList(dayNumber: dayNumber) ?? false;
+          await planService.deleteDayFromListMethod(dayNumber: dayNumber) ??
+              false;
 
       if (dayAdded) {
         Fluttertoast.showToast(
@@ -290,7 +329,7 @@ class MyplanController extends GetxController {
       isLoading(true);
 
       bool dayAdded =
-          await planService.planDeleteFromList(planId: planId) ?? false;
+          await planService.planDeleteFromListMethod(planId: planId) ?? false;
 
       if (dayAdded) {
         Fluttertoast.showToast(
@@ -324,7 +363,7 @@ class MyplanController extends GetxController {
     try {
       isLoading(true);
 
-      bool dayPlanChanged = await planService.planDayChangeApi(
+      bool dayPlanChanged = await planService.planDayChangeApiMethod(
               planId: planId, dayNumber: dayNumber) ??
           false;
 
@@ -362,7 +401,7 @@ class MyplanController extends GetxController {
 
       var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
 
-      bool dayPlanChanged = await planService.planReorderInDayApi(
+      bool dayPlanChanged = await planService.planReorderInDayApiMethod(
             userId: userId,
             oldIndexNumber: oldIndex,
             newIndexNumber: newIndex,
@@ -370,8 +409,9 @@ class MyplanController extends GetxController {
           false;
 
       if (dayPlanChanged) {
+        // Get.back();
         Fluttertoast.showToast(
-            msg: 'Plan Reordered Sucessfully.',
+            msg: 'Plan Reordered Successfully.',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
@@ -397,6 +437,127 @@ class MyplanController extends GetxController {
       log("error is :: ${e.toString()}");
       rethrow;
     } finally {}
+  }
+
+  Future<bool> changeStartTimeOfPlanInDayApiMethod(
+      {planId, startTime, dayNumber}) async {
+    try {
+      isLoading(true);
+
+      bool startTimeChanged =
+          await planService.changeStartTimeOfPlanInDayApiMethod(
+                planId: planId,
+                startTime: startTime,
+                dayNumber: dayNumber,
+              ) ??
+              false;
+
+      if (startTimeChanged) {
+        Get.back();
+        Fluttertoast.showToast(
+            msg: 'Start Time Changed Successfully.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        planGetlistByDayFunction();
+        return true;
+      } else {
+        Fluttertoast.showToast(
+            msg:
+                'Start Time Changing failed. Something Went wrong. Please try again later...!',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        isLoading(false);
+        return false;
+      }
+    } catch (e) {
+      isLoading(false);
+      log("error is :: ${e.toString()}");
+      rethrow;
+    } finally {}
+  }
+
+  Future<bool> changeTimeDurationOfPlanInDayApiMethod(
+      {planId, dayNumber, durationTime}) async {
+    try {
+      isLoading(true);
+
+      // var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
+
+      bool durationTimeChanged =
+          await planService.changeTimeDurationOfPlanInDayApiMethod(
+                planId: planId,
+                dayNumber: dayNumber,
+                durationTime: durationTime,
+              ) ??
+              false;
+
+      if (durationTimeChanged) {
+        Get.back();
+        Fluttertoast.showToast(
+            msg: 'Time Duration Changed Successfully.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        planGetlistByDayFunction();
+        return true;
+      } else {
+        Fluttertoast.showToast(
+            msg:
+                'Time Duration Changing failed. Something Went wrong. Please try again later...!',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        isLoading(false);
+        return false;
+      }
+    } catch (e) {
+      isLoading(false);
+      log("error is :: ${e.toString()}");
+      rethrow;
+    } finally {}
+  }
+
+  gotoMapPlaceLocation({placeId}) {
+    if (Get.isRegistered<HomeController>() &&
+        Get.isRegistered<BottomNavigationBarController>()) {
+      var homeController = Get.find<HomeController>();
+      var bottomBarController = Get.find<BottomNavigationBarController>();
+      homeController.isMapView.value = true;
+      PlaceDetails? singlePlace;
+      for (var item in homeController.placeDataList) {
+        if (item.id == placeId) {
+          singlePlace = item;
+        }
+      }
+      if (singlePlace != null) {
+        homeController.selectedPlaceLocation = singlePlace;
+      }
+      homeController.initialCameraPosition = CameraPosition(
+        target: LatLng(
+          double.parse(homeController.selectedPlaceLocation!.latitude),
+          double.parse(homeController.selectedPlaceLocation!.longitude),
+        ),
+        tilt: 10,
+        zoom: 14.5,
+      );
+
+      bottomBarController.selectedIndex.value = 0;
+      bottomBarController.locateWindowPop.value = true;
+    }
   }
 
   @override

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:playze/Reusability/shared/custom_btmbar.dart';
-import 'package:playze/Reusability/shared/drawer.dart';
-import 'package:playze/Reusability/utils/util.dart';
+import 'package:playze/Reusability/shared/custom_drawer.dart';
+import 'package:playze/reusability/shared/custom_bottom_bar.dart';
+import 'package:playze/reusability/utils/util.dart';
 
 import '../controllers/notifications_controller.dart';
 
 class NotificationsView extends GetView<NotificationsController> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  NotificationsView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,14 +48,16 @@ class NotificationsView extends GetView<NotificationsController> {
                     const SizedBox(
                       width: 20,
                     ),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text("Notifications",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                            )),
+                        Text(
+                          "Notifications",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -63,7 +67,7 @@ class NotificationsView extends GetView<NotificationsController> {
           ),
         ),
       ),
-      drawer: const CsDrawer(),
+      drawer: const CustomStartDrawer(),
       body: Container(
           margin: const EdgeInsets.fromLTRB(20, 25, 20, 0),
           height: Get.height,
@@ -123,7 +127,7 @@ class NotificationsView extends GetView<NotificationsController> {
               );
             },
           )),
-      bottomNavigationBar: const btmbar(fromOther: true),
+      bottomNavigationBar: const CustomBottomBar(fromOther: true),
       extendBody: true,
     );
   }

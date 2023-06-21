@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:playze/Reusability/shared/drawer.dart';
+import 'package:playze/Reusability/shared/custom_drawer.dart';
 
+import '../../../../reusability/utils/app_colors.dart';
 import '../controllers/myplan_controller.dart';
 import '../widgets/myplan_widgets.dart';
 
@@ -61,56 +63,72 @@ class MyplanView extends GetView<MyplanController> {
                       ],
                     ),
                     const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      height: Get.height * 0.06,
-                      decoration: const BoxDecoration(),
-                      child: Center(
-                        child: Container(
-                            padding: const EdgeInsets.all(5),
-                            child: const Image(
-                              image: AssetImage("assets/images/search.png"),
-                              color: Colors.white,
-                            )),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     //search func
+                    //   },
+                    //   child: Container(
+                    //     margin: const EdgeInsets.symmetric(horizontal: 7),
+                    //     // decoration: const BoxDecoration(),
+                    //     child: Center(
+                    //       child: Image.asset(
+                    //         "assets/images/search.png",
+                    //         height: 20,
+                    //         width: 20,
+                    //         color: AppColors.whiteColor,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        //share func
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 7),
+                        // decoration: const BoxDecoration(),
+                        child: Center(
+                          child: Image.asset(
+                            "assets/images/share.png",
+                            height: 24,
+                            width: 24,
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      height: Get.height * 0.06,
-                      decoration: const BoxDecoration(),
-                      child: Center(
-                        child: Container(
-                            padding: const EdgeInsets.all(0),
-                            child: const Image(
-                              image: AssetImage("assets/images/share.png"),
-                              color: Colors.white,
-                            )),
+                    GestureDetector(
+                      onTap: () {
+                        //mapview  func
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 7),
+                        // decoration: const BoxDecoration(),
+                        child: Center(
+                          child: Image.asset(
+                            "assets/images/mapviwe.png",
+                            height: 20,
+                            width: 20,
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      height: Get.height * 0.06,
-                      decoration: const BoxDecoration(),
-                      child: Center(
-                        child: Container(
-                            padding: const EdgeInsets.all(5),
-                            child: const Image(
-                              image: AssetImage("assets/images/mapviwe.png"),
-                              color: Colors.white,
-                            )),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      height: Get.height * 0.06,
-                      decoration: const BoxDecoration(),
-                      child: Center(
-                        child: Container(
-                            padding: const EdgeInsets.all(5),
-                            child: const Image(
-                              image: AssetImage("assets/images/more3.png"),
-                              color: Colors.white,
-                            )),
+                    GestureDetector(
+                      onTap: () {
+                        //more func
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 7),
+                        // decoration: const BoxDecoration(),
+                        child: Center(
+                          child: Image.asset(
+                            "assets/images/more3.png",
+                            height: 20,
+                            width: 20,
+                            color: AppColors.whiteColor,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -120,24 +138,35 @@ class MyplanView extends GetView<MyplanController> {
           ),
         ),
       ),
-      drawer: const CsDrawer(),
+      drawer: const CustomStartDrawer(),
       body: Obx(
         () => controller.isLoading.value
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
+            : controller.permission! == LocationPermission.whileInUse ||
+                    controller.permission! == LocationPermission.always
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const MyPlansListview(),
-                      AddPlaceButton(),
+                      Stack(
+                        children: [
+                          const MyPlansListview(),
+                          AddPlaceButton(),
+                        ],
+                      ),
                     ],
                   )
-                ],
-              ),
+                : const Center(
+                    child: Text(
+                      "Allow location permission in your settings",
+                      style: TextStyle(
+                        color: AppColors.blackColor,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
       ),
     );
   }

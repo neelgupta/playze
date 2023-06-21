@@ -1,60 +1,46 @@
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:playze/app/data/modal/workmodal.dart';
-import 'package:playze/app/data/service/Userservise.dart';
+// import 'dart:developer';
 
-class WorkController extends GetxController {
-  //TODO: Implement WorkController
+// import 'package:flutter/material.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:get/get.dart';
+// import 'package:playze/app/data/modal/work_space_model.dart';
+// import 'package:playze/app/data/service/user_service.dart';
 
-  RxBool isLoading = false.obs;
-  Usersevise usersevise = Usersevise();
-  WorkModal? a;
-  @override
-  void onInit() {
-    super.onInit();
-  }
+// class WorkController extends GetxController {
+//   //TODO: Implement WorkController
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+//   RxBool isLoading = false.obs;
+//   UserService userService = UserService();
+//   WorkSpaceListModel? workSpaceListModel;
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  Future<void> getwork() async {
-    isLoading(true);
-    try {
-      a = await usersevise.getwork();
-      if (a?.status == 200) {
-        Fluttertoast.showToast(
-            msg: '${a?.message}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.blue,
-            textColor: Colors.white,
-            fontSize: 16.0
-        );
-      }else{
-        Fluttertoast.showToast(
-            msg: '${a?.message}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.blue,
-            textColor: Colors.white,
-            fontSize: 16.0
-        );
-      }
-      update();
-    } catch (e) {
-      print("${e.toString()}");
-    } finally {
-      isLoading(false);
-    }
-  }
-}
+//   Future<void> getwork() async {
+//     isLoading(true);
+//     try {
+//       workSpaceListModel = await userService.getWorkSpacesListMethod();
+//       if (workSpaceListModel?.status == 200) {
+//         Fluttertoast.showToast(
+//             msg: '${a?.message}',
+//             toastLength: Toast.LENGTH_SHORT,
+//             gravity: ToastGravity.BOTTOM,
+//             timeInSecForIosWeb: 1,
+//             backgroundColor: Colors.blue,
+//             textColor: Colors.white,
+//             fontSize: 16.0);
+//       } else {
+//         Fluttertoast.showToast(
+//             msg: '${a?.message}',
+//             toastLength: Toast.LENGTH_SHORT,
+//             gravity: ToastGravity.BOTTOM,
+//             timeInSecForIosWeb: 1,
+//             backgroundColor: Colors.blue,
+//             textColor: Colors.white,
+//             fontSize: 16.0);
+//       }
+//       update();
+//     } catch (e) {
+//       log(e.toString());
+//     } finally {
+//       isLoading(false);
+//     }
+//   }
+// }

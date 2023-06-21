@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:playze/Reusability/shared/drawer.dart';
+import 'package:playze/Reusability/shared/custom_drawer.dart';
 
-import '../../../../Reusability/utils/util.dart';
+import '../../../../reusability/utils/app_colors.dart';
+import '../../../../reusability/utils/util.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/wishlist_controller.dart';
 
 class WishlistView extends GetView<WishlistController> {
@@ -66,200 +69,338 @@ class WishlistView extends GetView<WishlistController> {
           ),
         ),
       ),
-      drawer: const CsDrawer(),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                color: Colors.white,
-                height: Get.height * 0.85,
-                width: Get.width,
-                child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: Container(
-                        color: Colors.white,
-                        margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                        height: Get.height * 0.25,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  height: Get.height * 0.12,
-                                  width: Get.width * 0.4,
-                                  decoration: const BoxDecoration(
-                                      color: Colors.cyan,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        top: 10,
-                                        left: 10,
-                                        child: SizedBox(
-                                          height: Get.height * 0.02,
-                                          child: const Image(
-                                              image: AssetImage(
-                                                  "assets/images/dil.png")),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text("Children’s Museum"),
-                                      SizedBox(
-                                        height: Get.height * 0.01,
-                                      ),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                              height: Get.height * 0.02,
-                                              child: const Image(
-                                                  image: AssetImage(
-                                                      "assets/images/star.png"))),
-                                          SizedBox(
-                                            width: Get.width * 0.02,
-                                          ),
-                                          const Text(
-                                            "4.0",
-                                            style: TextStyle(fontSize: 16),
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.02,
-                                          ),
-                                          const Text(
-                                            "150 Reviews",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: Get.height * 0.01,
-                                      ),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                              height: Get.height * 0.02,
-                                              child: const Image(
-                                                  image: AssetImage(
-                                                      "assets/images/log.png"))),
-                                          SizedBox(
-                                            width: Get.width * 0.02,
-                                          ),
-                                          SizedBox(
-                                              width: Get.width * 0.35,
-                                              child: const Text(
-                                                "100 Laurier Street, Gatineau..",
-                                                style: TextStyle(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    fontSize: 12,
-                                                    color: Colors.grey),
-                                              )),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: Get.height * 0.01,
-                                      ),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                              height: Get.height * 0.02,
-                                              child: const Image(
-                                                  image: AssetImage(
-                                                      "assets/images/walking.png"))),
-                                          SizedBox(
-                                            width: Get.width * 0.02,
-                                          ),
-                                          const Text(
-                                            "2 min",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey),
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.02,
-                                          ),
-                                          const Text(
-                                            "1 km away",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: Get.height * 0.025,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Row(
-                                  children: [
-                                    Image(
-                                      image: AssetImage("assets/images/go.png"),
-                                      width: 25,
-                                    ),
-                                    Text("  Go"),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: Get.width * 0.025,
-                                ),
-                                const Row(
-                                  children: [
-                                    Image(
-                                      image:
-                                          AssetImage("assets/images/plan.png"),
-                                      width: 25,
-                                    ),
-                                    Text("  My Plan"),
-                                  ],
-                                ),
-                                ButtonWithStyle(
-                                  onPressed: () {
-                                    //   Get.toNamed(Routes.FULL_DETAILS);
-                                    //   Get.toNamed(
-                                    //     Routes.FULL_DETAILS,
-                                    //     arguments: [
-                                    //       controller.a?
-                                    //           .data![index].id
-                                    //     ],
-                                    //   );
-                                  },
-                                  textVal: "Details",
-                                  btnwidth: Get.width * 0.3,
-                                ),
-                              ],
-                            )
-                          ],
+      drawer: const CustomStartDrawer(),
+      body: Obx(
+        () => controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : Stack(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 15,
                         ),
+                        // color: Colors.white,
+                        height: Get.height * 0.75,
+                        width: Get.width,
+                        child: controller.wishDataList.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  "You Wishlist is Empty\n\nAdd Some Places",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: AppColors.blackColor,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              )
+                            : RefreshIndicator(
+                                onRefresh: () {
+                                  return controller.getWishListFunction();
+                                },
+                                child: ListView.separated(
+                                  // padding: const EdgeInsets.symmetric(
+                                  //   horizontal: 15,
+                                  //   vertical: 15,
+                                  // ),
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: controller.wishDataList.length,
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(height: 10);
+                                  },
+                                  itemBuilder: (context, index) {
+                                    var singleData =
+                                        controller.wishDataList[index];
+                                    return Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8, horizontal: 12),
+                                      // height: Get.height * 0.25,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: AppColors.greyColor
+                                                .withOpacity(0.12),
+                                            spreadRadius: 1,
+                                            blurRadius: 5,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Container(
+                                                height: Get.height * 0.12,
+                                                width: Get.width * 0.4,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.cyan,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(10),
+                                                  ),
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                        Radius.circular(10),
+                                                      ),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: singleData
+                                                            .images.first.images
+                                                            .toString(),
+                                                        fit: BoxFit.cover,
+                                                        height:
+                                                            Get.height * 0.12,
+                                                        width: Get.width * 0.4,
+                                                        errorWidget: (context,
+                                                            url, error) {
+                                                          return const Center(
+                                                            child: Text(
+                                                              "Image Not Loaded",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                color: AppColors
+                                                                    .blackColor,
+                                                                fontSize: 11,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      top: 8,
+                                                      left: 8,
+                                                      child: GestureDetector(
+                                                        onTap: () {
+                                                          controller
+                                                              .removeFromWishListFunction(
+                                                            placeId:
+                                                                singleData.id,
+                                                          );
+                                                        },
+                                                        child: SizedBox(
+                                                          // height: Get.height * 0.02,
+                                                          child: Image.asset(
+                                                            "assets/images/dil2.png",
+                                                            color: AppColors
+                                                                .redColor,
+                                                            height: 24,
+                                                            width: 24,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      singleData.placesName,
+                                                      style: const TextStyle(
+                                                        color: AppColors
+                                                            .blackColor,
+                                                        fontSize: 14,
+                                                      ),
+                                                      // "Children’s Museum"
+                                                    ),
+                                                    SizedBox(
+                                                        height:
+                                                            Get.height * 0.015),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          height:
+                                                              Get.height * 0.02,
+                                                          child: const Image(
+                                                            image: AssetImage(
+                                                                "assets/images/star.png"),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                            width: Get.width *
+                                                                0.02),
+                                                        Text(
+                                                          singleData.rating,
+                                                          style:
+                                                              const TextStyle(
+                                                            color: AppColors
+                                                                .blackColor,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                            width: Get.width *
+                                                                0.02),
+                                                        Text(
+                                                          "${singleData.totalReview} Reviews",
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 12,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                        height:
+                                                            Get.height * 0.015),
+                                                    Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          height:
+                                                              Get.height * 0.02,
+                                                          child: const Image(
+                                                            image: AssetImage(
+                                                                "assets/images/log.png"),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                            width: Get.width *
+                                                                0.02),
+                                                        SizedBox(
+                                                          width:
+                                                              Get.width * 0.35,
+                                                          child: Text(
+                                                            singleData.address,
+                                                            // "100 Laurier Street, Gatineau..",
+                                                            style:
+                                                                const TextStyle(
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                        height:
+                                                            Get.height * 0.01),
+                                                    // const Row(
+                                                    //   children: [
+                                                    // SizedBox(
+                                                    //   height: Get.height * 0.02,
+                                                    //   child: const Image(
+                                                    //     image: AssetImage(
+                                                    //         "assets/images/walking.png"),
+                                                    //   ),
+                                                    // ),
+                                                    // SizedBox(
+                                                    //     width: Get.width * 0.02),
+                                                    // Text(
+                                                    //   "${singleData.totalReview} min",
+                                                    //   style: TextStyle(
+                                                    //       fontSize: 12,
+                                                    //       color: Colors.grey),
+                                                    // ),
+                                                    // SizedBox(
+                                                    //   width: Get.width * 0.02,
+                                                    // ),
+                                                    // const Text(
+                                                    //   "1 km away",
+                                                    //   style: TextStyle(
+                                                    //       fontSize: 12,
+                                                    //       color: Colors.grey),
+                                                    // ),
+                                                    //   ],
+                                                    // ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(height: Get.height * 0.015),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  controller
+                                                      .gotoMapPlaceLocation(
+                                                    placeId: singleData.id,
+                                                  );
+                                                },
+                                                child: const Row(
+                                                  children: [
+                                                    Image(
+                                                      image: AssetImage(
+                                                          "assets/images/go.png"),
+                                                      width: 25,
+                                                    ),
+                                                    Text("  Go"),
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                  width: Get.width * 0.025),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  controller
+                                                      .addPlanToSelectedDay(
+                                                    placeId: singleData.id,
+                                                  );
+                                                },
+                                                child: const Row(
+                                                  children: [
+                                                    Image(
+                                                      image: AssetImage(
+                                                          "assets/images/plan.png"),
+                                                      width: 25,
+                                                    ),
+                                                    Text("  My Plan"),
+                                                  ],
+                                                ),
+                                              ),
+                                              ButtonWithStyle(
+                                                onPressed: () {
+                                                  //   Get.toNamed(Routes.FULL_DETAILS);
+                                                  Get.toNamed(
+                                                    Routes.FULL_DETAILS,
+                                                    arguments: [
+                                                      singleData.id,
+                                                    ],
+                                                  );
+                                                },
+                                                textVal: "Details",
+                                                btnwidth: Get.width * 0.3,
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
                       ),
-                    );
-                  },
-                ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
       ),
       extendBody: true,
     );

@@ -5,23 +5,21 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:playze/app/data/modal/class.dart';
 import 'package:playze/app/data/modal/get_category_filter_model.dart';
-import 'package:playze/app/data/service/Userservise.dart';
-import 'package:playze/app/modules/BottomNavigationbar/controllers/bottom_navigationbar_controller.dart';
+import 'package:playze/app/data/service/user_service.dart';
 import 'package:playze/app/modules/home/controllers/home_controller.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/modal/filters_model.dart';
 import '../../../data/provider/filter_provider.dart';
+import '../../bottom_navigation_bar/controllers/bottom_navigation_bar_controller.dart';
 
 class FilterController extends GetxController {
-  //TODO: Implement FilterController
-
-  hp? a;
-  Usersevise usersevise = Usersevise();
+  FiltersModel? filtersModel;
+  UserService userService = UserService();
   RxBool isLoading = false.obs;
   RxInt selectedCount = 0.obs;
-  List<dp> filterList = [];
+  List<FilterData> filterList = [];
   List<bool> isbool = [];
   List<CategoryFilterData> filteredCatList = [];
   late Position currentLocation;
@@ -45,27 +43,40 @@ class FilterController extends GetxController {
   Future<void> getfilterList() async {
     try {
       isLoading(true);
-      a = await usersevise.getCategorylist();
-      for (var element in a!.data) {
-        filterList.add(element);
-        // lip.add(element.name);
-      }
-      // ignore: unused_local_variable
-      for (var element in a!.data) {
-        // log("$element");
-        isbool.add(false);
-        update();
-      }
+      filtersModel = await userService.getCategorylistMethod();
 
-      selectedCount.value = filterProv.filteredCatdataList.length;
-      for (int i = 0; i < filterList.length; i++) {
-        // log("filterList[i].id : ${filterList[i].id}");
-        for (var item in filterProv.filteredCatdataList) {
-          // log("item.id : ${item.id}");
-          if (filterList[i].id == item.id) {
-            filterList[i].isSelected = true;
+      if (filtersModel != null) {
+        for (var element in filtersModel!.data) {
+          filterList.add(element);
+          // lip.add(element.name);
+        }
+        // ignore: unused_local_variable
+        for (var element in filtersModel!.data) {
+          // log("$element");
+          isbool.add(false);
+          update();
+        }
+
+        selectedCount.value = filterProv.filteredCatdataList.length;
+        for (int i = 0; i < filterList.length; i++) {
+          // log("filterList[i].id : ${filterList[i].id}");
+          for (var item in filterProv.filteredCatdataList) {
+            // log("item.id : ${item.id}");
+            if (filterList[i].id == item.id) {
+              filterList[i].isSelected = true;
+            }
           }
         }
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
       update();
     } catch (e) {
@@ -92,19 +103,12 @@ class FilterController extends GetxController {
           .split("]")[0]
           .removeAllWhitespace;
 
-      getCategoryFilterModel = await usersevise.categoryFilterGetList(
+      getCategoryFilterModel = await userService.categoryFilterGetListMethod(
         categoryFilterIdList: catStringids,
         latitude: currentLattitude.value,
         longitude: currentLongitude.value,
       );
-      // filteredCatList.forEach((element) {
-      //   filterList.add(element);
-      //   // lip.add(element.name);
-      // });
-      // a?.data.forEach((element) {
-      //   isbool.add(false);
-      //   update();
-      // });
+
       if (getCategoryFilterModel != null) {
         filteredCatList = getCategoryFilterModel!.data;
         if (filteredCatList.isEmpty) {
@@ -118,13 +122,17 @@ class FilterController extends GetxController {
             fontSize: 16.0,
           );
         }
-
-        // <FilterProvider>;
         filterHomeScreenPlacesList();
-      }
-
-      for (int i = 0; i < filteredCatList.length; i++) {
-        log("filteredCatList[i].name ::${filteredCatList[i].name}");
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Please try again later...!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
       }
       update();
     } catch (e) {
@@ -148,7 +156,6 @@ class FilterController extends GetxController {
           }
         }
       }
-
       if (homeCont.placeFilteredList.isNotEmpty) {
         homeCont.markers.clear();
         homeCont.selectedPlaceLocation = homeCont.placeFilteredList.first;
@@ -159,7 +166,7 @@ class FilterController extends GetxController {
           var singlePlace = homeCont.placeFilteredList[i];
 
           // if (Get.isRegistered<HomeController>()) {
-          var bottombarController = Get.find<BottomNavigationbarController>();
+          var bottombarController = Get.find<BottomNavigationBarController>();
 
           // log(" singlePlace.latitude!.toDouble() ${singlePlace.latitude!.toDouble()}");
           // log(" singlePlace.longitude!.toDouble() ${singlePlace.longitude!.toDouble()}");
@@ -172,8 +179,7 @@ class FilterController extends GetxController {
                 homeCont.selectedPlaceLocation = singlePlace;
               },
               infoWindow: InfoWindow(
-                  title: "${singlePlace.placesName}",
-                  snippet: "${singlePlace.address}"),
+                  title: singlePlace.placesName, snippet: singlePlace.address),
               flat: true,
               rotation: 1.1,
               zIndex: 10,
@@ -182,8 +188,8 @@ class FilterController extends GetxController {
 
               markerId: MarkerId(singlePlace.id.toString()),
               position: LatLng(
-                double.parse(singlePlace.latitude!),
-                double.parse(singlePlace.longitude!),
+                double.parse(singlePlace.latitude),
+                double.parse(singlePlace.longitude),
               ),
               // icon: BitmapDescriptor.fromBytes(markerIcon),
             ),
@@ -197,9 +203,7 @@ class FilterController extends GetxController {
         homeCont.markers.clear();
         // filterProv.updateFilterDataList([]);
       }
-
       log("homeCont.placeFilteredList len ::${homeCont.placeFilteredList.length}");
-
       homeCont.update();
     }
 
@@ -218,14 +222,6 @@ class FilterController extends GetxController {
 
     filterProv.updateFilterDataList([]);
 
-    // for (var filter in filteredCatList) {
-    //   for (var item inplaceDataList) {
-    //     if (filter.id == item.id) {
-    //      placeFilteredList.add(item);
-    //     }
-    //   }
-    // }
-
     if (homeCont.placeDataList.isNotEmpty) {
       homeCont.markers.clear();
       homeCont.selectedPlaceLocation = homeCont.placeDataList.first;
@@ -236,7 +232,7 @@ class FilterController extends GetxController {
         var singlePlace = homeCont.placeDataList[i];
 
         // if (Get.isRegistered<HomeController>()) {
-        var bottombarController = Get.find<BottomNavigationbarController>();
+        var bottombarController = Get.find<BottomNavigationBarController>();
 
         // log(" singlePlace.latitude!.toDouble() ${singlePlace.latitude!.toDouble()}");
         // log(" singlePlace.longitude!.toDouble() ${singlePlace.longitude!.toDouble()}");
@@ -249,27 +245,22 @@ class FilterController extends GetxController {
               homeCont.selectedPlaceLocation = singlePlace;
             },
             infoWindow: InfoWindow(
-                title: "${singlePlace.placesName}",
-                snippet: "${singlePlace.address}"),
+                title: singlePlace.placesName, snippet: singlePlace.address),
             flat: true,
             rotation: 1.1,
             zIndex: 10,
-
             visible: true,
-
             markerId: MarkerId(singlePlace.id.toString()),
             position: LatLng(
-              double.parse(singlePlace.latitude!),
-              double.parse(singlePlace.longitude!),
+              double.parse(singlePlace.latitude),
+              double.parse(singlePlace.longitude),
             ),
             // icon: BitmapDescriptor.fromBytes(markerIcon),
           ),
         );
-
         log(" markers  len is : ${homeCont.markers.length}");
       }
     }
-
     log("placeDataList len ::${homeCont.placeDataList.length}");
     update();
     isLoading(false);

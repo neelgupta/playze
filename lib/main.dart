@@ -39,7 +39,7 @@ void main() async {
         ListenableProvider<FilterProvider>(create: (_) => FilterProvider()),
       ],
       child: GetMaterialApp(
-        title: "Application",
+        title: "Playze",
         initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,
         translationsKeys: AppTranslation.translations,

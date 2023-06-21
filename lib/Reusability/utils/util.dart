@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:playze/Reusability/shared/lodding.dart';
-import 'package:playze/Reusability/shared/textStyle.dart';
+import 'package:playze/reusability/shared/app_text_style.dart';
 
 // ignore: non_constant_identifier_names
 // Util() async {
@@ -12,6 +10,14 @@ TimeOfDay minutesToTimeOfDay(int minutes) {
   Duration duration = Duration(minutes: minutes);
   List<String> parts = duration.toString().split(':');
   return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+}
+
+extension TimeOfDayConverter on TimeOfDay {
+  String to24hours() {
+    final hour = this.hour.toString().padLeft(2, "0");
+    final min = minute.toString().padLeft(2, "0");
+    return "$hour:$min";
+  }
 }
 
 Widget w(double count) => SizedBox(
@@ -57,41 +63,22 @@ class ButtonWithStyle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-        height: 40,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(btnradius ?? 5)),
-        onPressed: onPressed ?? () {},
-        color: bgColor ?? Colors.orange,
-        child: Ink(
-            width: btnwidth,
-            height: btnheight ?? 40,
-            decoration: BoxDecoration(
-                border: Border.all(color: bcolor ?? Colors.orange),
-                borderRadius: BorderRadius.circular(5)),
-            child: Center(
-                child:
-                    Text(textVal, style: style ?? AppTextStyle.size14Medium))));
-  }
-}
-
-class UtillDialogs {
-  static Future<void> showDialogBox(Widget widget, bool dismiss) {
-    return Get.dialog(widget, barrierDismissible: dismiss);
-  }
-
-  static Future<void> showLoadingDialog({barrierDismissible = false}) async {
-    print('opned');
-    return Get.dialog(
-        const Material(
-          type: MaterialType.transparency,
-          child: Center(
-            // Aligns the container to center
-            child: LoadingAni(
-              isTransparent: true,
-            ),
-          ),
+      height: 40,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(btnradius ?? 5)),
+      onPressed: onPressed ?? () {},
+      color: bgColor ?? Colors.orange,
+      child: Ink(
+        width: btnwidth,
+        height: btnheight ?? 40,
+        decoration: BoxDecoration(
+            border: Border.all(color: bcolor ?? Colors.orange),
+            borderRadius: BorderRadius.circular(5)),
+        child: Center(
+          child: Text(textVal, style: style ?? AppTextStyle.size14Medium),
         ),
-        barrierDismissible: barrierDismissible);
+      ),
+    );
   }
 }
