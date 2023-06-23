@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:playze/generated/locales.g.dart';
 import 'package:playze/reusability/shared/common_text_field.dart';
 import 'package:playze/reusability/shared/custom_bottom_bar.dart';
 import 'package:playze/reusability/utils/util.dart';
-import 'package:playze/generated/locales.g.dart';
 
 import '../../../../reusability/shared/app_text_style.dart';
 import '../../../../reusability/utils/app_colors.dart';
@@ -50,12 +50,10 @@ class EditProfileView extends GetView<EditProfileController> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const Row(
+                    const SizedBox(width: 20),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text("Edit Profile",
                             style: TextStyle(
                               fontSize: 18,
@@ -682,72 +680,69 @@ class EditProfileView extends GetView<EditProfileController> {
                       ),
                       h(25),
 
-                      SizedBox(
-                        height: Get.height * 0.3,
-                        child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: controller.interestsList.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 4),
-                          itemBuilder: (context, index) {
-                            return GetBuilder<EditProfileController>(
-                              builder: (control) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    control.interestsList[index].isSelected =
-                                        !control
-                                            .interestsList[index].isSelected;
-                                    control.update();
-                                    if (control
-                                            .interestsList[index].isSelected ==
-                                        true) {
-                                      controller.selectedInterestIdList
-                                          .add(control.interestsList[index].id);
-                                      log("controller.selectedInterestIdLis : ${controller.selectedInterestIdList}");
-                                    } else if (control
-                                            .interestsList[index].isSelected ==
-                                        false) {
-                                      controller.selectedInterestIdList.remove(
-                                          control.interestsList[index].id);
-                                      log("controller.selectedInterestIdLis : ${controller.selectedInterestIdList}");
-                                    } else {}
-                                    log("control.selectedInterestIdList ${control.selectedInterestIdList}");
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: controller
-                                              .interestsList[index].isSelected
-                                          ? Colors.orange
-                                          : Colors.blue,
-                                      border: Border.all(
-                                        color: Colors.white,
-                                      ),
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(5),
-                                      ),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: controller.interestsList.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 4,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GetBuilder<EditProfileController>(
+                            builder: (control) {
+                              return GestureDetector(
+                                onTap: () {
+                                  control.interestsList[index].isSelected =
+                                      !control.interestsList[index].isSelected;
+                                  control.update();
+                                  if (control.interestsList[index].isSelected ==
+                                      true) {
+                                    controller.selectedInterestIdList
+                                        .add(control.interestsList[index].id);
+                                    log("controller.selectedInterestIdLis : ${controller.selectedInterestIdList}");
+                                  } else if (control
+                                          .interestsList[index].isSelected ==
+                                      false) {
+                                    controller.selectedInterestIdList.remove(
+                                        control.interestsList[index].id);
+                                    log("controller.selectedInterestIdLis : ${controller.selectedInterestIdList}");
+                                  } else {}
+                                  log("control.selectedInterestIdList ${control.selectedInterestIdList}");
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: controller
+                                            .interestsList[index].isSelected
+                                        ? Colors.orange
+                                        : Colors.blue,
+                                    border: Border.all(
+                                      color: Colors.white,
                                     ),
-                                    child: Text(
-                                      controller.interestsList[index].name,
-                                      style: TextStyle(
-                                        color: controller
-                                                .interestsList[index].isSelected
-                                            ? Colors.white
-                                            : Colors.white,
-                                      ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(5),
                                     ),
                                   ),
-                                );
-                              },
-                            );
-                          },
-                        ),
+                                  child: Text(
+                                    controller.interestsList[index].name,
+                                    style: TextStyle(
+                                      color: controller
+                                              .interestsList[index].isSelected
+                                          ? Colors.white
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
-                      h(30),
+                      h(20),
                       ButtonWithStyle(
                         onPressed: () {
                           bool contactValid =
@@ -842,7 +837,7 @@ class EditProfileView extends GetView<EditProfileController> {
                         textVal: LocaleKeys.buttons_save.tr.toUpperCase(),
                         btnwidth: Get.width,
                       ),
-                      // h(0),
+                      h(25),
                     ],
                   ),
                 ),

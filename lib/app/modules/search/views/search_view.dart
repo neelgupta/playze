@@ -45,9 +45,9 @@ class SearchView extends GetView<SearchScreenController> {
                       ),
                     ),
                     const SizedBox(
-                      width: 10,
+                      width: 10
                     ),
-                    const Row(
+                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(

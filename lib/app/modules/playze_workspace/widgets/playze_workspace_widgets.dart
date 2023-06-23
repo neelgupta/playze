@@ -228,7 +228,7 @@ class SingleWorkSpaceWidget extends StatelessWidget {
                         placeId: workSpaceData.id,
                       );
                     },
-                    child: const Row(
+                    child:  Row(
                       children: [
                         Image(
                           image: AssetImage("assets/images/go.png"),
@@ -245,7 +245,7 @@ class SingleWorkSpaceWidget extends StatelessWidget {
                         placeId: workSpaceData.id,
                       );
                     },
-                    child: const Row(
+                    child:  Row(
                       children: [
                         Image(
                           image: AssetImage("assets/images/plan.png"),

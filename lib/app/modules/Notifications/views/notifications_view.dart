@@ -45,12 +45,10 @@ class NotificationsView extends GetView<NotificationsController> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const Row(
+                    const SizedBox(width: 20),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           "Notifications",
                           style: TextStyle(

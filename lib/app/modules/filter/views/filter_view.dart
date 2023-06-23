@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:get/get.dart';
 import 'package:playze/app/data/modal/filters_model.dart';
 import 'package:playze/reusability/utils/app_colors.dart';
@@ -48,9 +47,9 @@ class FilterView extends GetView<FilterController> {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                         "Filter",
                         style: TextStyle(

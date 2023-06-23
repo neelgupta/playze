@@ -52,9 +52,9 @@ class AboutusView extends GetView<AboutUsController> {
                     const SizedBox(
                       width: 20,
                     ),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           "About us",
                           style: TextStyle(

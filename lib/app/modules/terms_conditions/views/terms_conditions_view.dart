@@ -43,9 +43,9 @@ class TermsConditionsView extends GetView<TermsConditionsController> {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text("Terms & Conditions",
                             style: TextStyle(
                               fontSize: 18,

@@ -182,6 +182,8 @@ class HomeController extends GetxController {
       isLoading(true);
       await userService
           .getAllPlacesListMethod(
+        // latitudeValue: "21.162659",
+        // longitudeValue: "72.815094",
         latitudeValue: currentLocation.latitude,
         longitudeValue: currentLocation.longitude,
       )

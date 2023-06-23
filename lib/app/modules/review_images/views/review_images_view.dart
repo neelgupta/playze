@@ -44,9 +44,9 @@ class ReviewImagesView extends GetView<ReviewImagesController> {
                       ),
                     ),
                     const SizedBox(
-                      width: 20,
+                      width: 20
                     ),
-                    const Row(
+                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(

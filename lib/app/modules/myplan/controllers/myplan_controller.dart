@@ -42,7 +42,7 @@ class MyplanController extends GetxController {
   LatLng? location;
   // = const LatLng(23.812433, 79.305474);
   late Position currentLocation;
-  LocationPermission? permission;
+  LocationPermission permission = LocationPermission.denied;
 
   //api model & lists
   DayDatum? selectedDayData;

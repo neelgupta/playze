@@ -1,13 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:playze/Reusability/shared/custom_drawer.dart';
-import 'package:playze/reusability/shared/custom_bottom_bar.dart';
-import 'package:playze/reusability/utils/util.dart';
 import 'package:playze/app/routes/app_pages.dart';
 import 'package:playze/generated/locales.g.dart';
+import 'package:playze/reusability/shared/custom_bottom_bar.dart';
+import 'package:playze/reusability/utils/util.dart';
 
 import '../controllers/settings_controller.dart';
 
@@ -50,12 +49,10 @@ class SettingsView extends GetView<SettingsController> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const Row(
+                    const SizedBox(width: 20),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text("Settings",
                             style: TextStyle(
                               fontSize: 18,

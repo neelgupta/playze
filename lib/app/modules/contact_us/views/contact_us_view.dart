@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:playze/generated/locales.g.dart';
 import 'package:playze/reusability/shared/custom_bottom_bar.dart';
 import 'package:playze/reusability/shared/custom_drawer.dart';
 import 'package:playze/reusability/utils/util.dart';
-import 'package:playze/generated/locales.g.dart';
 
 import '../controllers/contact_us_controller.dart';
 
@@ -58,12 +58,10 @@ class ContactUsView extends GetView<ContactUsController> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const Row(
+                    const SizedBox(width: 20),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text("Contact Us",
                             style: TextStyle(
                               fontSize: 18,

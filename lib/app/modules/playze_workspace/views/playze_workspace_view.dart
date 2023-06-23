@@ -47,9 +47,9 @@ class PlayzeWorkspaceView extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(
-                      width: 20,
+                      width: 20
                     ),
-                    const Row(
+                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(

@@ -50,9 +50,9 @@ class MyplanView extends GetView<MyplanController> {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           "My Plan",
                           style: TextStyle(
@@ -144,8 +144,8 @@ class MyplanView extends GetView<MyplanController> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : controller.permission! == LocationPermission.whileInUse ||
-                    controller.permission! == LocationPermission.always
+            : controller.permission == LocationPermission.whileInUse ||
+                    controller.permission == LocationPermission.always
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,

@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:playze/app/modules/bottom_navigation_bar/controllers/bottom_navigation_bar_controller.dart';
 import 'package:playze/app/modules/home/controllers/home_controller.dart';
+import 'package:playze/app/routes/app_pages.dart';
 import 'package:playze/reusability/shared/custom_bottom_bar.dart';
 import 'package:playze/reusability/utils/app_colors.dart';
 import 'package:playze/reusability/utils/util.dart';
-import 'package:playze/app/routes/app_pages.dart';
 
 import '../controllers/add_places_controller.dart';
 
@@ -49,9 +49,9 @@ class AddplacesView extends GetView<AddPlacesController> {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           "Add Places",
                           style: TextStyle(
@@ -390,8 +390,8 @@ class AddplacesView extends GetView<AddPlacesController> {
                                               .locateWindowPop.value = true;
                                         }
                                       },
-                                      child: const Row(
-                                        children: [
+                                      child: Row(
+                                        children: const [
                                           Image(
                                             image: AssetImage(
                                                 "assets/images/go.png"),
@@ -408,8 +408,8 @@ class AddplacesView extends GetView<AddPlacesController> {
                                           placeId: singlePlace.id,
                                         );
                                       },
-                                      child: const Row(
-                                        children: [
+                                      child: Row(
+                                        children: const [
                                           Image(
                                             image: AssetImage(
                                                 "assets/images/plan.png"),

@@ -763,9 +763,9 @@ class BottomEditPlanBody extends StatelessWidget {
                         width: Get.size.width * 0.85,
                         child: Column(
                           children: [
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
+                              children: const [
                                 Padding(
                                   padding: EdgeInsets.symmetric(vertical: 12),
                                   child: Text(

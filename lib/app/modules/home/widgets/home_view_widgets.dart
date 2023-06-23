@@ -234,8 +234,8 @@ class SinglePlaceWidget extends StatelessWidget {
 
                   bottomCont.locateWindowPop.value = true;
                 },
-                child: const Row(
-                  children: [
+                child: Row(
+                  children: const [
                     Image(
                       image: AssetImage("assets/images/go.png"),
                       width: 25,
@@ -253,8 +253,8 @@ class SinglePlaceWidget extends StatelessWidget {
                     placeId: placeData.id,
                   );
                 },
-                child: const Row(
-                  children: [
+                child: Row(
+                  children: const [
                     Image(
                       image: AssetImage("assets/images/plan.png"),
                       width: 25,

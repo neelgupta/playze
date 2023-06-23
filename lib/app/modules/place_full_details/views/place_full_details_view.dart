@@ -1,6 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 
 import 'dart:developer';
+import 'dart:io' show Platform;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -271,8 +272,8 @@ class PlaceFullDetailsView extends GetView<PlaceFullDetailsController> {
                                                 }
                                               }
                                             },
-                                            child: const Row(
-                                              children: [
+                                            child: Row(
+                                              children: const [
                                                 Image(
                                                   image: AssetImage(
                                                       "assets/images/go.png"),
@@ -292,8 +293,8 @@ class PlaceFullDetailsView extends GetView<PlaceFullDetailsController> {
                                                     .placeData?.data.id,
                                               );
                                             },
-                                            child: const Row(
-                                              children: [
+                                            child: Row(
+                                              children: const [
                                                 Image(
                                                   image: AssetImage(
                                                       "assets/images/plan.png"),
@@ -312,8 +313,8 @@ class PlaceFullDetailsView extends GetView<PlaceFullDetailsController> {
                                                 status: "1",
                                               );
                                             },
-                                            child: const Row(
-                                              children: [
+                                            child: Row(
+                                              children: const [
                                                 Image(
                                                   image: AssetImage(
                                                       "assets/images/plus.png"),
@@ -714,12 +715,12 @@ class PlaceFullDetailsView extends GetView<PlaceFullDetailsController> {
                                             children: [
                                               SizedBox(
                                                 height: Get.height * 0.05,
-                                                child: const Column(
+                                                child: Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
-                                                  children: [
+                                                  children: const [
                                                     Text(
                                                       "Cost",
                                                       style: TextStyle(
@@ -1200,8 +1201,11 @@ class PlaceFullDetailsView extends GetView<PlaceFullDetailsController> {
                                         ],
                                       ),
                                       Container(
-                                        height: Get.height *
-                                            0.72, //height of TabBarView
+                                        height: Platform.isIOS
+                                            ? Get.size.height * 0.67
+                                            : Get.size.height * 0.72,
+                                        // height: Get.height *
+                                        //     0.72, //height of TabBarView
                                         decoration: const BoxDecoration(
                                           border: Border(
                                             top: BorderSide(

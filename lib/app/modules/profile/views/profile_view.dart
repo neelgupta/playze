@@ -52,9 +52,9 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                     ),
                     const SizedBox(
-                      width: 20,
+                      width: 20
                     ),
-                    const Row(
+                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text("My Profile",

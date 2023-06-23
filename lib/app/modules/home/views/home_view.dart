@@ -1,3 +1,5 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -64,9 +66,9 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           "Home",
                           style: TextStyle(
@@ -114,227 +116,214 @@ class HomeView extends GetView<HomeController> {
             : controller.permission! == LocationPermission.whileInUse ||
                     controller.permission! == LocationPermission.always
                 ? controller.isMapView.value
-                    ? SizedBox(
-                        height: Get.height,
-                        width: Get.width,
-                        child: Column(
-                          children: [
-                            Stack(
-                              children: [
-                                SizedBox(
-                                  height: Get.height * 0.85,
-                                  width: Get.width,
-                                  child: controller.permission! ==
-                                              LocationPermission.whileInUse ||
-                                          controller.permission! ==
-                                              LocationPermission.always
-                                      ? GetBuilder<HomeController>(
-                                          builder: (context) {
-                                          return GoogleMap(
-                                            initialCameraPosition:
-                                                CameraPosition(
-                                              target: controller.center!,
-                                              tilt: 10,
-                                              zoom: controller.permission! ==
-                                                          LocationPermission
-                                                              .whileInUse ||
-                                                      controller.permission! ==
-                                                          LocationPermission
-                                                              .always
-                                                  ? 14.5
-                                                  : 4.5,
-                                              // tilt: 10,
-                                              // zoom: 14.5,
-                                            ),
-
-                                            // zoomGesturesEnabled: true,
-                                            rotateGesturesEnabled: false,
-                                            scrollGesturesEnabled: true,
-                                            zoomControlsEnabled: false,
-                                            // myLocationButtonEnabled: true,
-                                            tiltGesturesEnabled: false,
-                                            compassEnabled: false,
-                                            onMapCreated: (gcontrol) {
-                                              controller.gMapController =
-                                                  gcontrol;
-                                            },
-                                            markers: Set<Marker>.of(
-                                                controller.markers),
-                                            onTap: (location) {
-                                              bottomController.locateWindowPop
-                                                  .value = false;
-                                              // log("location.latitude ::  ${location.latitude}");
-                                              // log("location. ::  ${location.longitude}");
-                                            },
-                                          );
-                                        })
-                                      : const Center(
-                                          child: Text(
-                                            "Allow location permission in your settings",
-                                            style: TextStyle(
-                                              color: AppColors.blackColor,
-                                              fontSize: 15,
-                                            ),
+                    ? Stack(
+                        children: [
+                          SizedBox(
+                            // height: Get.height * 0.82,
+                            width: Get.width,
+                            child: controller.permission! ==
+                                        LocationPermission.whileInUse ||
+                                    controller.permission! ==
+                                        LocationPermission.always
+                                ? GetBuilder<HomeController>(
+                                    builder: (context) {
+                                    return GoogleMap(
+                                      initialCameraPosition: CameraPosition(
+                                        target: controller.center!,
+                                        tilt: 10,
+                                        zoom: controller.permission! ==
+                                                    LocationPermission
+                                                        .whileInUse ||
+                                                controller.permission! ==
+                                                    LocationPermission.always
+                                            ? 14.5
+                                            : 4.5,
+                                        // tilt: 10,
+                                        // zoom: 14.5,
+                                      ),
+                                      // myLocationEnabled: false,
+                                      myLocationButtonEnabled: false,
+                                      // zoomGesturesEnabled: true,
+                                      rotateGesturesEnabled: false,
+                                      scrollGesturesEnabled: true,
+                                      zoomControlsEnabled: false,
+                                      // myLocationButtonEnabled: true,
+                                      tiltGesturesEnabled: false,
+                                      compassEnabled: false,
+                                      onMapCreated: (gcontrol) {
+                                        controller.gMapController = gcontrol;
+                                      },
+                                      markers:
+                                          Set<Marker>.of(controller.markers),
+                                      onTap: (location) {
+                                        bottomController.locateWindowPop.value =
+                                            false;
+                                        // log("location.latitude ::  ${location.latitude}");
+                                        // log("location. ::  ${location.longitude}");
+                                      },
+                                    );
+                                  })
+                                : const Center(
+                                    child: Text(
+                                      "Allow location permission in your settings",
+                                      style: TextStyle(
+                                        color: AppColors.blackColor,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: Get.height * 0.1),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.SEARCH);
+                                },
+                                child: Container(
+                                  height: Get.height * 0.06,
+                                  width: Get.width * 0.75,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.85),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(25),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: Get.width * 0.03),
+                                      SizedBox(
+                                        height: Get.height * 0.05,
+                                        width: Get.width * 0.07,
+                                        child: const Image(
+                                          image: AssetImage(
+                                              "assets/images/search.png"),
+                                        ),
+                                      ),
+                                      SizedBox(width: Get.width * 0.03),
+                                      SizedBox(
+                                        height: Get.height * 0.3,
+                                        width: Get.width * 0.5,
+                                        child: TextFormField(
+                                          enabled: false,
+                                          controller:
+                                              controller.searchController,
+                                          decoration: const InputDecoration(
+                                            hintText: "Search places",
+                                            border: InputBorder.none,
                                           ),
                                         ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(height: Get.height * 0.1),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.toNamed(Routes.SEARCH);
-                                      },
-                                      child: Container(
+                              ),
+                              SizedBox(width: Get.width * 0.02),
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.FILTER);
+                                },
+                                child: filterProvider.filterCategoryCount == 0
+                                    ? Container(
+                                        padding: const EdgeInsets.all(10),
                                         height: Get.height * 0.06,
-                                        width: Get.width * 0.75,
+                                        width: Get.width * 0.13,
                                         decoration: BoxDecoration(
                                           color: Colors.white.withOpacity(0.85),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(25),
-                                          ),
+                                          shape: BoxShape.circle,
                                         ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(width: Get.width * 0.03),
-                                            SizedBox(
-                                              height: Get.height * 0.05,
-                                              width: Get.width * 0.07,
-                                              child: const Image(
-                                                image: AssetImage(
-                                                    "assets/images/search.png"),
-                                              ),
-                                            ),
-                                            SizedBox(width: Get.width * 0.03),
-                                            SizedBox(
-                                              height: Get.height * 0.3,
-                                              width: Get.width * 0.5,
-                                              child: TextFormField(
-                                                enabled: false,
-                                                controller:
-                                                    controller.searchController,
-                                                decoration:
-                                                    const InputDecoration(
-                                                  hintText: "Search places",
-                                                  border: InputBorder.none,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
+                                        child: Image.asset(
+                                            "assets/images/menu2.png"),
+                                      )
+                                    : Badge(
+                                        label: Text(
+                                            "${filterProvider.filterCategoryCount}"),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          height: Get.height * 0.06,
+                                          width: Get.width * 0.13,
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Colors.white.withOpacity(0.85),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Image.asset(
+                                              "assets/images/menu2.png"),
                                         ),
                                       ),
+                              ),
+                            ],
+                          ),
+                          Positioned(
+                            left: 15,
+                            bottom: Platform.isIOS
+                                ? Get.size.height * 0.152
+                                : Get.size.height * 0.114,
+                            child: GestureDetector(
+                              onTap: () {
+                                controller.isMapView.value =
+                                    !controller.isMapView.value;
+                                bottomController.locateWindowPop.value = false;
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20)),
+                                  border: Border.all(color: Colors.blueAccent),
+                                  color: Colors.white.withOpacity(0.85),
+                                ),
+                                height: Get.height * 0.05,
+                                width: Get.width * 0.4,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: Get.width * 0.25,
+                                      child: const Text(
+                                        "List View",
+                                      ),
                                     ),
-                                    SizedBox(width: Get.width * 0.02),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.toNamed(Routes.FILTER);
-                                      },
-                                      child: filterProvider
-                                                  .filterCategoryCount ==
-                                              0
-                                          ? Container(
-                                              padding: const EdgeInsets.all(10),
-                                              height: Get.height * 0.06,
-                                              width: Get.width * 0.13,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white
-                                                    .withOpacity(0.85),
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Image.asset(
-                                                  "assets/images/menu2.png"),
-                                            )
-                                          : Badge(
-                                              label: Text(
-                                                  "${filterProvider.filterCategoryCount}"),
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                height: Get.height * 0.06,
-                                                width: Get.width * 0.13,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white
-                                                      .withOpacity(0.85),
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Image.asset(
-                                                    "assets/images/menu2.png"),
-                                              ),
-                                            ),
+                                    const Spacer(),
+                                    Container(
+                                      padding: const EdgeInsets.all(4),
+                                      height: Get.height * 0.05,
+                                      width: Get.width * 0.07,
+                                      child: Image.asset(
+                                        "assets/images/list.png",
+                                      ),
                                     ),
+                                    SizedBox(
+                                      width: Get.width * 0.03,
+                                    )
                                   ],
                                 ),
-                                Positioned(
-                                  left: 15,
-                                  bottom: Get.size.height * 0.115,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      controller.isMapView.value =
-                                          !controller.isMapView.value;
-                                      bottomController.locateWindowPop.value =
-                                          false;
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                        border: Border.all(
-                                            color: Colors.blueAccent),
-                                        color: Colors.white.withOpacity(0.85),
-                                      ),
-                                      height: Get.height * 0.05,
-                                      width: Get.width * 0.4,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            width: Get.width * 0.25,
-                                            child: const Text(
-                                              "List View",
-                                            ),
-                                          ),
-                                          const Spacer(),
-                                          Container(
-                                            padding: const EdgeInsets.all(4),
-                                            height: Get.height * 0.05,
-                                            width: Get.width * 0.07,
-                                            child: Image.asset(
-                                              "assets/images/list.png",
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.03,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  bottom: Get.size.height * 0.11,
-                                  right: 20,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      controller.requestLocationPermission();
-                                      controller.goToMyCurrentLocation();
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      height: Get.height * 0.09,
-                                      width: Get.width * 0.15,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.85),
-                                          shape: BoxShape.circle),
-                                      child: Image.asset(
-                                          "assets/images/location.png"),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Positioned(
+                            bottom: Platform.isIOS
+                                ? Get.size.height * 0.145
+                                : Get.size.height * 0.114,
+                            right: 20,
+                            child: GestureDetector(
+                              onTap: () {
+                                controller.requestLocationPermission();
+                                controller.goToMyCurrentLocation();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                height: Get.height * 0.09,
+                                width: Get.width * 0.15,
+                                decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.85),
+                                    shape: BoxShape.circle),
+                                child:
+                                    Image.asset("assets/images/location.png"),
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                     : Stack(
                         children: [
@@ -501,7 +490,9 @@ class HomeView extends GetView<HomeController> {
                           ),
                           Positioned(
                             left: 15,
-                            bottom: Get.size.height * 0.111,
+                            bottom: Platform.isIOS
+                                ? Get.size.height * 0.145
+                                : Get.size.height * 0.114,
                             child: GestureDetector(
                               onTap: () {
                                 controller.isMapView.value = true;

@@ -274,8 +274,8 @@ class BottomNavigationbarView extends GetView<BottomNavigationBarController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            const Row(
-                                              children: [
+                                            Row(
+                                              children: const [
                                                 Image(
                                                   image: AssetImage(
                                                       "assets/images/go.png"),
@@ -287,8 +287,8 @@ class BottomNavigationbarView extends GetView<BottomNavigationBarController> {
                                             SizedBox(
                                               width: Get.width * 0.025,
                                             ),
-                                            const Row(
-                                              children: [
+                                            Row(
+                                              children: const [
                                                 Image(
                                                   image: AssetImage(
                                                       "assets/images/plan.png"),
