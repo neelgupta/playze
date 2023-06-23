@@ -221,7 +221,7 @@ class FilterController extends GetxController {
     homeCont.placeFilteredList = [];
 
     filterProv.updateFilterDataList([]);
-
+    homeCont.getUserLocation();
     if (homeCont.placeDataList.isNotEmpty) {
       homeCont.markers.clear();
       homeCont.selectedPlaceLocation = homeCont.placeDataList.first;

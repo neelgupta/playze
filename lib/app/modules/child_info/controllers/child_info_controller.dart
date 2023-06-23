@@ -67,15 +67,15 @@ class ChildInfoController extends GetxController {
           // lip.add(element.name);
         }
       } else {
-        Fluttertoast.showToast(
-          msg: 'Please try again later...!',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        // Fluttertoast.showToast(
+        //   msg: 'Please try again later...!',
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.BOTTOM,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.blue,
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
       }
       log("interestsList len :: ${interestsList.length}");
       update();

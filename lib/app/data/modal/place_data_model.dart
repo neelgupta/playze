@@ -39,6 +39,7 @@ class PlaceDetails {
   final String costAdults;
   final String costChildren;
   final String logo;
+  final bool isfavorite;
   final String distance;
   final String duration;
   final String totalReview;
@@ -58,6 +59,7 @@ class PlaceDetails {
     required this.costChildren,
     required this.logo,
     required this.distance,
+    required this.isfavorite,
     required this.duration,
     required this.totalReview,
     required this.rating,
@@ -78,6 +80,7 @@ class PlaceDetails {
         logo: json["logo"] ?? "",
         distance: json["distance"] ?? "",
         duration: json["duration"] ?? "",
+        isfavorite: json["isfavorite "] ?? false,
         totalReview: json["total_review"] ?? "",
         rating: json["rating"] ?? "",
         avgRating: json["avg_rating"] ?? "",
@@ -98,6 +101,7 @@ class PlaceDetails {
         "cost_adults": costAdults,
         "cost_children": costChildren,
         "logo": logo,
+        "isfavorite ": isfavorite,
         "distance": distance,
         "duration": duration,
         "total_review": totalReview,

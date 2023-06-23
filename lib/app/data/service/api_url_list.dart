@@ -34,6 +34,7 @@ class ApiUrlList {
 
   ///user functions apis
   static String addWorkSpace = '${baseUrl}workspace/addWorkspace';
+  static String deleteWorkspace = '${baseUrl}workspace/deleteworkspace';
   static String addReview = '${baseUrl}addReview';
 
   //common apis

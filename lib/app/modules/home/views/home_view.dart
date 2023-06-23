@@ -336,198 +336,209 @@ class HomeView extends GetView<HomeController> {
                           ],
                         ),
                       )
-                    : SizedBox(
-                        height: Get.height,
-                        width: Get.width,
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                    : Stack(
+                        children: [
+                          SizedBox(
+                            height: Get.height,
+                            width: Get.width,
+                            child: Column(
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.SEARCH);
-                                  },
-                                  child: Container(
-                                    height: Get.height * 0.06,
-                                    width: Get.width * 0.75,
-                                    decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(25))),
-                                    child: Row(
-                                      children: [
-                                        SizedBox(width: Get.width * 0.03),
-                                        SizedBox(
-                                          height: Get.height * 0.05,
-                                          width: Get.width * 0.07,
-                                          child: const Image(
-                                            image: AssetImage(
-                                                "assets/images/search.png"),
-                                          ),
-                                        ),
-                                        SizedBox(width: Get.width * 0.03),
-                                        SizedBox(
-                                          height: Get.height * 0.3,
-                                          width: Get.width * 0.5,
-                                          child: TextFormField(
-                                            enabled: false,
-                                            controller:
-                                                controller.searchController,
-                                            decoration: const InputDecoration(
-                                              hintText: "Search places",
-                                              border: InputBorder.none,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: Get.width * 0.02),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.toNamed(Routes.FILTER);
-                                  },
-                                  child: filterProvider.filterCategoryCount == 0
-                                      ? Container(
-                                          padding: const EdgeInsets.all(10),
-                                          height: Get.height * 0.06,
-                                          width: Get.width * 0.13,
-                                          decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              shape: BoxShape.circle),
-                                          child: Image.asset(
-                                              "assets/images/menu2.png"),
-                                        )
-                                      : Badge(
-                                          label: Text(
-                                              "${filterProvider.filterCategoryCount}"),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(10),
-                                            height: Get.height * 0.06,
-                                            width: Get.width * 0.13,
-                                            decoration: const BoxDecoration(
-                                                color: Colors.white,
-                                                shape: BoxShape.circle),
-                                            child: Image.asset(
-                                              "assets/images/menu2.png",
-                                            ),
-                                          ),
-                                        ),
-                                )
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            Stack(
-                              children: [
-                                Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                                  // color: Colors.white,
-                                  height: Get.height * 0.68,
-                                  width: Get.width,
-                                  child: GetBuilder<HomeController>(
-                                    builder: (context) {
-                                      return controller.isFiltered.value
-                                          ? controller.placeFilteredList.isEmpty
-                                              ? const Center(
-                                                  child:
-                                                      Text("No data Available"),
-                                                )
-                                              : ListView.separated(
-                                                  itemCount: controller
-                                                      .placeFilteredList.length,
-                                                  padding: const EdgeInsets
-                                                      .symmetric(vertical: 10),
-                                                  physics:
-                                                      const BouncingScrollPhysics(),
-                                                  separatorBuilder:
-                                                      (context, index) {
-                                                    return h(15);
-                                                  },
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return SinglePlaceWidget(
-                                                      placeData: controller
-                                                              .placeFilteredList[
-                                                          index],
-                                                    );
-                                                  },
-                                                )
-                                          : RefreshIndicator(
-                                              onRefresh: () {
-                                                return controller
-                                                    .getPlacesList();
-                                              },
-                                              child: ListView.separated(
-                                                itemCount: controller
-                                                    .placeDataList.length,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 10),
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                separatorBuilder:
-                                                    (context, index) {
-                                                  return h(15);
-                                                },
-                                                itemBuilder: (context, index) {
-                                                  return SinglePlaceWidget(
-                                                    placeData: controller
-                                                        .placeDataList[index],
-                                                  );
-                                                },
+                                const SizedBox(height: 15),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.toNamed(Routes.SEARCH);
+                                      },
+                                      child: Container(
+                                        height: Get.height * 0.06,
+                                        width: Get.width * 0.75,
+                                        decoration: const BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(25))),
+                                        child: Row(
+                                          children: [
+                                            SizedBox(width: Get.width * 0.03),
+                                            SizedBox(
+                                              height: Get.height * 0.05,
+                                              width: Get.width * 0.07,
+                                              child: const Image(
+                                                image: AssetImage(
+                                                    "assets/images/search.png"),
                                               ),
-                                            );
-                                    },
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 15,
-                                  bottom: Get.size.height * 0.033,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      controller.isMapView.value = true;
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                        border: Border.all(
-                                            color: Colors.blueAccent),
-                                        color: Colors.white,
-                                      ),
-                                      height: Get.height * 0.05,
-                                      width: Get.width * 0.4,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            width: Get.width * 0.25,
-                                            child: const Text("Map View"),
-                                          ),
-                                          const Spacer(),
-                                          Container(
-                                            padding: const EdgeInsets.all(4),
-                                            height: Get.height * 0.05,
-                                            width: Get.width * 0.07,
-                                            child: Image.asset(
-                                                "assets/images/mapviwe.png"),
-                                          ),
-                                          SizedBox(
-                                            width: Get.width * 0.03,
-                                          )
-                                        ],
+                                            ),
+                                            SizedBox(width: Get.width * 0.03),
+                                            SizedBox(
+                                              height: Get.height * 0.3,
+                                              width: Get.width * 0.5,
+                                              child: TextFormField(
+                                                enabled: false,
+                                                controller:
+                                                    controller.searchController,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  hintText: "Search places",
+                                                  border: InputBorder.none,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                )
+                                    SizedBox(width: Get.width * 0.02),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.toNamed(Routes.FILTER);
+                                      },
+                                      child: filterProvider
+                                                  .filterCategoryCount ==
+                                              0
+                                          ? Container(
+                                              padding: const EdgeInsets.all(10),
+                                              height: Get.height * 0.06,
+                                              width: Get.width * 0.13,
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.white,
+                                                  shape: BoxShape.circle),
+                                              child: Image.asset(
+                                                  "assets/images/menu2.png"),
+                                            )
+                                          : Badge(
+                                              label: Text(
+                                                  "${filterProvider.filterCategoryCount}"),
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                height: Get.height * 0.06,
+                                                width: Get.width * 0.13,
+                                                decoration: const BoxDecoration(
+                                                    color: Colors.white,
+                                                    shape: BoxShape.circle),
+                                                child: Image.asset(
+                                                  "assets/images/menu2.png",
+                                                ),
+                                              ),
+                                            ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 5),
+                                Stack(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          10, 0, 10, 10),
+                                      // color: Colors.white,
+                                      height: Get.height * 0.61,
+                                      width: Get.width,
+                                      child: GetBuilder<HomeController>(
+                                        builder: (context) {
+                                          return controller.isFiltered.value
+                                              ? controller
+                                                      .placeFilteredList.isEmpty
+                                                  ? const Center(
+                                                      child: Text(
+                                                          "No data Available"),
+                                                    )
+                                                  : ListView.separated(
+                                                      itemCount: controller
+                                                          .placeFilteredList
+                                                          .length,
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 5),
+                                                      physics:
+                                                          const BouncingScrollPhysics(),
+                                                      separatorBuilder:
+                                                          (context, index) {
+                                                        return h(15);
+                                                      },
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return SinglePlaceWidget(
+                                                          placeData: controller
+                                                                  .placeFilteredList[
+                                                              index],
+                                                        );
+                                                      },
+                                                    )
+                                              : RefreshIndicator(
+                                                  onRefresh: () {
+                                                    return controller
+                                                        .getPlacesList();
+                                                  },
+                                                  child: ListView.separated(
+                                                    itemCount: controller
+                                                        .placeDataList.length,
+                                                    padding: const EdgeInsets
+                                                        .symmetric(vertical: 5),
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    separatorBuilder:
+                                                        (context, index) {
+                                                      return h(15);
+                                                    },
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return SinglePlaceWidget(
+                                                        placeData: controller
+                                                                .placeDataList[
+                                                            index],
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Positioned(
+                            left: 15,
+                            bottom: Get.size.height * 0.111,
+                            child: GestureDetector(
+                              onTap: () {
+                                controller.isMapView.value = true;
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20)),
+                                  border: Border.all(color: Colors.blueAccent),
+                                  color: Colors.white,
+                                ),
+                                height: Get.height * 0.05,
+                                width: Get.width * 0.4,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      width: Get.width * 0.25,
+                                      child: const Text("Map View"),
+                                    ),
+                                    const Spacer(),
+                                    Container(
+                                      padding: const EdgeInsets.all(4),
+                                      height: Get.height * 0.05,
+                                      width: Get.width * 0.07,
+                                      child: Image.asset(
+                                          "assets/images/mapviwe.png"),
+                                    ),
+                                    SizedBox(
+                                      width: Get.width * 0.03,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       )
                 : const Center(
                     child: Text(

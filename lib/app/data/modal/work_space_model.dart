@@ -44,6 +44,7 @@ class WorkSpaceData {
   final String address;
   final int latitude;
   final int longitude;
+  final bool isfavorite;
   final String image;
   final int rating;
   final int totalRating;
@@ -55,6 +56,7 @@ class WorkSpaceData {
     required this.address,
     required this.latitude,
     required this.image,
+    required this.isfavorite,
     required this.longitude,
     required this.rating,
     required this.totalRating,
@@ -66,6 +68,7 @@ class WorkSpaceData {
         placesName: json["places_name"] ?? "",
         address: json["address"] ?? "",
         image: json["image"] ?? "",
+        isfavorite: json["isfavorite"] ?? false,
         latitude: json["latitude"] ?? 0,
         longitude: json["longitude"] ?? 0,
         rating: json["rating"] ?? 0,
@@ -78,6 +81,7 @@ class WorkSpaceData {
         "places_name": placesName,
         "address": address,
         "image": image,
+        "isfavorite": isfavorite,
         "latitude": latitude,
         "longitude": longitude,
         "rating": rating,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:playze/generated/locales.g.dart';
 import 'package:provider/provider.dart';
+
 // ignore: depend_on_referenced_packages
 // import 'package:firebase_core/firebase_core.dart';
 import 'app/data/provider/filter_provider.dart';

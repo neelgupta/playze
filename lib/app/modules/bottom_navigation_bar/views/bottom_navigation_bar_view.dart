@@ -3,13 +3,13 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:playze/reusability/shared/custom_bottom_bar.dart';
-import 'package:playze/reusability/utils/app_colors.dart';
-import 'package:playze/reusability/utils/util.dart';
 import 'package:playze/app/modules/home/controllers/home_controller.dart';
 import 'package:playze/app/modules/home/views/home_view.dart';
 import 'package:playze/app/modules/myplan/views/myplan_view.dart';
 import 'package:playze/app/modules/profile/views/profile_view.dart';
+import 'package:playze/reusability/shared/custom_bottom_bar.dart';
+import 'package:playze/reusability/utils/app_colors.dart';
+import 'package:playze/reusability/utils/util.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../wishlist/views/wishlist_view.dart';
@@ -88,7 +88,7 @@ class BottomNavigationbarView extends GetView<BottomNavigationBarController> {
                                                       fit: BoxFit.cover,
                                                       errorWidget: (context,
                                                           url, error) {
-                                                        log("hController.selectedPlaceLocation!.images.first :${hController.selectedPlaceLocation!.images.first.images}");
+                                                        log("hController.selectedPlaceLocation!.isfavorite :${hController.selectedPlaceLocation!.isfavorite}");
                                                         return const Center(
                                                           child: Text(
                                                             "No Image",
@@ -104,15 +104,51 @@ class BottomNavigationbarView extends GetView<BottomNavigationBarController> {
                                                   Positioned(
                                                     top: 10,
                                                     left: 10,
-                                                    child: SizedBox(
-                                                      height: Get.height * 0.02,
-                                                      child: const Image(
-                                                        image: AssetImage(
-                                                          "assets/images/dil.png",
-                                                        ),
-                                                      ),
+                                                    child: GestureDetector(
+                                                      onTap: () async {
+                                                        if (hController
+                                                            .selectedPlaceLocation!
+                                                            .isfavorite) {
+                                                          controller
+                                                              .removeFromWishListFunction(
+                                                            placeId: hController
+                                                                .selectedPlaceLocation!
+                                                                .id,
+                                                          );
+                                                        } else {
+                                                          await controller
+                                                              .addTowishListFunction(
+                                                            placeId: hController
+                                                                .selectedPlaceLocation!
+                                                                .id,
+                                                          );
+                                                        }
+                                                      },
+                                                      child: hController
+                                                              .selectedPlaceLocation!
+                                                              .isfavorite
+                                                          ? Image.asset(
+                                                              "assets/images/dil2.png",
+                                                              color: AppColors
+                                                                  .redColor,
+                                                              height: 24,
+                                                              width: 24,
+                                                            )
+                                                          : Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              child:
+                                                                  Image.asset(
+                                                                "assets/images/dil.png",
+                                                                color: AppColors
+                                                                    .whiteColor,
+                                                                height: 18,
+                                                                width: 18,
+                                                              ),
+                                                            ),
                                                     ),
-                                                  )
+                                                  ),
                                                 ],
                                               ),
                                             ),

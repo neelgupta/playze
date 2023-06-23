@@ -47,6 +47,7 @@ class WishListData {
   final String costAdults;
   final String costChildren;
   final String time;
+  final bool isfavorite;
   final String logo;
   final String totalReview;
   final String rating;
@@ -58,6 +59,7 @@ class WishListData {
     required this.placesName,
     required this.address,
     required this.latitude,
+    required this.isfavorite,
     required this.longitude,
     required this.costAdults,
     required this.costChildren,
@@ -78,6 +80,7 @@ class WishListData {
         costAdults: json["cost_adults"] ?? "",
         costChildren: json["cost_children"] ?? "",
         time: json["time"] ?? "",
+        isfavorite: json["isfavorite"] ?? false,
         logo: json["logo"] ?? "",
         totalReview: json["total_review"] ?? "",
         rating: json["rating"] ?? "",
@@ -97,6 +100,7 @@ class WishListData {
         "cost_children": costChildren,
         "time": time,
         "logo": logo,
+        "isfavorite": isfavorite,
         "total_review": totalReview,
         "rating": rating,
         "images": List<dynamic>.from(images.map((x) => x.toJson())),

@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:playze/reusability/utils/app_colors.dart';
 
+import '../../../../generated/locales.g.dart';
 import '../../../../reusability/shared/app_text_style.dart';
 import '../../../../reusability/utils/util.dart';
-import '../../../../generated/locales.g.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/myplan_controller.dart';
 
@@ -99,18 +99,25 @@ class _MyPlansListviewState extends State<MyPlansListview>
                 children: [
                   TabBar(
                     controller: controller.dayTabBarController,
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 0),
                     onTap: (day) {
-                      controller.selectedDay.value = day + 1;
                       // controller.update();
                       // Future.delayed(
                       //   const Duration(milliseconds: 20),
                       //   () {
                       //   },
                       // );
+                      // log("day is : $day");
 
+                      controller.selectedDay.value = day + 1;
+                      for (var d in controller.daysList) {
+                        if (d.dayNumber ==
+                            controller.selectedDay.value.toString()) {
+                          controller.selectedDayData = d;
+                        }
+                      }
+                      log("controller.selectedDayData :${controller.selectedDayData!.dayNumber}");
                       controller.planGetlistByDayFunction();
-                      log("controller.selectedDay.value :${controller.selectedDay.value}");
                     },
                     indicator: const BoxDecoration(),
                     isScrollable: true,
@@ -185,14 +192,16 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                       physics: const BouncingScrollPhysics(),
                                       onReorder:
                                           (int oldIndex, int newIndex) async {
-                                        if (newIndex > oldIndex) {
-                                          newIndex -= 1;
-                                        }
                                         bool reordered = await controller
                                             .planReorderInListFunction(
                                           oldIndex: oldIndex + 1,
-                                          newIndex: newIndex,
+                                          newIndex: newIndex == 0
+                                              ? newIndex + 1
+                                              : newIndex,
                                         );
+                                        if (newIndex > oldIndex) {
+                                          newIndex -= 1;
+                                        }
                                         if (reordered) {
                                           final items = controller.planDataList
                                               .removeAt(oldIndex);
@@ -242,7 +251,7 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                                       child: Image.asset(
                                                           "assets/images/Blueman.png"),
                                                     ),
-                                                    w(5),
+                                                    w(10),
                                                     Text(
                                                       singlePlan.duration,
                                                       // "2 min by walking",
@@ -280,76 +289,133 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              child: Container(
-                                                                height: 121,
-                                                                width:
-                                                                    Get.width *
-                                                                        0.8,
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  // image: DecorationImage(
-                                                                  //     image: AssetImage(
-                                                                  //         "assets/images/pic.png"),
-                                                                  //     fit: BoxFit.fill),
-                                                                  color: Colors
-                                                                      .cyan,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                  ),
+                                                        Container(
+                                                          height: 121,
+                                                          width:
+                                                              double.infinity,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            // image: DecorationImage(
+                                                            //     image: AssetImage(
+                                                            //         "assets/images/pic.png"),
+                                                            //     fit: BoxFit.fill),
+                                                            color: Colors.cyan,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                            ),
+                                                          ),
+                                                          child: Stack(
+                                                            children: [
+                                                              ClipRRect(
+                                                                borderRadius:
+                                                                    const BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
                                                                 ),
-                                                                child: Stack(
-                                                                  children: [
-                                                                    ClipRRect(
-                                                                      borderRadius:
-                                                                          const BorderRadius
-                                                                              .only(
-                                                                        topLeft:
-                                                                            Radius.circular(10),
-                                                                        topRight:
-                                                                            Radius.circular(10),
-                                                                      ),
+                                                                child:
+                                                                    CachedNetworkImage(
+                                                                  imageUrl:
+                                                                      singlePlan
+                                                                          .placeImage,
+                                                                  height: 121,
+                                                                  width: double
+                                                                      .infinity,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  errorWidget:
+                                                                      (context,
+                                                                          url,
+                                                                          error) {
+                                                                    return const Center(
                                                                       child:
-                                                                          CachedNetworkImage(
-                                                                        imageUrl:
-                                                                            singlePlan.placeImage,
-                                                                        height:
-                                                                            121,
-                                                                        width: double
-                                                                            .infinity,
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                        errorWidget: (context,
-                                                                            url,
-                                                                            error) {
-                                                                          return const Center(
-                                                                            child:
-                                                                                Text(
-                                                                              "Image Not Loaded",
-                                                                              textAlign: TextAlign.center,
-                                                                              style: TextStyle(
-                                                                                color: AppColors.blackColor,
-                                                                                fontSize: 11,
-                                                                              ),
-                                                                            ),
-                                                                          );
-                                                                        },
+                                                                          Text(
+                                                                        "Image Not Loaded",
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              AppColors.blackColor,
+                                                                          fontSize:
+                                                                              11,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              ),
+                                                              Positioned(
+                                                                top: 12,
+                                                                left: 12,
+                                                                child: Row(
+                                                                  children: [
+                                                                    Container(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      decoration: const BoxDecoration(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          borderRadius:
+                                                                              BorderRadius.all(Radius.circular(20))),
+                                                                      height: Get
+                                                                              .height *
+                                                                          0.04,
+                                                                      width: Get
+                                                                              .width *
+                                                                          0.15,
+                                                                      child:
+                                                                          Text(
+                                                                        singlePlan
+                                                                            .startTime,
+                                                                        style: const TextStyle(
+                                                                            fontSize:
+                                                                                12),
                                                                       ),
                                                                     ),
-                                                                    Positioned(
-                                                                      top: 10,
-                                                                      left: 10,
+                                                                    const SizedBox(
+                                                                        width:
+                                                                            6),
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        showModalBottomSheet(
+                                                                          context:
+                                                                              context,
+                                                                          isScrollControlled:
+                                                                              true,
+                                                                          shape:
+                                                                              const RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topLeft: Radius.circular(20),
+                                                                              topRight: Radius.circular(20),
+                                                                            ),
+                                                                          ),
+                                                                          constraints:
+                                                                              BoxConstraints(maxHeight: Get.size.height * 0.7),
+                                                                          builder:
+                                                                              (BuildContext context) {
+                                                                            return BottomEditPlanBody(
+                                                                              planId: singlePlan.id,
+                                                                            );
+                                                                          },
+                                                                        );
+                                                                      },
                                                                       child:
                                                                           Container(
+                                                                        padding:
+                                                                            const EdgeInsets.all(7),
                                                                         alignment:
                                                                             Alignment.center,
                                                                         decoration: const BoxDecoration(
@@ -359,83 +425,80 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                                                         height: Get.height *
                                                                             0.04,
                                                                         width: Get.width *
-                                                                            0.15,
-                                                                        child:
-                                                                            Text(
-                                                                          singlePlan
-                                                                              .startTime,
-                                                                          style:
-                                                                              const TextStyle(fontSize: 12),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Positioned(
-                                                                      top: 10,
-                                                                      left: 70,
-                                                                      child:
-                                                                          GestureDetector(
-                                                                        onTap:
-                                                                            () {
-                                                                          showModalBottomSheet(
-                                                                            context:
-                                                                                context,
-                                                                            isScrollControlled:
-                                                                                true,
-                                                                            shape:
-                                                                                const RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(20),
-                                                                                topRight: Radius.circular(20),
-                                                                              ),
-                                                                            ),
-                                                                            constraints:
-                                                                                BoxConstraints(maxHeight: Get.size.height * 0.7),
-                                                                            builder:
-                                                                                (BuildContext context) {
-                                                                              return BottomEditPlanBody(
-                                                                                planId: singlePlan.id,
-                                                                              );
-                                                                            },
-                                                                          );
-                                                                        },
-                                                                        child:
-                                                                            Container(
-                                                                          padding:
-                                                                              const EdgeInsets.all(7),
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          decoration: const BoxDecoration(
-                                                                              color: Colors.white,
-                                                                              borderRadius: BorderRadius.all(Radius.circular(20))),
-                                                                          height:
-                                                                              Get.height * 0.04,
-                                                                          width:
-                                                                              Get.width * 0.1,
-                                                                          child:
-                                                                              Image.asset(
-                                                                            "assets/images/edit-line.png",
-                                                                          ),
+                                                                            0.1,
+                                                                        child: Image
+                                                                            .asset(
+                                                                          "assets/images/edit-line.png",
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ],
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ],
+                                                              Positioned(
+                                                                top: 15,
+                                                                right: 15,
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap:
+                                                                      () async {
+                                                                    // if (singlePlan
+                                                                    //     .isfavorite) {
+                                                                    //   controller
+                                                                    //       .removeFromWishListFunction(
+                                                                    //     placeId:
+                                                                    //         singlePlan.id,
+                                                                    //   );
+                                                                    // } else {
+                                                                    //   await controller
+                                                                    //       .addTowishListFunction(
+                                                                    //     placeId:
+                                                                    //         singlePlan.id,
+                                                                    //   );
+                                                                    // }
+                                                                  },
+                                                                  child: singlePlan
+                                                                          .isfavorite
+                                                                      ? Image
+                                                                          .asset(
+                                                                          "assets/images/dil2.png",
+                                                                          color:
+                                                                              AppColors.redColor,
+                                                                          height:
+                                                                              24,
+                                                                          width:
+                                                                              24,
+                                                                        )
+                                                                      : Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(5),
+                                                                          child:
+                                                                              Image.asset(
+                                                                            "assets/images/dil.png",
+                                                                            color:
+                                                                                AppColors.whiteColor,
+                                                                            height:
+                                                                                18,
+                                                                            width:
+                                                                                18,
+                                                                          ),
+                                                                        ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
-                                                        SizedBox(
-                                                            height: Get.height *
-                                                                0.025),
+                                                        const SizedBox(
+                                                            height: 12),
                                                         Stack(
                                                           children: [
                                                             Container(
                                                               margin:
                                                                   const EdgeInsets
-                                                                          .only(
-                                                                      left: 10,
-                                                                      right:
-                                                                          10),
+                                                                      .only(
+                                                                left: 12,
+                                                                right: 12,
+                                                              ),
                                                               child: Column(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
@@ -453,7 +516,7 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                                                           16,
                                                                     ),
                                                                   ),
-                                                                  h(5),
+                                                                  h(8),
                                                                   Text(
                                                                     singlePlan
                                                                         .placeDescription,
@@ -462,7 +525,16 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                                                             12),
                                                                   ),
                                                                   h(10),
-                                                                  const Divider(),
+                                                                  Divider(
+                                                                    color: AppColors
+                                                                        .blackColor
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    thickness:
+                                                                        1,
+                                                                    height: 1,
+                                                                  ),
+                                                                  h(10),
                                                                   Row(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
@@ -480,7 +552,17 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                                                           child:
                                                                               Row(
                                                                             children: [
-                                                                              Container(padding: const EdgeInsets.all(7), alignment: Alignment.center, decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20))), height: Get.height * 0.04, width: Get.width * 0.1, child: Image.asset("assets/images/Navigate.png")),
+                                                                              Container(
+                                                                                padding: const EdgeInsets.all(7),
+                                                                                alignment: Alignment.center,
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: Colors.white,
+                                                                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                                ),
+                                                                                height: Get.height * 0.04,
+                                                                                width: Get.width * 0.1,
+                                                                                child: Image.asset("assets/images/Navigate.png"),
+                                                                              ),
                                                                               w(10),
                                                                               const Text(
                                                                                 "Navigate",
@@ -498,7 +580,10 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                                                             Container(
                                                                                 padding: const EdgeInsets.all(7),
                                                                                 alignment: Alignment.center,
-                                                                                decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20))),
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: Colors.white,
+                                                                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                                                                ),
                                                                                 height: Get.height * 0.04,
                                                                                 width: Get.width * 0.1,
                                                                                 child: Image.asset("assets/images/clock.png")),
@@ -998,43 +1083,51 @@ class StartTimeListviewBody extends StatelessWidget {
           color: AppColors.greyColor.withOpacity(0.35),
         ),
         Expanded(
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: controller.startTimeList.length,
-            itemBuilder: (context, index) {
-              var singleTime = controller.startTimeList[index];
-              String displayTime = DateFormat("h:mmaa").format(singleTime);
-              String apiSendTime = DateFormat("hh:mm").format(singleTime);
+          child: Obx(
+            () => controller.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: controller.startTimeList.length,
+                    itemBuilder: (context, index) {
+                      var singleTime = controller.startTimeList[index];
+                      String displayTime =
+                          DateFormat("h:mmaa").format(singleTime);
+                      String apiSendTime =
+                          DateFormat("hh:mm").format(singleTime);
 
-              return ListTile(
-                dense: true,
-                onTap: () {
-                  controller.changeStartTimeOfPlanInDayApiMethod(
-                    planId: planId,
-                    dayNumber: controller.selectedDayData!.dayNumber,
-                    startTime: apiSendTime,
-                  );
-                },
-                title: Text(
-                  displayTime.toUpperCase(),
-                  style: const TextStyle(
-                    color: AppColors.blackColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w300,
+                      return ListTile(
+                        dense: true,
+                        onTap: () {
+                          controller.changeStartTimeOfPlanInDayApiMethod(
+                            planId: planId,
+                            dayNumber: controller.selectedDayData!.dayNumber,
+                            startTime: apiSendTime,
+                          );
+                        },
+                        title: Text(
+                          displayTime.toUpperCase(),
+                          style: const TextStyle(
+                            color: AppColors.blackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: AppColors.greyColor.withOpacity(0.25),
+                        indent: 5,
+                        endIndent: 5,
+                      );
+                    },
                   ),
-                ),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return Divider(
-                height: 1,
-                thickness: 1,
-                color: AppColors.greyColor.withOpacity(0.25),
-                indent: 5,
-                endIndent: 5,
-              );
-            },
           ),
         ),
       ],
@@ -1072,52 +1165,58 @@ class ChangeDurationListviewBody extends StatelessWidget {
           color: AppColors.greyColor.withOpacity(0.35),
         ),
         Expanded(
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: controller.changeDurationList.length,
-            itemBuilder: (context, index) {
-              var singleHour = controller.changeDurationList[index];
-              // String displayTime = DateFormat("h:mmaa").format(singleTime);
-              // final now = DateTime.now();
-              // final dt = DateTime(now.year, now.month, now.day, singleHour.hour,
-              //     singleHour.minute);
-              // final hmFormat = DateFormat("hh:mm"); //"6:00 AM"
-              // return format.format(dt);
+          child: Obx(
+            () => controller.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: controller.changeDurationList.length,
+                    itemBuilder: (context, index) {
+                      var singleHour = controller.changeDurationList[index];
+                      // String displayTime = DateFormat("h:mmaa").format(singleTime);
+                      // final now = DateTime.now();
+                      // final dt = DateTime(now.year, now.month, now.day, singleHour.hour,
+                      //     singleHour.minute);
+                      // final hmFormat = DateFormat("hh:mm"); //"6:00 AM"
+                      // return format.format(dt);
 
-              return ListTile(
-                dense: true,
-                onTap: () {
-                  controller.changeTimeDurationOfPlanInDayApiMethod(
-                    planId: planId,
-                    dayNumber: controller.selectedDayData!.dayNumber,
-                    durationTime: singleHour.to24hours(),
-                    // "${singleHour.hour}:${singleHour.minute}",
-                  );
-                },
-                title: Text(
-                  singleHour.hour == 0
-                      ? "${singleHour.minute} minutes"
-                      : singleHour.minute == 0
-                          ? "${singleHour.hour} hour"
-                          : "${singleHour.hour} hour ${singleHour.minute} minutes",
-                  style: const TextStyle(
-                    color: AppColors.blackColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w300,
+                      return ListTile(
+                        dense: true,
+                        onTap: () {
+                          controller.changeTimeDurationOfPlanInDayApiMethod(
+                            planId: planId,
+                            dayNumber: controller.selectedDayData!.dayNumber,
+                            durationTime: singleHour.to24hours(),
+                            // "${singleHour.hour}:${singleHour.minute}",
+                          );
+                        },
+                        title: Text(
+                          singleHour.hour == 0
+                              ? "${singleHour.minute} minutes"
+                              : singleHour.minute == 0
+                                  ? "${singleHour.hour} hour"
+                                  : "${singleHour.hour} hour ${singleHour.minute} minutes",
+                          style: const TextStyle(
+                            color: AppColors.blackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: AppColors.greyColor.withOpacity(0.25),
+                        indent: 5,
+                        endIndent: 5,
+                      );
+                    },
                   ),
-                ),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return Divider(
-                height: 1,
-                thickness: 1,
-                color: AppColors.greyColor.withOpacity(0.25),
-                indent: 5,
-                endIndent: 5,
-              );
-            },
           ),
         ),
       ],
@@ -1156,52 +1255,59 @@ class ChangeDayListviewBody extends StatelessWidget {
           color: AppColors.greyColor.withOpacity(0.35),
         ),
         Expanded(
-          child: ListView.separated(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: controller.daysList.length,
-            itemBuilder: (context, index) {
-              var singleDay = controller.daysList[index];
-              // String displayTime = DateFormat("h:mmaa").format(singleTime);
+          child: Obx(
+            () => controller.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: controller.daysList.length,
+                    itemBuilder: (context, index) {
+                      var singleDay = controller.daysList[index];
+                      // String displayTime = DateFormat("h:mmaa").format(singleTime);
 
-              return ListTile(
-                dense: true,
-                onTap: () {},
-                title: Text(
-                  singleDay.dayNumber
-                          .contains(controller.selectedDay.value.toString())
-                      ? "${singleDay.day} (current)"
-                      : singleDay.day,
-                  style: const TextStyle(
-                    color: AppColors.blackColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w300,
+                      return ListTile(
+                        dense: true,
+                        onTap: () {},
+                        title: Text(
+                          singleDay.dayNumber.contains(
+                                  controller.selectedDay.value.toString())
+                              ? "${singleDay.day} (current)"
+                              : singleDay.day,
+                          style: const TextStyle(
+                            color: AppColors.blackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        contentPadding:
+                            const EdgeInsets.only(left: 20, right: 5),
+                        trailing: IconButton(
+                          onPressed: () {
+                            controller.dayPlanChangeFunction(
+                              planId: planId,
+                              dayNumber: singleDay.dayNumber,
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.play_circle_outline_outlined,
+                            color: AppColors.blackColor,
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: AppColors.greyColor.withOpacity(0.25),
+                        indent: 5,
+                        endIndent: 5,
+                      );
+                    },
                   ),
-                ),
-                contentPadding: const EdgeInsets.only(left: 20, right: 5),
-                trailing: IconButton(
-                  onPressed: () {
-                    controller.dayPlanChangeFunction(
-                      planId: planId,
-                      dayNumber: singleDay.dayNumber,
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.play_circle_outline_outlined,
-                    color: AppColors.blackColor,
-                  ),
-                ),
-              );
-            },
-            separatorBuilder: (context, index) {
-              return Divider(
-                height: 1,
-                thickness: 1,
-                color: AppColors.greyColor.withOpacity(0.25),
-                indent: 5,
-                endIndent: 5,
-              );
-            },
           ),
         ),
       ],
@@ -1256,75 +1362,82 @@ class ReorderDayListviewBody extends StatelessWidget {
         ),
         Expanded(
           child: GetBuilder<MyplanController>(builder: (cont) {
-            return cont.isPlansLoading.value
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ReorderableListView.builder(
-                    onReorder: (oldIndex, newIndex) async {
-                      // if (newIndex > oldIndex) {
-                      //   newIndex -= 1;
-                      // }
-                      bool reordered =
-                          await controller.planReorderInListFunction(
-                        oldIndex: oldIndex + 1,
-                        newIndex: newIndex,
-                      );
-                      if (reordered) {
-                        // if (newIndex > oldIndex) {
-                        //   newIndex -= 1;
-                        // }
-                        final items =
-                            controller.planDataList.removeAt(oldIndex);
-                        controller.planDataList.insert(newIndex, items);
+            return Obx(
+              () => cont.isLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : cont.isPlansLoading.value
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ReorderableListView.builder(
+                          onReorder: (oldIndex, newIndex) async {
+                            // if (newIndex > oldIndex) {
+                            //   newIndex -= 1;
+                            // }
+                            bool reordered =
+                                await controller.planReorderInListFunction(
+                              oldIndex: oldIndex + 1,
+                              newIndex: newIndex,
+                            );
+                            if (reordered) {
+                              // if (newIndex > oldIndex) {
+                              //   newIndex -= 1;
+                              // }
+                              final items =
+                                  controller.planDataList.removeAt(oldIndex);
+                              controller.planDataList.insert(newIndex, items);
 
-                        controller.update();
-                      }
-                    },
-                    shrinkWrap: true,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: controller.planDataList.length,
-                    itemBuilder: (context, index) {
-                      var singlePlace = controller.planDataList[index];
-                      var singlePlaceKey =
-                          controller.reorderPlacesKeyList[index];
-                      // String displayTime = DateFormat("h:mmaa").format(singleTime);
-
-                      return Card(
-                        key: ValueKey(singlePlaceKey),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              dense: true,
-                              onTap: () {},
-                              title: Text(
-                                singlePlace.placeName,
-                                style: const TextStyle(
-                                  color: AppColors.blackColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w300,
-                                ),
+                              controller.update();
+                            }
+                          },
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: controller.planDataList.length,
+                          itemBuilder: (context, index) {
+                            var singlePlace = controller.planDataList[index];
+                            var singlePlaceKey =
+                                controller.reorderPlacesKeyList[index];
+                            // String displayTime = DateFormat("h:mmaa").format(singleTime);
+                            log("singlePlace name  :: ${singlePlace.placeName}");
+                            return Card(
+                              key: ValueKey(singlePlaceKey),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    dense: true,
+                                    onTap: () {},
+                                    title: Text(
+                                      singlePlace.placeName,
+                                      style: const TextStyle(
+                                        color: AppColors.blackColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                    horizontalTitleGap: 0,
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 15, right: 5),
+                                    leading: const Icon(
+                                      Icons.menu,
+                                      color: AppColors.blackColor,
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 1,
+                                    thickness: 1,
+                                    color:
+                                        AppColors.greyColor.withOpacity(0.25),
+                                    indent: 5,
+                                    endIndent: 5,
+                                  )
+                                ],
                               ),
-                              horizontalTitleGap: 0,
-                              contentPadding:
-                                  const EdgeInsets.only(left: 15, right: 5),
-                              leading: const Icon(
-                                Icons.menu,
-                                color: AppColors.blackColor,
-                              ),
-                            ),
-                            Divider(
-                              height: 1,
-                              thickness: 1,
-                              color: AppColors.greyColor.withOpacity(0.25),
-                              indent: 5,
-                              endIndent: 5,
-                            )
-                          ],
+                            );
+                          },
                         ),
-                      );
-                    },
-                  );
+            );
           }),
         ),
       ],
@@ -1339,120 +1452,127 @@ class ManageDaysListviewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => controller.isLoading.value
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
-              children: [
-                ListTile(
-                  dense: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-                  leading: IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: AppColors.blackColor,
-                    ),
-                  ),
-                  title: const Text("Manage Days"),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      height: 35,
-                      width: 85,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: AppColors.whiteColor,
-                          foregroundColor: AppColors.primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: const BorderSide(
-                              color: AppColors.primaryColor,
-                              width: 1,
-                            ),
-                          ),
-                        ),
-                        onPressed: () {
-                          // controller.day.add("Day New (empty)");
-                          controller.addDayToList();
-                        },
-                        child: const Text(
-                          "Add Day",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Expanded(
-                  child: GetBuilder<MyplanController>(builder: (context) {
-                    return ListView.separated(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: controller.daysList.length,
-                      itemBuilder: (context, index) {
-                        var singleDay = controller.daysList[index];
-                        // String displayTime = DateFormat("h:mmaa").format(singleTime);
-
-                        return ListTile(
-                          dense: true,
-                          // onTap: () {},
-                          title: Text(
-                            // singleDay.contains(controller.selectedDay.value)
-                            //     ? "Day  (current)"
-                            //     :
-                            singleDay.day,
-                            style: const TextStyle(
-                              color: AppColors.blackColor,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w300,
-                            ),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.only(left: 20, right: 5),
-                          leading: const Icon(
-                            Icons.menu,
-                            color: AppColors.blackColor,
-                          ),
-                          horizontalTitleGap: 0,
-                          trailing: IconButton(
-                            onPressed: () {
-                              // controller.daysList.removeAt(index);
-                              controller.deleteDayFromList(
-                                  dayNumber: singleDay.dayNumber);
-                            },
-                            icon: Icon(
-                              Icons.delete_outline_rounded,
-                              size: 25,
-                              color: AppColors.blackColor.withOpacity(0.8),
-                            ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider(
-                          height: 1,
-                          thickness: 1,
-                          color: AppColors.greyColor.withOpacity(0.25),
-                          indent: 5,
-                          endIndent: 5,
-                        );
-                      },
-                    );
-                  }),
-                ),
-              ],
+    return Column(
+      children: [
+        ListTile(
+          dense: true,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 5),
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(
+              Icons.close,
+              color: AppColors.blackColor,
             ),
+          ),
+          title: const Text("Manage Days"),
+        ),
+        Expanded(
+          child: Obx(
+            () => controller.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          SizedBox(
+                            height: 35,
+                            width: 85,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: AppColors.whiteColor,
+                                foregroundColor: AppColors.primaryColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: const BorderSide(
+                                    color: AppColors.primaryColor,
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                // controller.day.add("Day New (empty)");
+                                controller.addDayToList();
+                              },
+                              child: const Text(
+                                "Add Day",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 15),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      GetBuilder<MyplanController>(
+                        builder: (context) {
+                          return ListView.separated(
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: controller.daysList.length,
+                            itemBuilder: (context, index) {
+                              var singleDay = controller.daysList[index];
+                              // String displayTime = DateFormat("h:mmaa").format(singleTime);
+
+                              return ListTile(
+                                dense: true,
+                                // onTap: () {},
+                                title: Text(
+                                  // singleDay.contains(controller.selectedDay.value)
+                                  //     ? "Day  (current)"
+                                  //     :
+                                  singleDay.day,
+                                  style: const TextStyle(
+                                    color: AppColors.blackColor,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                                contentPadding:
+                                    const EdgeInsets.only(left: 20, right: 5),
+                                leading: const Icon(
+                                  Icons.menu,
+                                  color: AppColors.blackColor,
+                                ),
+                                horizontalTitleGap: 0,
+                                trailing: IconButton(
+                                  onPressed: () {
+                                    // controller.daysList.removeAt(index);
+                                    controller.deleteDayFromList(
+                                        dayNumber: singleDay.dayNumber);
+                                  },
+                                  icon: Icon(
+                                    Icons.delete_outline_rounded,
+                                    size: 25,
+                                    color:
+                                        AppColors.blackColor.withOpacity(0.8),
+                                  ),
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return Divider(
+                                height: 1,
+                                thickness: 1,
+                                color: AppColors.greyColor.withOpacity(0.25),
+                                indent: 5,
+                                endIndent: 5,
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+          ),
+        ),
+      ],
     );
   }
 }

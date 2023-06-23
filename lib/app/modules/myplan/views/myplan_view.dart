@@ -68,7 +68,7 @@ class MyplanView extends GetView<MyplanController> {
                     //     //search func
                     //   },
                     //   child: Container(
-                    //     margin: const EdgeInsets.symmetric(horizontal: 7),
+                    //     margin: const EdgeInsets.symmetric(horizontal: 10),
                     //     // decoration: const BoxDecoration(),
                     //     child: Center(
                     //       child: Image.asset(
@@ -85,7 +85,7 @@ class MyplanView extends GetView<MyplanController> {
                         //share func
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 7),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         // decoration: const BoxDecoration(),
                         child: Center(
                           child: Image.asset(
@@ -102,7 +102,7 @@ class MyplanView extends GetView<MyplanController> {
                         //mapview  func
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 7),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         // decoration: const BoxDecoration(),
                         child: Center(
                           child: Image.asset(
@@ -119,7 +119,7 @@ class MyplanView extends GetView<MyplanController> {
                         //more func
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 7),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         // decoration: const BoxDecoration(),
                         child: Center(
                           child: Image.asset(

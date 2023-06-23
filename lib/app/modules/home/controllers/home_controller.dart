@@ -78,7 +78,6 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     getUserLocation();
   }
 
@@ -205,6 +204,7 @@ class HomeController extends GetxController {
             textColor: Colors.white,
             fontSize: 16.0,
           );
+          isLoading(false);
         }
       });
 
@@ -222,7 +222,7 @@ class HomeController extends GetxController {
               infoWindow: InfoWindow(
                   title: singlePlace.placesName, snippet: singlePlace.address),
               flat: true,
-              rotation: 1.1,
+              // rotation: 1.1,
               zIndex: 10,
 
               visible: true,
@@ -238,7 +238,7 @@ class HomeController extends GetxController {
 
           log("markers  len is : ${markers.length}");
           update();
-          // isLoading(false);
+          isLoading(false);
         }
       }
 
@@ -255,6 +255,7 @@ class HomeController extends GetxController {
       var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
 
       isLoading(true);
+
       await userService
           .addToWishListMethod(
         userId: userId,
@@ -262,67 +263,18 @@ class HomeController extends GetxController {
         status: 1,
       )
           .then((value) {
-        // placeModel = value;
-        // if (placeModel != null) {
-        //   placeDataList.clear();
-        //   placeModel?.data?.forEach((element) {
-        //     placeDataList.add(element);
-        //     // lip.add(element.name);
-        //   });
-        //   log("addTowishListFunction len is : ${placeDataList.length}");
-        // } else {
-        //   Fluttertoast.showToast(
-        //     msg: 'Please try again later...!',
-        //     toastLength: Toast.LENGTH_SHORT,
-        //     gravity: ToastGravity.BOTTOM,
-        //     timeInSecForIosWeb: 1,
-        //     backgroundColor: Colors.blue,
-        //     textColor: Colors.white,
-        //     fontSize: 16.0,
-        //   );
-        // }
+        if (value!) {
+          getPlacesList();
+        }
       });
 
-      // if (placeDataList.isNotEmpty) {
-      //   selectedPlaceLocation = placeDataList.first;
-      //   for (int i = 0; i < placeDataList.length; i++) {
-      //     var singlePlace = placeDataList[i];
-      //     markers.add(
-      //       Marker(
-      //         onTap: () {
-      //           controller.locateWindowPop.value =
-      //               !controller.locateWindowPop.value;
-      //           selectedPlaceLocation = singlePlace;
-      //         },
-      //         infoWindow: InfoWindow(
-      //             title: "${singlePlace.placesName}",
-      //             snippet: "${singlePlace.address}"),
-      //         flat: true,
-      //         rotation: 1.1,
-      //         zIndex: 10,
-
-      //         visible: true,
-
-      //         markerId: MarkerId(singlePlace.id.toString()),
-      //         position: LatLng(
-      //           double.parse(singlePlace.latitude!),
-      //           double.parse(singlePlace.longitude!),
-      //         ),
-      //         // icon: BitmapDescriptor.fromBytes(markerIcon),
-      //       ),
-      //     );
-
-      //     log("markers  len is : ${markers.length}");
-      //     update();
-      //     // isLoading(false);
-      //   }
-      // }
-
+      // isLoading(false);
       update();
     } catch (e) {
       log(e.toString());
     } finally {
-      isLoading(false);
+      // controller.locateWindowPop(false);
+      // isLoading(false);
     }
   }
 
@@ -343,11 +295,12 @@ class HomeController extends GetxController {
         }
       });
 
+      // isLoading(false);
       update();
     } catch (e) {
       log(e.toString());
     } finally {
-      isLoading(false);
+      // isLoading(false);
     }
   }
 

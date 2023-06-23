@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:playze/Reusability/shared/custom_drawer.dart';
-import 'package:playze/reusability/utils/util.dart';
 import 'package:playze/app/routes/app_pages.dart';
 import 'package:playze/generated/locales.g.dart';
+import 'package:playze/reusability/utils/util.dart';
 
 import '../../../../reusability/utils/app_colors.dart';
 import '../controllers/profile_controller.dart';
@@ -184,8 +184,13 @@ class ProfileView extends GetView<ProfileController> {
                                   color: Colors.orange,
                                   shape: BoxShape.circle,
                                 ),
-                                child:
-                                    Image.asset("assets/images/nounedit.png"),
+                                child: Center(
+                                  child: Image.asset(
+                                    "assets/images/nounedit.png",
+                                    height: 16,
+                                    width: 16,
+                                  ),
+                                ),
                               ),
                             ),
                           ],

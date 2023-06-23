@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:playze/reusability/utils/app_colors.dart';
 
 import '../../../../reusability/utils/util.dart';
 import '../../../data/modal/place_data_model.dart';
@@ -62,20 +63,33 @@ class SinglePlaceWidget extends StatelessWidget {
                     top: 10,
                     left: 10,
                     child: GestureDetector(
-                      onTap: () {
-                        controller.addTowishListFunction(
-                          placeId: placeData.id,
-                        );
-                        // controller.removeFromWishListFunction(
-                        //   placeId: placeData.id,
-                        // );
+                      onTap: () async {
+                        if (placeData.isfavorite) {
+                          controller.removeFromWishListFunction(
+                            placeId: placeData.id,
+                          );
+                        } else {
+                          await controller.addTowishListFunction(
+                            placeId: placeData.id,
+                          );
+                        }
                       },
-                      child: SizedBox(
-                        height: Get.height * 0.02,
-                        child: const Image(
-                          image: AssetImage("assets/images/dil.png"),
-                        ),
-                      ),
+                      child: placeData.isfavorite
+                          ? Image.asset(
+                              "assets/images/dil2.png",
+                              color: AppColors.redColor,
+                              height: 24,
+                              width: 24,
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Image.asset(
+                                "assets/images/dil.png",
+                                color: AppColors.whiteColor,
+                                height: 18,
+                                width: 18,
+                              ),
+                            ),
                     ),
                   )
                 ],

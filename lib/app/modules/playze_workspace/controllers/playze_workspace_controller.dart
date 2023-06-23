@@ -35,6 +35,7 @@ class PlayzeWorkSpaceController extends GetxController {
 
       if (workSpaceListModel != null) {
         if (workSpaceListModel?.status == 200) {
+          isLoading(false);
         } else {
           Fluttertoast.showToast(
               msg: '${workSpaceListModel?.message}',
@@ -45,6 +46,7 @@ class PlayzeWorkSpaceController extends GetxController {
               textColor: Colors.white,
               fontSize: 16.0);
         }
+        isLoading(false);
       } else {
         Fluttertoast.showToast(
           msg: 'Please try again later...!',
@@ -55,6 +57,7 @@ class PlayzeWorkSpaceController extends GetxController {
           textColor: Colors.white,
           fontSize: 16.0,
         );
+        isLoading(false);
       }
       update();
     } catch (e) {
@@ -62,7 +65,7 @@ class PlayzeWorkSpaceController extends GetxController {
 
       rethrow;
     } finally {
-      isLoading(false);
+      // isLoading(false);
     }
   }
 
@@ -144,17 +147,78 @@ class PlayzeWorkSpaceController extends GetxController {
       var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
 
       isLoading(true);
-      await userService.addToWishListMethod(
+      // locateWindowPop(false);
+      await userService
+          .addToWishListMethod(
         userId: userId,
         placeId: placeId,
         status: 1,
-      );
+      )
+          .then((value) {
+        if (value!) {
+          getWorkSpaceList();
+        }
+      });
 
+      // isLoading(false);
       update();
     } catch (e) {
       log(e.toString());
     } finally {
-      isLoading(false);
+      // isLoading(false);
+    }
+  }
+
+  Future<void> removeFromWishListFunction({placeId}) async {
+    try {
+      var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
+
+      isLoading(true);
+      // locateWindowPop(false);
+      await userService
+          .addToWishListMethod(
+        userId: userId,
+        placeId: placeId,
+        status: 0,
+      )
+          .then((value) {
+        if (value! == true) {
+          getWorkSpaceList();
+        }
+      });
+
+      // isLoading(false);
+      update();
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      // isLoading(false);
+    }
+  }
+
+  Future<void> removeWorkSpaceFunction({placeId}) async {
+    try {
+      var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
+
+      isLoading(true);
+      // locateWindowPop(false);
+      await userService
+          .removeWorkSpaceFromListMethod(
+        userId: userId,
+        placeId: placeId,
+      )
+          .then((value) {
+        if (value! == true) {
+          getWorkSpaceList();
+        }
+      });
+
+      // isLoading(false);
+      update();
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      // isLoading(false);
     }
   }
 }

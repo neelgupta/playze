@@ -183,23 +183,44 @@ class WishlistView extends GetView<WishlistController> {
                                                       top: 8,
                                                       left: 8,
                                                       child: GestureDetector(
-                                                        onTap: () {
-                                                          controller
-                                                              .removeFromWishListFunction(
-                                                            placeId:
-                                                                singleData.id,
-                                                          );
+                                                        onTap: () async {
+                                                          if (singleData
+                                                              .isfavorite) {
+                                                            controller
+                                                                .removeFromWishListFunction(
+                                                              placeId:
+                                                                  singleData.id,
+                                                            );
+                                                          } else {
+                                                            await controller
+                                                                .addTowishListFunction(
+                                                              placeId:
+                                                                  singleData.id,
+                                                            );
+                                                          }
                                                         },
-                                                        child: SizedBox(
-                                                          // height: Get.height * 0.02,
-                                                          child: Image.asset(
-                                                            "assets/images/dil2.png",
-                                                            color: AppColors
-                                                                .redColor,
-                                                            height: 24,
-                                                            width: 24,
-                                                          ),
-                                                        ),
+                                                        child: singleData
+                                                                .isfavorite
+                                                            ? Image.asset(
+                                                                "assets/images/dil2.png",
+                                                                color: AppColors
+                                                                    .redColor,
+                                                                height: 24,
+                                                                width: 24,
+                                                              )
+                                                            : Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(5),
+                                                                child:
+                                                                    Image.asset(
+                                                                  "assets/images/dil.png",
+                                                                  color: AppColors
+                                                                      .whiteColor,
+                                                                  height: 18,
+                                                                  width: 18,
+                                                                ),
+                                                              ),
                                                       ),
                                                     )
                                                   ],

@@ -40,6 +40,7 @@ class PlanData {
   final String startTime;
   final String planNumber;
   final String placeName;
+  final bool isfavorite;
   final String placeDescription;
   final String time;
   final String changeDuration;
@@ -51,6 +52,7 @@ class PlanData {
     required this.startTime,
     required this.planNumber,
     required this.placeName,
+    required this.isfavorite,
     required this.placeDescription,
     required this.time,
     required this.changeDuration,
@@ -63,6 +65,7 @@ class PlanData {
         startTime: json["start_time"] ?? "",
         planNumber: json["plan_number"] ?? "",
         placeName: json["place_name"] ?? "",
+        isfavorite: json["isfavorite "] ?? false,
         placeDescription: json["place_description"] ?? "",
         time: json["time"] ?? "",
         changeDuration: json["change_duration"] ?? "",
@@ -75,6 +78,7 @@ class PlanData {
         "start_time": startTime,
         "plan_number": planNumber,
         "place_name": placeName,
+        "isfavorite ": isfavorite,
         "place_description": placeDescription,
         "time": time,
         "change_duration": changeDuration,

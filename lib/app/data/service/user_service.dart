@@ -6,9 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:playze/app/data/Network/network.dart';
 import 'package:playze/app/data/modal/common_message_data.dart';
+import 'package:playze/app/data/modal/place_data_model.dart';
 import 'package:playze/app/data/modal/user_data_model.dart';
 import 'package:playze/app/data/modal/workspace_detail_model.dart';
-import 'package:playze/app/data/modal/place_data_model.dart';
 
 import '../../../reusability/utils/shared_prefs.dart';
 import '../modal/about_model.dart';
@@ -220,7 +220,7 @@ class UserService {
     String newtokan = tokan![1];
     log(newtokan);
     var result = await NetworkHandler().get(url, client, newtokan);
-    log("getAllPlacesListMethod result is : $result");
+    // log("getAllPlacesListMethod result is : $result");
     if (result != null) {
       var resBody = jsonDecode(result);
       if (resBody['status'] == 200) {
@@ -292,14 +292,14 @@ class UserService {
       if (resBody['status'] == 200) {
         return GetNearByModel.fromJson(jsonDecode(result));
       } else {
-        Fluttertoast.showToast(
-            msg: '${resBody['message']}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.blue,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: '${resBody['message']}',
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.blue,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
         return null;
       }
     } else {
@@ -322,14 +322,14 @@ class UserService {
       if (resBody['status'] == 200) {
         return GetReviewsModel.fromJson(jsonDecode(result));
       } else {
-        Fluttertoast.showToast(
-            msg: '${resBody['message']}',
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.blue,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: '${resBody['message']}',
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.BOTTOM,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.blue,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
         return null;
       }
     } else {
@@ -542,10 +542,61 @@ class UserService {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        return false;
+        return true;
       }
     } else {
       throw Exception("Error addToWishListMethod list");
+    }
+    // return null;
+  }
+
+  Future<bool?> removeWorkSpaceFromListMethod({
+    placeId,
+    userId,
+    client,
+  }) async {
+    client ??= http.Client();
+    var url = ApiUrlList.deleteWorkspace;
+    String newtokan = tokan![1];
+    log(newtokan);
+    var result = await NetworkHandler().post(
+      url,
+      client,
+      newtokan,
+      model: {
+        "places_id": placeId,
+        "user_id": userId,
+      },
+    );
+    log("removeWorkSpaceFromListMethod result is $result");
+    if (result != null) {
+      var resBody = jsonDecode(result);
+
+      if (resBody["status"] == 200) {
+        Fluttertoast.showToast(
+          msg: resBody["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return true;
+      } else {
+        Fluttertoast.showToast(
+          msg: resBody["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+        return true;
+      }
+    } else {
+      throw Exception("Error removeWorkSpaceFromListMethod list");
     }
     // return null;
   }

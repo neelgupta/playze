@@ -65,27 +65,57 @@ class WishlistController extends GetxController {
     }
   }
 
+  Future<void> addTowishListFunction({placeId}) async {
+    try {
+      var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
+
+      isLoading(true);
+
+      await userService
+          .addToWishListMethod(
+        userId: userId,
+        placeId: placeId,
+        status: 1,
+      )
+          .then((value) {
+        if (value!) {
+          getWishListFunction();
+        }
+      });
+
+      // isLoading(false);
+      update();
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      // isLoading(false);
+    }
+  }
+
   Future<void> removeFromWishListFunction({placeId}) async {
     try {
       var userId = SharedPrefs().value.read(SharedPrefs.userIdKey);
 
       isLoading(true);
-      bool isRemoved = await userService.addToWishListMethod(
-            userId: userId,
-            placeId: placeId,
-            status: 0,
-          ) ??
-          false;
-      if (isRemoved) {
-        log("rmeoved");
-      }
 
+      await userService
+          .addToWishListMethod(
+        userId: userId,
+        placeId: placeId,
+        status: 0,
+      )
+          .then((value) {
+        if (value! == true) {
+          getWishListFunction();
+        }
+      });
+
+      // isLoading(false);
       update();
     } catch (e) {
       log(e.toString());
     } finally {
-      getWishListFunction();
-      isLoading(false);
+      // isLoading(false);
     }
   }
 

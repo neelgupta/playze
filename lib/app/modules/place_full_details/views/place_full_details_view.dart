@@ -9,8 +9,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:playze/reusability/utils/app_colors.dart';
 import 'package:playze/app/modules/home/controllers/home_controller.dart';
+import 'package:playze/reusability/utils/app_colors.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 import '../../../../reusability/shared/custom_bottom_bar.dart';
@@ -69,19 +69,30 @@ class PlaceFullDetailsView extends GetView<PlaceFullDetailsController> {
                         margin: const EdgeInsets.only(right: 5, top: 5),
                         child: IconButton(
                           padding: const EdgeInsets.all(0),
-                          icon: Image.asset(
-                            "assets/images/dil.png",
-                            height: 20,
-                            width: 20,
-                          ),
+                          icon: controller.placeData!.data.isfavorite
+                              ? Image.asset(
+                                  "assets/images/dil2.png",
+                                  height: 24,
+                                  width: 24,
+                                  color: AppColors.redColor,
+                                )
+                              : Image.asset(
+                                  "assets/images/dil.png",
+                                  height: 22,
+                                  width: 22,
+                                ),
                           onPressed: () {
                             // log("favourite butto tapped");
-                            // controller.addTowishListFunction(
-                            //   placeId: controller.placeData!.data.id,
-                            // );
-                            controller.removeFromWishListFunction(
-                              placeId: controller.placeData!.data.id,
-                            );
+
+                            if (controller.placeData!.data.isfavorite) {
+                              controller.removeFromWishListFunction(
+                                placeId: controller.placeData!.data.id,
+                              );
+                            } else {
+                              controller.addTowishListFunction(
+                                placeId: controller.placeData!.data.id,
+                              );
+                            }
                           },
                         ),
                       ),
@@ -1614,12 +1625,36 @@ class PlaceFullDetailsView extends GetView<PlaceFullDetailsController> {
                                                                                 ),
                                                                               ),
                                                                               Positioned(
-                                                                                top: 0,
+                                                                                top: 10,
                                                                                 left: 10,
-                                                                                child: SizedBox(
-                                                                                  height: Get.height * 0.06,
-                                                                                  width: Get.width * 0.06,
-                                                                                  child: Image.asset("assets/images/dil.png"),
+                                                                                child: GestureDetector(
+                                                                                  onTap: () async {
+                                                                                    if (singleNearBy.isfavorite) {
+                                                                                      controller.removeFromWishListFunction(
+                                                                                        placeId: singleNearBy.id,
+                                                                                      );
+                                                                                    } else {
+                                                                                      await controller.addTowishListFunction(
+                                                                                        placeId: singleNearBy.id,
+                                                                                      );
+                                                                                    }
+                                                                                  },
+                                                                                  child: singleNearBy.isfavorite
+                                                                                      ? Image.asset(
+                                                                                          "assets/images/dil2.png",
+                                                                                          color: AppColors.redColor,
+                                                                                          height: 24,
+                                                                                          width: 24,
+                                                                                        )
+                                                                                      : Padding(
+                                                                                          padding: const EdgeInsets.all(5),
+                                                                                          child: Image.asset(
+                                                                                            "assets/images/dil.png",
+                                                                                            color: AppColors.whiteColor,
+                                                                                            height: 18,
+                                                                                            width: 18,
+                                                                                          ),
+                                                                                        ),
                                                                                 ),
                                                                               )
                                                                             ],
@@ -1627,7 +1662,7 @@ class PlaceFullDetailsView extends GetView<PlaceFullDetailsController> {
                                                                           w(20),
                                                                         ],
                                                                       ),
-                                                                      h(5),
+                                                                      h(10),
                                                                       Text(
                                                                         singleNearBy
                                                                             .placesName,

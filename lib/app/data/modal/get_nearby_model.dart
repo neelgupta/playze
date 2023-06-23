@@ -40,6 +40,7 @@ class NearByPlaceData {
   String placesName;
   String address;
   String totalReview;
+  final bool isfavorite;
   String rating;
   String distance;
   String duration;
@@ -49,6 +50,7 @@ class NearByPlaceData {
     required this.placeImage,
     required this.placesName,
     required this.address,
+    required this.isfavorite,
     required this.totalReview,
     required this.rating,
     required this.distance,
@@ -62,6 +64,7 @@ class NearByPlaceData {
         placesName: json["places_name"] ?? "",
         address: json["address"] ?? "",
         totalReview: json["total_review"] ?? "",
+        isfavorite: json["isfavorite "] ?? false,
         rating: json["rating"] ?? "",
         distance: json["distance"] ?? "",
         duration: json["duration"] ?? "",
@@ -72,6 +75,7 @@ class NearByPlaceData {
         "place_image": placeImage,
         "places_name": placesName,
         "address": address,
+        "isfavorite ": isfavorite,
         "total_review": totalReview,
         "rating": rating,
         "distance": distance,

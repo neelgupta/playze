@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +22,7 @@ class SingleWorkSpaceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("workSpaceData.isfavorite : ${workSpaceData.isfavorite}");
     return Stack(
       children: [
         Container(
@@ -77,16 +80,33 @@ class SingleWorkSpaceWidget extends StatelessWidget {
                         top: 10,
                         left: 10,
                         child: GestureDetector(
-                          onTap: () {
-                            controller.addTowishListFunction(
-                              placeId: workSpaceData.id,
-                            );
+                          onTap: () async {
+                            if (workSpaceData.isfavorite) {
+                              controller.removeFromWishListFunction(
+                                placeId: workSpaceData.id,
+                              );
+                            } else {
+                              await controller.addTowishListFunction(
+                                placeId: workSpaceData.id,
+                              );
+                            }
                           },
-                          child: SizedBox(
-                            height: Get.height * 0.02,
-                            child: const Image(
-                                image: AssetImage("assets/images/dil.png")),
-                          ),
+                          child: workSpaceData.isfavorite
+                              ? Image.asset(
+                                  "assets/images/dil2.png",
+                                  color: AppColors.redColor,
+                                  height: 24,
+                                  width: 24,
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: Image.asset(
+                                    "assets/images/dil.png",
+                                    color: AppColors.whiteColor,
+                                    height: 18,
+                                    width: 18,
+                                  ),
+                                ),
                         ),
                       )
                     ],
@@ -233,7 +253,7 @@ class SingleWorkSpaceWidget extends StatelessWidget {
                         ),
                         Text("  My Plan"),
                       ],
-                    ), 
+                    ),
                   ),
                   ButtonWithStyle(
                     onPressed: () {
@@ -257,7 +277,10 @@ class SingleWorkSpaceWidget extends StatelessWidget {
           top: 10,
           right: 5,
           child: GestureDetector(
-            onTap: () {},
+            onTap: () async {
+              await controller.removeWorkSpaceFunction(
+                  placeId: workSpaceData.id);
+            },
             child: const Icon(Icons.close),
           ),
         )

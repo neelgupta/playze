@@ -113,17 +113,18 @@ class PlaceFullDetailsController extends GetxController {
       );
 
       if (getNearByModel != null) {
+        nearByPlacesList.clear();
         nearByPlacesList.addAll(getNearByModel!.data);
       } else {
-        Fluttertoast.showToast(
-          msg: 'Please try again later...!',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        // Fluttertoast.showToast(
+        //   msg: 'Please try again later...!',
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.BOTTOM,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.blue,
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
       }
       log("nearByPlacesList len is : ${nearByPlacesList.length}");
     } catch (e) {
@@ -144,15 +145,15 @@ class PlaceFullDetailsController extends GetxController {
       if (getReviewsModel != null) {
         reviewAllData = getReviewsModel!.data;
       } else {
-        Fluttertoast.showToast(
-          msg: 'Please try again later...!',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        // Fluttertoast.showToast(
+        //   msg: 'Please try again later...!',
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.BOTTOM,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.blue,
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
       }
     } catch (e) {
       rethrow;
@@ -254,17 +255,22 @@ class PlaceFullDetailsController extends GetxController {
       isLoading(true);
       await userService
           .addToWishListMethod(
-            userId: userId,
-            placeId: placeId,
-            status: 1,
-          )
-          .then((value) {});
+        userId: userId,
+        placeId: placeId,
+        status: 1,
+      )
+          .then((value) {
+        if (value!) {
+          getPlaceDetails(placeDataId);
+        }
+      });
 
+      // isLoading(false);
       update();
     } catch (e) {
       log(e.toString());
     } finally {
-      isLoading(false);
+      // isLoading(false);
     }
   }
 
@@ -285,11 +291,12 @@ class PlaceFullDetailsController extends GetxController {
         }
       });
 
+      // isLoading(false);
       update();
     } catch (e) {
       log(e.toString());
     } finally {
-      isLoading(false);
+      // isLoading(false);
     }
   }
 }

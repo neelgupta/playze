@@ -4,12 +4,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:playze/reusability/utils/shared_prefs.dart';
 import 'package:playze/app/data/Network/network.dart';
 import 'package:playze/app/data/modal/common_message_data.dart';
 import 'package:playze/app/data/modal/get_emoji_model.dart';
 import 'package:playze/app/data/modal/otp_model.dart';
 import 'package:playze/app/data/modal/signup_model.dart';
+import 'package:playze/reusability/utils/shared_prefs.dart';
 
 import '../modal/filters_model.dart';
 import '../modal/login_model.dart';
@@ -29,15 +29,15 @@ class LoginService {
       if (resbody["status"] == 200) {
         return FiltersModel.fromjson(jsonDecode(result));
       } else {
-        Fluttertoast.showToast(
-          msg: resbody["message"],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+        // Fluttertoast.showToast(
+        //   msg: resbody["message"],
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.BOTTOM,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.blue,
+        //   textColor: Colors.white,
+        //   fontSize: 16.0,
+        // );
         throw Exception("Error getInterestsMethod list");
       }
     } else {
@@ -77,7 +77,7 @@ class LoginService {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        throw Exception("Error getInterestsMethod list");
+        throw Exception("Error signUpMethod list");
       }
     } else {
       return null;
@@ -108,7 +108,7 @@ class LoginService {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        throw Exception("Error getInterestsMethod list");
+        throw Exception("Error loginMethod list");
       }
     } else {
       log("loginMethod failed");

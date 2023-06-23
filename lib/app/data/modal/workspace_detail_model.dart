@@ -49,6 +49,7 @@ class WorkSpaceData {
   final String location;
   final String contactNo;
   final String time;
+  final bool isfavorite;
   final int totalRating;
   final int totalRatingOne;
   final int totalRatingTwo;
@@ -72,6 +73,7 @@ class WorkSpaceData {
     required this.location,
     required this.contactNo,
     required this.time,
+    required this.isfavorite,
     required this.totalRating,
     required this.totalRatingOne,
     required this.totalRatingTwo,
@@ -96,6 +98,7 @@ class WorkSpaceData {
         location: json["location"] ?? "",
         contactNo: json["contact_no"] ?? "",
         time: json["time"] ?? "",
+        isfavorite: json["isfavorite "] ?? false,
         totalRating: json["total_rating"] ?? 0,
         totalRatingOne: json["total_rating_one"] ?? 0,
         totalRatingTwo: json["total_rating_two"] ?? 0,
@@ -123,6 +126,7 @@ class WorkSpaceData {
         "location": location,
         "contact_no": contactNo,
         "time": time,
+        "isfavorite ": isfavorite,
         "total_rating": totalRating,
         "total_rating_one": totalRatingOne,
         "total_rating_two": totalRatingTwo,

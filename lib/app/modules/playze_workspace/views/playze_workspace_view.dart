@@ -84,37 +84,40 @@ class PlayzeWorkspaceView extends StatelessWidget {
                     Column(
                       children: [
                         controller.workSpaceListModel != null
-                            ? controller.workSpaceListModel!.data.isNotEmpty
-                                ? Container(
-                                    color: Colors.white,
-                                    height: Get.height * 0.75,
-                                    width: Get.width,
-                                    child: ListView.separated(
-                                      physics: const BouncingScrollPhysics(),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 12),
-                                      itemCount: controller
-                                          .workSpaceListModel!.data.length,
-                                      separatorBuilder: (context, index) {
-                                        return const SizedBox(height: 10);
-                                      },
-                                      itemBuilder: (context, index) {
-                                        var item = controller
-                                            .workSpaceListModel!.data[index];
-                                        return SingleWorkSpaceWidget(
-                                          workSpaceData: item,
-                                        );
-                                      },
-                                    ),
-                                  )
-                                : const SizedBox(
-                                    height: 200,
-                                    width: double.infinity,
-                                    child: Center(
-                                      child:
-                                          Text("No WorkSpace Data Available"),
-                                    ),
-                                  )
+                            ? Container(
+                                color: Colors.white,
+                                height: Get.height * 0.75,
+                                width: Get.width,
+                                child: controller
+                                        .workSpaceListModel!.data.isEmpty
+                                    ? const Center(
+                                        child: Text("No WorkSpace Available"),
+                                      )
+                                    : RefreshIndicator(
+                                        onRefresh: () {
+                                          return controller.getWorkSpaceList();
+                                        },
+                                        child: ListView.separated(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 15, horizontal: 12),
+                                          itemCount: controller
+                                              .workSpaceListModel!.data.length,
+                                          separatorBuilder: (context, index) {
+                                            return const SizedBox(height: 10);
+                                          },
+                                          itemBuilder: (context, index) {
+                                            var item = controller
+                                                .workSpaceListModel!
+                                                .data[index];
+                                            return SingleWorkSpaceWidget(
+                                              workSpaceData: item,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                              )
                             : const SizedBox()
                       ],
                     ),

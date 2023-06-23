@@ -211,8 +211,8 @@ class MyplanController extends GetxController {
 
       if (planGetList != null) {
         planDataList = planGetList.data;
-        selectedDayData = daysList.first;
-        log("selectedDayData!.dayNumber : ${selectedDayData!.dayNumber}");
+        // selectedDayData = daysList.first;
+        // log("selectedDayData!.dayNumber : ${selectedDayData!.dayNumber}");
 
         if (planDataList.isNotEmpty) {
           for (var item in planDataList) {
@@ -368,6 +368,7 @@ class MyplanController extends GetxController {
           false;
 
       if (dayPlanChanged) {
+        Get.back();
         Fluttertoast.showToast(
             msg: 'Plan Moved to day $dayNumber',
             toastLength: Toast.LENGTH_SHORT,

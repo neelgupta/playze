@@ -6,43 +6,43 @@ environment:
   sdk: '>=2.18.0 <3.0.0'
 
 dependencies: 
-  cupertino_icons: ^1.0.2
-  get: 4.6.5
   flutter: 
     sdk: flutter
 
-  google_fonts: ^4.0.4
+  smooth_star_rating_null_safety: ^1.0.4+2
   floating_bottom_navigation_bar: ^1.5.2
-  # flutter_swiper: ^1.1.6
-  flutter_card_swiper: ^5.1.0
-  permission_handler: ^10.3.0
-  flutter_rating_bar: ^4.0.1
-  percent_indicator: ^4.0.1
-  image_picker: ^0.8.7+4
-  file_picker: ^5.2.10
-  provider: ^6.0.5
-  flutter_html: ^3.0.0-beta.2
-  badges: ^3.1.1
-  intl: ^0.18.1
-  video_thumbnail: ^0.5.3
-  http: ^0.13.5
-  fluttertoast: ^8.2.1
-  loader_overlay: ^2.2.0
-  carousel_slider: ^4.2.1
-  shared_preferences: ^2.1.0
   video_thumbnail_imageview: ^0.0.5
   cached_network_image: ^3.2.3
-  bottom_sheet: ^3.1.2
-  path_provider: ^2.0.15
-  get_storage: ^2.1.1
+  flutter_html: ^3.0.0-beta.2
   google_maps_flutter: ^2.2.6
-  location: ^4.4.0
-  video_player: ^2.6.1
-  chewie: ^1.5.0
+  flutter_card_swiper: ^5.1.0
+  permission_handler: ^10.3.0
+  shared_preferences: ^2.1.0
+  flutter_rating_bar: ^4.0.1
+  percent_indicator: ^4.0.1
+  cupertino_icons: ^1.0.2
+  carousel_slider: ^4.2.1
+  video_thumbnail: ^0.5.3
+  loader_overlay: ^2.2.0
+  path_provider: ^2.0.15
   map_launcher: ^2.5.0+1
+  image_picker: ^0.8.7+4
   url_launcher: ^6.1.11
+  google_fonts: ^4.0.4
+  file_picker: ^5.2.10
+  fluttertoast: ^8.2.1
+  bottom_sheet: ^3.1.2
+  video_player: ^2.6.1
+  get_storage: ^2.1.1
   geolocator: ^9.0.2
-  smooth_star_rating_null_safety: ^1.0.4+2
+  provider: ^6.0.5
+  location: ^4.4.0
+  chewie: ^1.5.0
+  badges: ^3.1.1
+  intl: ^0.18.1
+  http: ^0.13.5
+  get: ^4.6.5
+# flutter_swiper: ^1.1.6
 #  cloud_firestore: ^4.7.1
 #  firebase_messaging: ^14.6.1
 #  device_info_plus: ^8.2.1
