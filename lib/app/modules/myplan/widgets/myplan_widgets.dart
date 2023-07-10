@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io' show Platform;
 
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,7 +22,7 @@ class AddPlaceButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 20,
+      bottom: Platform.isIOS ? Get.size.height * 0.055 : 20,
       right: 20,
       child: GestureDetector(
         onTap: () {
@@ -75,6 +76,8 @@ class _MyPlansListviewState extends State<MyPlansListview>
         // onTabDrag();
         controller.selectedDayData =
             controller.daysList[controller.dayTabBarController!.index];
+
+        controller.planDataList.clear();
         controller.planGetlistByDayFunction();
         // log("controller.dayTabBarController!.index :${controller.dayTabBarController!.index}");
 
@@ -117,7 +120,11 @@ class _MyPlansListviewState extends State<MyPlansListview>
                         }
                       }
                       log("controller.selectedDayData :${controller.selectedDayData!.dayNumber}");
+
+                      controller.isPlansLoading(true);
+
                       controller.planGetlistByDayFunction();
+                      // controller.isPlansLoading(false);
                     },
                     indicator: const BoxDecoration(),
                     isScrollable: true,
@@ -185,6 +192,7 @@ class _MyPlansListviewState extends State<MyPlansListview>
                                   )
                                 : RefreshIndicator(
                                     onRefresh: () {
+                                      controller.planDataList.clear();
                                       return controller
                                           .planGetlistByDayFunction();
                                     },

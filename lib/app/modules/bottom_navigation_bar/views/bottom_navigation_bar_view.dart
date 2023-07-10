@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io' show Platform;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,8 @@ class BottomNavigationbarView extends GetView<BottomNavigationBarController> {
                   ? controller.locateWindowPop.value
                       ? GetBuilder<HomeController>(builder: (hController) {
                           return Positioned(
-                            bottom: 80,
+                            bottom:
+                                Platform.isIOS ? Get.size.height * 0.14 : 80,
                             child: SizedBox(
                                 height: Get.height * 0.25,
                                 width: Get.width,

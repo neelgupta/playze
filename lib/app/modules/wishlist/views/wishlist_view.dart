@@ -52,9 +52,9 @@ class WishlistView extends GetView<WishlistController> {
                     const SizedBox(
                       width: 20,
                     ),
-                     Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text("Wishlist",
                             style: TextStyle(
                               fontSize: 18,
@@ -365,8 +365,8 @@ class WishlistView extends GetView<WishlistController> {
                                                     placeId: singleData.id,
                                                   );
                                                 },
-                                                child:  Row(
-                                                  children: [
+                                                child: Row(
+                                                  children: const [
                                                     Image(
                                                       image: AssetImage(
                                                           "assets/images/go.png"),
@@ -385,8 +385,8 @@ class WishlistView extends GetView<WishlistController> {
                                                     placeId: singleData.id,
                                                   );
                                                 },
-                                                child:  Row(
-                                                  children: [
+                                                child: Row(
+                                                  children: const [
                                                     Image(
                                                       image: AssetImage(
                                                           "assets/images/plan.png"),

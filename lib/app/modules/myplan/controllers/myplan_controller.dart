@@ -160,6 +160,8 @@ class MyplanController extends GetxController {
   planDaysGetListFunction() async {
     try {
       isLoading(true);
+
+      currentLocation = await locateUser();
       PlanDaysGetList? planDaysGetList =
           await planService.planDaysGetListMethod();
 
@@ -249,6 +251,7 @@ class MyplanController extends GetxController {
       log('locAlwaysGranted.value ::  ${locAlwaysGranted.value}');
       log('locWhenInUseGranted.value ::  ${locWhenInUseGranted.value}');
       isLoading(false);
+      isPlansLoading(false);
     }
   }
 
@@ -564,6 +567,7 @@ class MyplanController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
     planDaysGetListFunction();
   }
 
